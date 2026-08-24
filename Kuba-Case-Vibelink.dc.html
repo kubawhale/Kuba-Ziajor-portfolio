@@ -9,7 +9,7 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -42,8 +42,8 @@
 <div style="min-height:100vh;background:#ebebeb">
 
   <header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(235,235,235,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.06)">
-    <a href="Kuba-Portfolio.dc.html" style="font-weight:800;font-size:17px;letter-spacing:-0.02em">KUBA<span style="color:#FF4718">.</span></a>
-    <nav style="display:flex;gap:26px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">
+    <a href="Kuba-Portfolio.dc.html" style="font-weight:800;font-size:21px;letter-spacing:-0.025em">KUBA Z<span style="color:#FF4718">.</span></a>
+    <nav style="display:flex;gap:26px;align-items:center;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">
       <div role="button" tabIndex="{{ zero }}" onClick="{{ toggle }}" onKeyDown="{{ toggleKey }}" style="position:relative;display:flex;background:#ffffff;border-radius:999px;padding:3px;box-shadow:0 1px 0 rgba(0,0,0,0.04);cursor:pointer;user-select:none">
         <div style="{{ thumbStyle }}"></div>
         <span style="{{ enLabelStyle }}">EN</span>
@@ -52,12 +52,12 @@
       <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
       <a href="Kuba-Portfolio.dc.html#work" style="color:#6b6b6b;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Work</a>
       <a href="Kuba-CV.dc.html" style="color:#6b6b6b;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
-      <a href="Kuba-Portfolio.dc.html#contact" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Contact</a>
+      <a href="Kuba-Kontakt.dc.html" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Contact</a>
     </sc-if>
       <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
       <a href="Kuba-Portfolio.dc.html#work" style="color:#6b6b6b;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Projekty</a>
       <a href="Kuba-CV.dc.html" style="color:#6b6b6b;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
-      <a href="Kuba-Portfolio.dc.html#contact" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Kontakt</a>
+      <a href="Kuba-Kontakt.dc.html" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Kontakt</a>
     </sc-if>
           <div data-burger="1" role="button" tabIndex="{{ zero }}" aria-label="Menu" onClick="{{ toggleMenu }}" onKeyDown="{{ toggleMenuKey }}" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:40px;height:40px;border-radius:999px;background:#fff;cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,0.04);flex:0 0 auto">
         <span style="{{ burgerTopStyle }}"></span>
@@ -66,16 +66,16 @@
       </div>
     </nav>
       <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
-    <div data-menu="1" style="position:absolute;top:100%;left:0;right:0;background:rgba(235,235,235,0.97);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,0.08);padding:8px 18px 18px;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;box-shadow:0 18px 30px -22px rgba(0,0,0,0.35)">
+    <div data-menu="1" style="position:absolute;top:100%;left:0;right:0;background:rgba(235,235,235,0.97);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,0.08);padding:8px 18px 18px;display:flex;flex-direction:column;font-family:'Montserrat',sans-serif;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;box-shadow:0 18px 30px -22px rgba(0,0,0,0.35)">
       <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
         <a href="Kuba-Portfolio.dc.html#work" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Work</a>
         <a href="Kuba-CV.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">CV</a>
-        <a href="Kuba-Portfolio.dc.html#contact" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Contact</a>
+        <a href="Kuba-Kontakt.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Contact</a>
       </sc-if>
       <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
         <a href="Kuba-Portfolio.dc.html#work" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Projekty</a>
         <a href="Kuba-CV.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">CV</a>
-        <a href="Kuba-Portfolio.dc.html#contact" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Kontakt</a>
+        <a href="Kuba-Kontakt.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Kontakt</a>
       </sc-if>
     </div>
     </sc-if>
@@ -86,8 +86,8 @@
   <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
 
   <section style="max-width:1000px;margin:0 auto;padding:60px 32px 36px">
-    <a href="Kuba-Portfolio.dc.html#work" style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:34px" style-hover="color:#FF4718">← All work</a>
-    <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:18px">Brand · UI · Motion</span>
+    <a href="Kuba-Portfolio.dc.html#work" style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:34px" style-hover="color:#FF4718">← All work</a>
+    <span style="display:block;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:18px">Brand · UI · Motion</span>
     <h1 style="font-size:clamp(40px,6vw,74px);line-height:1;font-weight:700;letter-spacing:-0.04em;margin:0 0 22px">Vibelink</h1>
     <p style="font-size:19px;line-height:1.5;color:#1c1c1c;margin:0;max-width:660px;text-wrap:pretty">A site for sharing music — paste one link, get links to every service. Share through Vibelink and your friends can play the track on whichever streaming service they use.</p>
   </section>
@@ -102,19 +102,19 @@
   <section style="max-width:1300px;margin:0 auto;padding:0 32px">
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
       <div style="background:#fff;border-radius:16px;padding:22px">
-        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Role</span>
+        <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Role</span>
         <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Identity, UI, motion</p>
       </div>
       <div style="background:#fff;border-radius:16px;padding:22px">
-        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Product</span>
+        <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Product</span>
         <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Vibelink — cross-service music sharing</p>
       </div>
       <div style="background:#fff;border-radius:16px;padding:22px">
-        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Tools</span>
+        <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Tools</span>
         <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Figma, Illustrator</p>
       </div>
       <div style="background:#fff;border-radius:16px;padding:22px">
-        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Deliverables</span>
+        <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Deliverables</span>
         <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Logo, UI kit, animated prototype</p>
       </div>
     </div>
@@ -122,7 +122,7 @@
 
   <section style="max-width:1000px;margin:0 auto;padding:72px 32px 0">
     <div style="display:grid;grid-template-columns:180px 1fr;gap:32px;padding-bottom:28px;border-bottom:1px solid rgba(0,0,0,0.12)">
-      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">The problem</h2>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">The problem</h2>
       <div>
         <p style="margin:0;font-size:17px;line-height:1.6;text-wrap:pretty">Sharing a song means sharing a service. The person on the other end opens a link to a platform they don't use, and the recommendation dies there.</p>
         <p style="margin:0;font-size:17px;line-height:1.6;color:#6b6b6b;text-wrap:pretty">Vibelink resolves one link into all of them — so the design had to make a technical lookup feel like handing someone a record.</p>
@@ -133,8 +133,8 @@
   
   <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
     <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:24px">
-      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0">The flow</h2>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6b6b">03 screens, animated</span>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0">The flow</h2>
+      <span style="font-family:'Montserrat',sans-serif;font-size:11px;color:#6b6b6b">03 screens, animated</span>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
       <div style="background:#fff;border-radius:18px;overflow:hidden">
@@ -142,7 +142,7 @@
           <img src="assets/vibelink-title.gif" alt="Paste a link" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
         </div>
         <div style="padding:20px 22px 24px">
-          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">01 — Paste</span>
+          <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">01 — Paste</span>
           <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">A link or a song ID goes in. The record sleeve reacts before any result loads.</p>
         </div>
       </div>
@@ -151,7 +151,7 @@
           <img src="assets/vibelink-link.gif" alt="Resolving the track" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
         </div>
         <div style="padding:20px 22px 24px">
-          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">02 — Resolve</span>
+          <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">02 — Resolve</span>
           <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">The track resolves into artwork, title, and artist on one card.</p>
         </div>
       </div>
@@ -160,7 +160,7 @@
           <img src="assets/vibelink-links.gif" alt="All services listed" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
         </div>
         <div style="padding:20px 22px 24px">
-          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">03 — Share</span>
+          <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">03 — Share</span>
           <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Every service as its own pill row: platform icon, title, play. One share button above them all.</p>
         </div>
       </div>
@@ -176,7 +176,7 @@
       <div style="display:grid;gap:20px">
         <div style="background:#fff;border-radius:18px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;gap:20px">
           <div>
-            <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Component study</span>
+            <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Component study</span>
             <h3 style="margin:0 0 8px;font-size:17px;font-weight:700;letter-spacing:-0.015em">The play button</h3>
             <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">A single control carrying the whole material: violet gradient, soft outer shadow, inner light. Press depth does the acknowledging.</p>
           </div>
@@ -185,12 +185,12 @@
           </div>
         </div>
         <div style="background:#13017c;border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:18px">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55)">The mark</span>
+          <span style="font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55)">The mark</span>
           <img src="assets/vibelink-logo.svg" alt="Vibelink mark" style="height:92px;width:auto;display:block;align-self:center">
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#13017C</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#421F87</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#7A4394</span>
+            <span style="font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#13017C</span>
+            <span style="font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#421F87</span>
+            <span style="font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#7A4394</span>
           </div>
         </div>
       </div>
@@ -199,7 +199,7 @@
 
   <section style="max-width:1000px;margin:0 auto;padding:56px 32px 0">
     <div style="display:grid;grid-template-columns:180px 1fr;gap:32px">
-      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">Outcome</h2>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">Outcome</h2>
       <div>
         <p style="margin:0;font-size:17px;line-height:1.6;text-wrap:pretty">A complete animated prototype: identity, UI kit, and the three screens that carry the entire product — paste, resolve, share.</p>
       </div>
@@ -209,10 +209,10 @@
   <section style="max-width:1300px;margin:0 auto;padding:72px 32px 56px">
     <a href="Kuba-Case-HeartBeat.dc.html" style="display:flex;justify-content:space-between;align-items:center;gap:24px;background:#1c1c1c;border-radius:22px;padding:40px 44px;transition:background .2s ease" style-hover="background:#FF4718">
       <div>
-        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:12px">Next case study</span>
+        <span style="display:block;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:12px">Next case study</span>
         <h3 style="margin:0;font-size:clamp(24px,3.4vw,38px);font-weight:700;letter-spacing:-0.03em;color:#fff">Heart Beat</h3>
       </div>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:22px;color:#fff">→</span>
+      <span style="font-family:'Montserrat',sans-serif;font-size:22px;color:#fff">→</span>
     </a>
   </section>
 
@@ -221,8 +221,8 @@
   <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
 
   <section style="max-width:1000px;margin:0 auto;padding:60px 32px 36px">
-    <a href="Kuba-Portfolio.dc.html#work" style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:34px" style-hover="color:#FF4718">← Wszystkie projekty</a>
-    <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:18px">Brand · UI · Motion</span>
+    <a href="Kuba-Portfolio.dc.html#work" style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:34px" style-hover="color:#FF4718">← Wszystkie projekty</a>
+    <span style="display:block;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:18px">Brand · UI · Motion</span>
     <h1 style="font-size:clamp(40px,6vw,74px);line-height:1;font-weight:700;letter-spacing:-0.04em;margin:0 0 22px">Vibelink</h1>
     <p style="font-size:19px;line-height:1.5;color:#1c1c1c;margin:0;max-width:660px;text-wrap:pretty">Strona do dzielenia się muzyką — wklejasz jeden link, dostajesz linki do kilku serwisów. Jeśli udostępnisz przez Vibelinka, twoi znajomi mogą odsłuchiwać utwory przez swój ulubiony serwis streamingowy.</p>
   </section>
@@ -237,19 +237,19 @@
   <section style="max-width:1300px;margin:0 auto;padding:0 32px">
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
       <div style="background:#fff;border-radius:16px;padding:22px">
-        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Rola</span>
+        <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Rola</span>
         <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Identyfikacja, UI, motion</p>
       </div>
       <div style="background:#fff;border-radius:16px;padding:22px">
-        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Produkt</span>
+        <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Produkt</span>
         <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Vibelink — udostępnianie muzyki między serwisami</p>
       </div>
       <div style="background:#fff;border-radius:16px;padding:22px">
-        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Narzędzia</span>
+        <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Narzędzia</span>
         <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Figma, Illustrator</p>
       </div>
       <div style="background:#fff;border-radius:16px;padding:22px">
-        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Zakres</span>
+        <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Zakres</span>
         <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Logo, UI kit, animowany prototyp</p>
       </div>
     </div>
@@ -257,7 +257,7 @@
 
   <section style="max-width:1000px;margin:0 auto;padding:72px 32px 0">
     <div style="display:grid;grid-template-columns:180px 1fr;gap:32px;padding-bottom:28px;border-bottom:1px solid rgba(0,0,0,0.12)">
-      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">Problem</h2>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">Problem</h2>
       <div>
         <p style="margin:0;font-size:17px;line-height:1.6;text-wrap:pretty">Udostępniając utwór, udostępniasz też serwis. Osoba po drugiej stronie otwiera link do platformy, której nie używa — i rekomendacja umiera w tym miejscu.</p>
         <p style="margin:0;font-size:17px;line-height:1.6;color:#6b6b6b;text-wrap:pretty">Vibelink zamienia jeden link na wszystkie. Projekt musiał sprawić, żeby techniczne wyszukiwanie działało jak podanie komuś płyty do ręki.</p>
@@ -268,8 +268,8 @@
   
   <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
     <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:24px">
-      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0">Przebieg</h2>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6b6b">03 ekrany, animowane</span>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0">Przebieg</h2>
+      <span style="font-family:'Montserrat',sans-serif;font-size:11px;color:#6b6b6b">03 ekrany, animowane</span>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
       <div style="background:#fff;border-radius:18px;overflow:hidden">
@@ -277,7 +277,7 @@
           <img src="assets/vibelink-title.gif" alt="Wklejanie linku" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
         </div>
         <div style="padding:20px 22px 24px">
-          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">01 — Wklej</span>
+          <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">01 — Wklej</span>
           <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Wchodzi link albo ID utworu. Okładka reaguje, zanim pojawi się wynik.</p>
         </div>
       </div>
@@ -286,7 +286,7 @@
           <img src="assets/vibelink-link.gif" alt="Rozpoznanie utworu" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
         </div>
         <div style="padding:20px 22px 24px">
-          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">02 — Rozpoznaj</span>
+          <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">02 — Rozpoznaj</span>
           <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Utwór rozwija się w okładkę, tytuł i wykonawcę na jednej karcie.</p>
         </div>
       </div>
@@ -295,7 +295,7 @@
           <img src="assets/vibelink-links.gif" alt="Lista serwisów" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
         </div>
         <div style="padding:20px 22px 24px">
-          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">03 — Udostępnij</span>
+          <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">03 — Udostępnij</span>
           <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Każdy serwis jako osobny wiersz: ikona platformy, tytuł, play. Nad nimi jeden przycisk udostępniania.</p>
         </div>
       </div>
@@ -311,7 +311,7 @@
       <div style="display:grid;gap:20px">
         <div style="background:#fff;border-radius:18px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;gap:20px">
           <div>
-            <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Studium komponentu</span>
+            <span style="display:block;font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Studium komponentu</span>
             <h3 style="margin:0 0 8px;font-size:17px;font-weight:700;letter-spacing:-0.015em">Przycisk play</h3>
             <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Jedna kontrolka nosząca cały materiał: fioletowy gradient, miękki cień, wewnętrzne światło. Głębia wciśnięcia załatwia potwierdzenie.</p>
           </div>
@@ -320,12 +320,12 @@
           </div>
         </div>
         <div style="background:#13017c;border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:18px">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55)">Znak</span>
+          <span style="font-family:'Montserrat',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55)">Znak</span>
           <img src="assets/vibelink-logo.svg" alt="Znak Vibelink" style="height:92px;width:auto;display:block;align-self:center">
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#13017C</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#421F87</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#7A4394</span>
+            <span style="font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#13017C</span>
+            <span style="font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#421F87</span>
+            <span style="font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#7A4394</span>
           </div>
         </div>
       </div>
@@ -334,7 +334,7 @@
 
   <section style="max-width:1000px;margin:0 auto;padding:56px 32px 0">
     <div style="display:grid;grid-template-columns:180px 1fr;gap:32px">
-      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">Efekt</h2>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">Efekt</h2>
       <div>
         <p style="margin:0;font-size:17px;line-height:1.6;text-wrap:pretty">Kompletny animowany prototyp: identyfikacja, UI kit i trzy ekrany, które unoszą cały produkt — wklej, rozpoznaj, udostępnij.</p>
       </div>
@@ -344,10 +344,10 @@
   <section style="max-width:1300px;margin:0 auto;padding:72px 32px 56px">
     <a href="Kuba-Case-HeartBeat.dc.html" style="display:flex;justify-content:space-between;align-items:center;gap:24px;background:#1c1c1c;border-radius:22px;padding:40px 44px;transition:background .2s ease" style-hover="background:#FF4718">
       <div>
-        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:12px">Następne case study</span>
+        <span style="display:block;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:12px">Następne case study</span>
         <h3 style="margin:0;font-size:clamp(24px,3.4vw,38px);font-weight:700;letter-spacing:-0.03em;color:#fff">Heart Beat</h3>
       </div>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:22px;color:#fff">→</span>
+      <span style="font-family:'Montserrat',sans-serif;font-size:22px;color:#fff">→</span>
     </a>
   </section>
 
@@ -410,7 +410,7 @@ class Component extends DCLogic {
     const fading = !!this.state.fading;
     const label = (on) => ({
       position: 'relative', zIndex: 1, pointerEvents: 'none',
-      fontFamily: "'JetBrains Mono', monospace", fontSize: '9.5px', fontWeight: 500,
+      fontFamily: "'Montserrat', sans-serif", fontSize: '9.5px', fontWeight: 500,
       letterSpacing: '0.1em', padding: '4px 9px', lineHeight: 1.2,
       color: on ? '#fff' : '#8a8a8a', transition: 'color .3s ease'
     });

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#ebebeb;color:#1c1c1c;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:#1c1c1c;text-decoration:none}
+  a:hover{color:#FF4718}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (max-width: 820px){
+    header{padding:12px 16px !important}
+    header nav{gap:12px !important;font-size:10px !important;flex-wrap:wrap;justify-content:flex-end}
+    header nav a{display:none !important}
+    [data-burger]{display:flex !important}
+    section, footer{padding-left:16px !important;padding-right:16px !important}
+    [style*="grid-template-columns"]{grid-template-columns:1fr !important}
+    h1{font-size:clamp(30px,9vw,40px) !important}
+  }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#ebebeb">
+
+  <header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(235,235,235,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.06)">
+    <a href="Kuba-Portfolio.dc.html" style="font-weight:800;font-size:21px;letter-spacing:-0.025em">Kuba Z<span style="color:#FF4718">.</span></a>
+    <nav style="display:flex;gap:26px;align-items:center;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ toggle }}" onKeyDown="{{ toggleKey }}" style="position:relative;display:flex;background:#ffffff;border-radius:999px;padding:3px;box-shadow:0 1px 0 rgba(0,0,0,0.04);cursor:pointer;user-select:none">
+        <div style="{{ thumbStyle }}"></div>
+        <span style="{{ enLabelStyle }}">EN</span>
+        <span style="{{ plLabelStyle }}">PL</span>
+      </div>
+      <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+      <a href="Kuba-Portfolio.dc.html#work" style="color:#6b6b6b;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Work</a>
+      <a href="Kuba-CV.dc.html" style="color:#6b6b6b;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
+      <a href="Kuba-Kontakt.dc.html" style="color:#1c1c1c;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Contact</a>
+    </sc-if>
+      <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+      <a href="Kuba-Portfolio.dc.html#work" style="color:#6b6b6b;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Projekty</a>
+      <a href="Kuba-CV.dc.html" style="color:#6b6b6b;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
+      <a href="Kuba-Kontakt.dc.html" style="color:#1c1c1c;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Kontakt</a>
+    </sc-if>
+      <div data-burger="1" role="button" tabIndex="{{ zero }}" aria-label="Menu" onClick="{{ toggleMenu }}" onKeyDown="{{ toggleMenuKey }}" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:40px;height:40px;border-radius:999px;background:#fff;cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,0.04);flex:0 0 auto">
+        <span style="{{ burgerTopStyle }}"></span>
+        <span style="{{ burgerMidStyle }}"></span>
+        <span style="{{ burgerBotStyle }}"></span>
+      </div>
+    </nav>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-menu="1" style="position:absolute;top:100%;left:0;right:0;background:rgba(235,235,235,0.97);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,0.08);padding:8px 18px 18px;display:flex;flex-direction:column;font-family:'Montserrat',sans-serif;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;box-shadow:0 18px 30px -22px rgba(0,0,0,0.35)">
+      <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+        <a href="Kuba-Portfolio.dc.html#work" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Work</a>
+        <a href="Kuba-CV.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">CV</a>
+        <a href="Kuba-Kontakt.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Contact</a>
+      </sc-if>
+      <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+        <a href="Kuba-Portfolio.dc.html#work" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Projekty</a>
+        <a href="Kuba-CV.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">CV</a>
+        <a href="Kuba-Kontakt.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Kontakt</a>
+      </sc-if>
+    </div>
+    </sc-if>
+  </header>
+
+  <div style="{{ swapStyle }}">
+  <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+
+  <section style="max-width:1000px;margin:0 auto;padding:72px 32px 8px;animation:riseIn .5s ease both">
+    <span style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:20px">Contact</span>
+    <h1 style="font-size:clamp(38px,6vw,68px);line-height:1.02;font-weight:700;letter-spacing:-0.035em;margin:0 0 18px;text-wrap:balance">Let's build something.</h1>
+    <p style="font-size:18px;line-height:1.55;color:#6b6b6b;margin:0;max-width:520px;text-wrap:pretty">Open to new projects, collaborations, and full-time work.</p>
+  </section>
+
+  <section style="max-width:1000px;margin:0 auto;padding:36px 32px 0">
+    <div style="background:#fff;border-radius:26px;padding:18px;box-shadow:0 20px 40px -26px rgba(0,0,0,0.22)">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ copyEmail }}" onKeyDown="{{ copyEmailKey }}" title="Click to copy" style="{{ mailCardStyle }}">
+        <div>
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:12px">Email</span>
+          <span style="display:block;font-size:clamp(20px,3.4vw,32px);font-weight:700;letter-spacing:-0.025em;color:#fff;word-break:break-word">kuba.ziastudio@gmail.com</span>
+        </div>
+        <span style="{{ copyPillStyle }}">{{ copyPillLabel }}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:38px 22px 30px">
+        <div>
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;margin-bottom:12px">Phone</span>
+          <a href="tel:+48512045081" style="font-size:20px;font-weight:700;letter-spacing:-0.02em;text-shadow:0 1px 1px rgba(0,0,0,0.08)">+48 512 045 081</a>
+        </div>
+        <div>
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;margin-bottom:12px">Based in</span>
+          <span style="font-size:20px;font-weight:700;letter-spacing:-0.02em;text-shadow:0 1px 1px rgba(0,0,0,0.08)">Rzeszów, Poland</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer style="max-width:1000px;margin:0 auto;padding:44px 32px 64px">
+    <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:16px 20px;font-size:11.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b">
+      <span style="width:8px;height:8px;border-radius:999px;background:#FF4718;flex:0 0 auto"></span>
+      Available for new projects — 2026
+    </div>
+  </footer>
+
+  </sc-if>
+  <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+
+  <section style="max-width:1000px;margin:0 auto;padding:72px 32px 8px;animation:riseIn .5s ease both">
+    <span style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:20px">Kontakt</span>
+    <h1 style="font-size:clamp(38px,6vw,68px);line-height:1.02;font-weight:700;letter-spacing:-0.035em;margin:0 0 18px;text-wrap:balance">Zbudujmy coś razem.</h1>
+    <p style="font-size:18px;line-height:1.55;color:#6b6b6b;margin:0;max-width:520px;text-wrap:pretty">Otwarty na nowe projekty, współprace i pracę na stałe.</p>
+  </section>
+
+  <section style="max-width:1000px;margin:0 auto;padding:36px 32px 0">
+    <div style="background:#fff;border-radius:26px;padding:18px;box-shadow:0 20px 40px -26px rgba(0,0,0,0.22)">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ copyEmail }}" onKeyDown="{{ copyEmailKey }}" title="Kliknij, aby skopiować" style="{{ mailCardStyle }}">
+        <div>
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:12px">E-mail</span>
+          <span style="display:block;font-size:clamp(20px,3.4vw,32px);font-weight:700;letter-spacing:-0.025em;color:#fff;word-break:break-word">kuba.ziastudio@gmail.com</span>
+        </div>
+        <span style="{{ copyPillStyle }}">{{ copyPillLabel }}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:38px 22px 30px">
+        <div>
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;margin-bottom:12px">Telefon</span>
+          <a href="tel:+48512045081" style="font-size:20px;font-weight:700;letter-spacing:-0.02em;text-shadow:0 1px 1px rgba(0,0,0,0.08)">+48 512 045 081</a>
+        </div>
+        <div>
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;margin-bottom:12px">Miejsce</span>
+          <span style="font-size:20px;font-weight:700;letter-spacing:-0.02em;text-shadow:0 1px 1px rgba(0,0,0,0.08)">Rzeszów, Polska</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer style="max-width:1000px;margin:0 auto;padding:44px 32px 64px">
+    <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:16px 20px;font-size:11.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b">
+      <span style="width:8px;height:8px;border-radius:999px;background:#FF4718;flex:0 0 auto"></span>
+      Dostępny do nowych projektów — 2026
+    </div>
+  </footer>
+
+  </sc-if>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;pl&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en' | 'pl'&quot;}}">
+class Component extends DCLogic {
+  state = { lang: null, fading: false, menuOpen: false, copied: 0 };
+  componentDidMount() {
+    let s = null;
+    try { s = localStorage.getItem('kuba-lang'); } catch (e) {}
+    this.setState({ lang: s || this.props.defaultLang || 'en' });
+  }
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._ct); }
+  set(l) {
+    const cur = this.state.lang || this.props.defaultLang || 'en';
+    if (l === cur || this.state.fading) return;
+    this.setState({ fading: true });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.setState({ lang: l, fading: false });
+      try { localStorage.setItem('kuba-lang', l); } catch (e) {}
+    }, 180);
+  }
+  copyEmail = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const em = 'kuba.ziastudio@gmail.com';
+    const flag = (ok) => {
+      this.setState({ copied: ok ? 1 : 2 });
+      clearTimeout(this._ct);
+      this._ct = setTimeout(() => this.setState({ copied: 0 }), 2800);
+    };
+    const legacy = () => {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = em;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+        document.body.appendChild(ta);
+        try { ta.focus({ preventScroll: true }); } catch (e2) {}
+        ta.select(); ta.setSelectionRange(0, em.length);
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+      } catch (err) { return false; }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(em).then(() => flag(true), () => flag(legacy()));
+      return;
+    }
+    flag(legacy());
+  };
+  renderVals() {
+    const lang = this.state.lang || this.props.defaultLang || 'en';
+    const isPl = lang === 'pl';
+    const fading = !!this.state.fading;
+    const copied = this.state.copied;
+    const label = (on) => ({
+      position: 'relative', zIndex: 1, pointerEvents: 'none',
+      fontFamily: "'Montserrat', sans-serif", fontSize: '9.5px', fontWeight: 500,
+      letterSpacing: '0.1em', padding: '4px 9px', lineHeight: 1.2,
+      color: on ? '#fff' : '#8a8a8a', transition: 'color .3s ease'
+    });
+    return {
+      isEn: !isPl, isPl, zero: 0,
+      copyEmail: this.copyEmail,
+      copyEmailKey: (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); this.copyEmail(); } },
+      mailCardStyle: {
+        background: copied ? '#FF4718' : '#1c1c1c',
+        borderRadius: '20px', padding: '38px 34px', cursor: 'pointer',
+        boxShadow: '0 14px 30px -18px rgba(0,0,0,0.45)',
+        display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+        flexWrap: 'wrap', gap: '20px',
+        transition: 'background .5s ease, transform .3s cubic-bezier(.33,.9,.25,1)'
+      },
+      copyPillStyle: {
+        display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden',
+        border: '1px solid rgba(255,255,255,0.28)', borderRadius: '999px',
+        padding: '11px 18px', fontSize: '11.5px', fontWeight: 600,
+        letterSpacing: '0.1em', textTransform: 'uppercase', color: '#fff',
+        maxWidth: '320px',
+        transition: 'border-color .5s ease, background .5s ease',
+        background: copied ? 'rgba(0,0,0,0.18)' : 'transparent'
+      },
+      copyPillLabel: copied ? (isPl ? 'Skopiowano' : 'Copied') : (isPl ? 'Kliknij, aby skopiować' : 'Click to copy'),
+      menuOpen: !!this.state.menuOpen,
+      toggleMenu: () => this.setState(st => ({ menuOpen: !st.menuOpen })),
+      toggleMenuKey: (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); this.setState(st => ({ menuOpen: !st.menuOpen })); } },
+      closeMenu: () => this.setState({ menuOpen: false }),
+      burgerTopStyle: { display: 'block', width: '18px', height: '2px', background: '#1c1c1c', borderRadius: '2px', transition: 'transform .35s cubic-bezier(.33,.9,.25,1)', transform: this.state.menuOpen ? 'translateY(6px) rotate(45deg)' : 'none' },
+      burgerMidStyle: { display: 'block', width: '18px', height: '2px', background: '#1c1c1c', borderRadius: '2px', transition: 'opacity .2s ease, transform .35s cubic-bezier(.33,.9,.25,1)', opacity: this.state.menuOpen ? 0 : 1, transform: this.state.menuOpen ? 'scaleX(.4)' : 'none' },
+      burgerBotStyle: { display: 'block', width: '18px', height: '2px', background: '#1c1c1c', borderRadius: '2px', transition: 'transform .35s cubic-bezier(.33,.9,.25,1)', transform: this.state.menuOpen ? 'translateY(-6px) rotate(-45deg)' : 'none' },
+      toggle: () => this.set(isPl ? 'en' : 'pl'),
+      toggleKey: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.set(isPl ? 'en' : 'pl'); } },
+      enLabelStyle: label(!isPl),
+      plLabelStyle: label(isPl),
+      thumbStyle: {
+        position: 'absolute', top: '3px', left: '3px',
+        width: 'calc(50% - 3px)', height: 'calc(100% - 6px)',
+        borderRadius: '999px', background: '#1c1c1c',
+        transform: isPl ? 'translateX(100%)' : 'translateX(0)',
+        transition: 'transform .32s cubic-bezier(.2,.8,.2,1)'
+      },
+      swapStyle: {
+        opacity: fading ? 0 : 1,
+        transform: fading ? 'translateY(-6px)' : 'none',
+        transition: 'opacity .18s ease, transform .18s ease'
+      }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

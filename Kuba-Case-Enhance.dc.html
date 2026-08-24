@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#ebebeb;color:#1c1c1c;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:#1c1c1c;text-decoration:none}
+  a:hover{color:#FF4718}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (max-width: 820px){
+    header{padding:12px 16px !important}
+    header nav{gap:12px !important;font-size:10px !important;flex-wrap:wrap;justify-content:flex-end}
+    header nav a{display:none !important}
+    [data-burger]{display:flex !important}
+    section, footer{padding-left:16px !important;padding-right:16px !important}
+    [style*="grid-template-columns"]{grid-template-columns:1fr !important}
+    [style*="grid-column: span"], [style*="grid-column:span"]{grid-column:auto !important}
+    h1{font-size:clamp(34px,11vw,52px) !important}
+  }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#ebebeb">
+
+  <header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(235,235,235,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.06)">
+    <a href="Kuba-Portfolio.dc.html" style="font-weight:800;font-size:21px;letter-spacing:-0.025em">KUBA Z<span style="color:#FF4718">.</span></a>
+    <nav style="display:flex;gap:26px;align-items:center;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ toggle }}" onKeyDown="{{ toggleKey }}" style="position:relative;display:flex;background:#ffffff;border-radius:999px;padding:3px;box-shadow:0 1px 0 rgba(0,0,0,0.04);cursor:pointer;user-select:none">
+        <div style="{{ thumbStyle }}"></div>
+        <span style="{{ enLabelStyle }}">EN</span>
+        <span style="{{ plLabelStyle }}">PL</span>
+      </div>
+      <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+        <a href="Kuba-Portfolio.dc.html#work" style="color:#1c1c1c;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Work</a>
+        <a href="Kuba-CV.dc.html" style="color:#6b6b6b;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
+        <a href="Kuba-Kontakt.dc.html" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Contact</a>
+      </sc-if>
+      <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+        <a href="Kuba-Portfolio.dc.html#work" style="color:#1c1c1c;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Projekty</a>
+        <a href="Kuba-CV.dc.html" style="color:#6b6b6b;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
+        <a href="Kuba-Kontakt.dc.html" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Kontakt</a>
+      </sc-if>
+      <div data-burger="1" role="button" tabIndex="{{ zero }}" aria-label="Menu" onClick="{{ toggleMenu }}" onKeyDown="{{ toggleMenuKey }}" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:40px;height:40px;border-radius:999px;background:#fff;cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,0.04);flex:0 0 auto">
+        <span style="{{ burgerTopStyle }}"></span>
+        <span style="{{ burgerMidStyle }}"></span>
+        <span style="{{ burgerBotStyle }}"></span>
+      </div>
+    </nav>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-menu="1" style="position:absolute;top:100%;left:0;right:0;background:rgba(235,235,235,0.97);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,0.08);padding:8px 18px 18px;display:flex;flex-direction:column;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;box-shadow:0 18px 30px -22px rgba(0,0,0,0.35)">
+      <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+        <a href="Kuba-Portfolio.dc.html#work" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Work</a>
+        <a href="Kuba-CV.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">CV</a>
+        <a href="Kuba-Kontakt.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Contact</a>
+      </sc-if>
+      <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+        <a href="Kuba-Portfolio.dc.html#work" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Projekty</a>
+        <a href="Kuba-CV.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">CV</a>
+        <a href="Kuba-Kontakt.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Kontakt</a>
+      </sc-if>
+    </div>
+    </sc-if>
+  </header>
+
+  <div style="{{ swapStyle }}">
+  <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+
+  <section style="max-width:1000px;margin:0 auto;padding:60px 32px 36px;animation:riseIn .5s ease both">
+    <a href="Kuba-Portfolio.dc.html#work" style="display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:30px" style-hover="color:#FF4718">← Back to work</a>
+    <span style="display:block;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:18px">Branding · Identity</span>
+    <h1 style="font-size:clamp(40px,6vw,74px);line-height:1;font-weight:700;letter-spacing:-0.04em;margin:0 0 22px">ENHANCE</h1>
+    <p style="font-size:19px;line-height:1.5;color:#1c1c1c;margin:0;max-width:660px;text-wrap:pretty">From naming explorations to a finished brand book: mark, colour versions, typography and construction rules.</p>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:0 32px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Role</span>
+        <span style="font-size:15px;font-weight:600">Brand design</span>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Scope</span>
+        <span style="font-size:15px;font-weight:600">Mark · Brand book</span>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Type</span>
+        <span style="font-size:15px;font-weight:600">Montserrat · AHAMONO</span>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Tools</span>
+        <span style="font-size:15px;font-weight:600">Illustrator · Figma</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:24px;gap:16px;flex-wrap:wrap">
+      <h2 style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;margin:0">Brand search</h2>
+      <span style="font-size:11px;letter-spacing:0.06em;color:#6b6b6b">click anything to open it larger</span>
+    </div>
+    <div role="button" tabIndex="{{ zero }}" onClick="{{ open.mood }}" onKeyDown="{{ openKey.mood }}" style="background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;margin-bottom:20px;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+      <img src="assets/enh-mood-lion.png" alt="Moodboard" style="display:block;width:100%;height:auto">
+      <div style="padding:16px 22px 20px">
+        <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:6px">01 — Moodboard</span>
+        <p style="margin:0;font-size:14px;line-height:1.5;color:#6b6b6b;max-width:640px">Where it started: a lion, a claim, and the tone the brand had to carry — strength without shouting.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start;grid-auto-flow:dense">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.type }}" onKeyDown="{{ openKey.type }}" style="grid-column:span 2;background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-mood-type.png" alt="Typeface tests" style="display:block;width:100%;height:auto">
+        <div style="padding:14px 18px 18px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:5px">02 — Typefaces</span>
+          <p style="margin:0;font-size:13.5px;line-height:1.45;color:#6b6b6b">Six candidates set in the same word. Montserrat won on the wide, quiet caps.</p>
+        </div>
+      </div>
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.marks }}" onKeyDown="{{ openKey.marks }}" style="grid-column:span 1;background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-mood-marks.png" alt="Mark explorations" style="display:block;width:100%;height:auto">
+        <div style="padding:14px 18px 18px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:5px">03 — Marks</span>
+          <p style="margin:0;font-size:13.5px;line-height:1.45;color:#6b6b6b">The N/E monogram taken through line, wave, and stripe.</p>
+        </div>
+      </div>
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.alt }}" onKeyDown="{{ openKey.alt }}" style="grid-column:span 3;background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-mood-alt.png" alt="Other directions" style="display:block;width:100%;height:auto">
+        <div style="padding:14px 18px 18px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:5px">04 — Other directions</span>
+          <p style="margin:0;font-size:13.5px;line-height:1.45;color:#6b6b6b">A softer, tech-company route explored in parallel.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:24px;gap:16px;flex-wrap:wrap">
+      <h2 style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;margin:0">Brand book</h2>
+      <span style="font-size:11px;letter-spacing:0.06em;color:#6b6b6b">click a page to open it larger</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.book1 }}" onKeyDown="{{ openKey.book1 }}" style="background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-book-01.png" alt="Red version" style="display:block;width:100%;height:auto">
+        <div style="padding:16px 20px 20px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:6px">01 — Red version</span>
+          <p style="margin:0;font-size:14px;line-height:1.5;color:#6b6b6b">Diamond mark, Montserrat Thin, red #b50a0a.</p>
+        </div>
+      </div>
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.book2 }}" onKeyDown="{{ openKey.book2 }}" style="background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-book-02.png" alt="Cyan version" style="display:block;width:100%;height:auto">
+        <div style="padding:16px 20px 20px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:6px">02 — Cyan version</span>
+          <p style="margin:0;font-size:14px;line-height:1.5;color:#6b6b6b">Hexagon mark, Montserrat Light, turquoise #32a3a3.</p>
+        </div>
+      </div>
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.book3 }}" onKeyDown="{{ openKey.book3 }}" style="background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-book-03.png" alt="Simplified version" style="display:block;width:100%;height:auto">
+        <div style="padding:16px 20px 20px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:6px">03 — Simplified</span>
+          <p style="margin:0;font-size:14px;line-height:1.5;color:#6b6b6b">Black and white only, squared frame, no rounded terminals.</p>
+        </div>
+      </div>
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.book4 }}" onKeyDown="{{ openKey.book4 }}" style="background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-book-04.png" alt="Other lock-ups" style="display:block;width:100%;height:auto">
+        <div style="padding:16px 20px 20px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:6px">04 — Other lock-ups</span>
+          <p style="margin:0;font-size:14px;line-height:1.5;color:#6b6b6b">Alternates that stayed in the file, plus the mono typeface.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1000px;margin:0 auto;padding:56px 32px 72px">
+    <div style="display:grid;grid-template-columns:180px 1fr;gap:32px">
+      <h2 style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;margin:0;padding-top:6px">Outcome</h2>
+      <div>
+        <p style="margin:0 0 14px;font-size:17px;line-height:1.6;color:#1c1c1c;max-width:640px;text-wrap:pretty">Three usable directions instead of one — red for print, cyan for digital, a simplified one-colour version for stamps and small sizes. Every version has fixed proportions, so the mark holds together at any scale.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px">
+          <span style="display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:999px;padding:9px 16px;font-size:12px;font-weight:600"><span style="width:12px;height:12px;border-radius:3px;background:#b50a0a"></span>#b50a0a</span>
+          <span style="display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:999px;padding:9px 16px;font-size:12px;font-weight:600"><span style="width:12px;height:12px;border-radius:3px;background:#32a3a3"></span>#32a3a3</span>
+          <span style="display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:999px;padding:9px 16px;font-size:12px;font-weight:600"><span style="width:12px;height:12px;border-radius:3px;background:#000"></span>#000000</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </sc-if>
+  <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+
+  <section style="max-width:1000px;margin:0 auto;padding:60px 32px 36px;animation:riseIn .5s ease both">
+    <a href="Kuba-Portfolio.dc.html#work" style="display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:30px" style-hover="color:#FF4718">← Wróć do projektów</a>
+    <span style="display:block;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:18px">Branding · Identyfikacja</span>
+    <h1 style="font-size:clamp(40px,6vw,74px);line-height:1;font-weight:700;letter-spacing:-0.04em;margin:0 0 22px">ENHANCE</h1>
+    <p style="font-size:19px;line-height:1.5;color:#1c1c1c;margin:0;max-width:660px;text-wrap:pretty">Od poszukiwania nazwy i znaku do gotowej księgi: logo, wersje kolorystyczne, typografia i zasady konstrukcji.</p>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:0 32px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Rola</span>
+        <span style="font-size:15px;font-weight:600">Projekt marki</span>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Zakres</span>
+        <span style="font-size:15px;font-weight:600">Znak · Księga znaku</span>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Typografia</span>
+        <span style="font-size:15px;font-weight:600">Montserrat · AHAMONO</span>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Narzędzia</span>
+        <span style="font-size:15px;font-weight:600">Illustrator · Figma</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:24px;gap:16px;flex-wrap:wrap">
+      <h2 style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;margin:0">Poszukiwanie brandu</h2>
+      <span style="font-size:11px;letter-spacing:0.06em;color:#6b6b6b">kliknij, aby powiększyć</span>
+    </div>
+    <div role="button" tabIndex="{{ zero }}" onClick="{{ open.mood }}" onKeyDown="{{ openKey.mood }}" style="background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;margin-bottom:20px;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+      <img src="assets/enh-mood-lion.png" alt="Moodboard" style="display:block;width:100%;height:auto">
+      <div style="padding:16px 22px 20px">
+        <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:6px">01 — Moodboard</span>
+        <p style="margin:0;font-size:14px;line-height:1.5;color:#6b6b6b;max-width:640px">Punkt startu: lew, hasło i ton, jaki marka miała nieść — siła bez krzyku.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start;grid-auto-flow:dense">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.type }}" onKeyDown="{{ openKey.type }}" style="grid-column:span 2;background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-mood-type.png" alt="Testy fontów" style="display:block;width:100%;height:auto">
+        <div style="padding:14px 18px 18px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:5px">02 — Typografia</span>
+          <p style="margin:0;font-size:13.5px;line-height:1.45;color:#6b6b6b">Sześć kandydatów w tym samym słowie. Montserrat wygrał szerokimi, spokojnymi kapitalikami.</p>
+        </div>
+      </div>
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.marks }}" onKeyDown="{{ openKey.marks }}" style="grid-column:span 1;background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-mood-marks.png" alt="Szkice znaku" style="display:block;width:100%;height:auto">
+        <div style="padding:14px 18px 18px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:5px">03 — Znaki</span>
+          <p style="margin:0;font-size:13.5px;line-height:1.45;color:#6b6b6b">Monogram N/E w wersji liniowej, falowej i prążkowanej.</p>
+        </div>
+      </div>
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.alt }}" onKeyDown="{{ openKey.alt }}" style="grid-column:span 3;background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-mood-alt.png" alt="Inne kierunki" style="display:block;width:100%;height:auto">
+        <div style="padding:14px 18px 18px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:5px">04 — Inne kierunki</span>
+          <p style="margin:0;font-size:13.5px;line-height:1.45;color:#6b6b6b">Równolegle sprawdzany, łagodniejszy kierunek „tech".</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:24px;gap:16px;flex-wrap:wrap">
+      <h2 style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;margin:0">Księga znaku</h2>
+      <span style="font-size:11px;letter-spacing:0.06em;color:#6b6b6b">kliknij stronę, aby powiększyć</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.book1 }}" onKeyDown="{{ openKey.book1 }}" style="background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-book-01.png" alt="Wersja red" style="display:block;width:100%;height:auto">
+        <div style="padding:16px 20px 20px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:6px">01 — Wersja red</span>
+          <p style="margin:0;font-size:14px;line-height:1.5;color:#6b6b6b">Znak w rombie, Montserrat Thin, czerwień #b50a0a.</p>
+        </div>
+      </div>
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.book2 }}" onKeyDown="{{ openKey.book2 }}" style="background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-book-02.png" alt="Wersja cyan" style="display:block;width:100%;height:auto">
+        <div style="padding:16px 20px 20px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:6px">02 — Wersja cyan</span>
+          <p style="margin:0;font-size:14px;line-height:1.5;color:#6b6b6b">Znak w heksagonie, Montserrat Light, turkus #32a3a3.</p>
+        </div>
+      </div>
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.book3 }}" onKeyDown="{{ openKey.book3 }}" style="background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-book-03.png" alt="Wersja uproszczona" style="display:block;width:100%;height:auto">
+        <div style="padding:16px 20px 20px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:6px">03 — Wersja uproszczona</span>
+          <p style="margin:0;font-size:14px;line-height:1.5;color:#6b6b6b">Tylko czerń i biel, kwadratowa ramka, litery bez zaokrągleń.</p>
+        </div>
+      </div>
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ open.book4 }}" onKeyDown="{{ openKey.book4 }}" style="background:#fff;border-radius:18px;overflow:hidden;cursor:zoom-in;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease" style-hover="transform:translateY(-5px);box-shadow:0 22px 44px -14px rgba(0,0,0,0.22)">
+        <img src="assets/enh-book-04.png" alt="Pozostałe wersje" style="display:block;width:100%;height:auto">
+        <div style="padding:16px 20px 20px">
+          <span style="display:block;font-size:10.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:6px">04 — Pozostałe</span>
+          <p style="margin:0;font-size:14px;line-height:1.5;color:#6b6b6b">Warianty, które zostały w pliku, i font monospace AHAMONO.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1000px;margin:0 auto;padding:56px 32px 72px">
+    <div style="display:grid;grid-template-columns:180px 1fr;gap:32px">
+      <h2 style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;margin:0;padding-top:6px">Efekt</h2>
+      <div>
+        <p style="margin:0 0 14px;font-size:17px;line-height:1.6;color:#1c1c1c;max-width:640px;text-wrap:pretty">Trzy używalne kierunki zamiast jednego — red do druku, cyan do digitalu i wersja uproszczona do pieczątek i małych rozmiarów. Każda ma ustalone proporcje, więc znak trzyma się w każdej skali.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px">
+          <span style="display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:999px;padding:9px 16px;font-size:12px;font-weight:600"><span style="width:12px;height:12px;border-radius:3px;background:#b50a0a"></span>#b50a0a</span>
+          <span style="display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:999px;padding:9px 16px;font-size:12px;font-weight:600"><span style="width:12px;height:12px;border-radius:3px;background:#32a3a3"></span>#32a3a3</span>
+          <span style="display:inline-flex;align-items:center;gap:9px;background:#fff;border-radius:999px;padding:9px 16px;font-size:12px;font-weight:600"><span style="width:12px;height:12px;border-radius:3px;background:#000"></span>#000000</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </sc-if>
+  </div>
+
+  <sc-if value="{{ zoomOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ close }}" style="position:fixed;inset:0;z-index:200;background:rgba(12,12,12,0.9);backdrop-filter:blur(6px);display:flex;flex-direction:column;align-items:center;padding:56px 24px 32px;overflow:auto;cursor:zoom-out">
+      <div style="position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px;background:rgba(12,12,12,0.75);backdrop-filter:blur(10px)">
+        <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.6)">{{ zoomLabel }}</span>
+        <span style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:7px 14px">{{ closeLabel }}</span>
+      </div>
+      <div onClick="{{ stop }}" style="width:100%;max-width:1400px;cursor:default">{{ zoomImage }}</div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;pl&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en' | 'pl'&quot;}}">
+const PAGES = {
+  mood: { src: 'assets/enh-mood-lion.png', en: 'Moodboard', pl: 'Moodboard' },
+  type: { src: 'assets/enh-mood-type.png', en: 'Typefaces', pl: 'Typografia' },
+  alt: { src: 'assets/enh-mood-alt.png', en: 'Other directions', pl: 'Inne kierunki' },
+  marks: { src: 'assets/enh-mood-marks.png', en: 'Mark explorations', pl: 'Szkice znaku' },
+  book1: { src: 'assets/enh-book-01.png', en: 'Red version', pl: 'Wersja red' },
+  book2: { src: 'assets/enh-book-02.png', en: 'Cyan version', pl: 'Wersja cyan' },
+  book3: { src: 'assets/enh-book-03.png', en: 'Simplified version', pl: 'Wersja uproszczona' },
+  book4: { src: 'assets/enh-book-04.png', en: 'Other lock-ups', pl: 'Pozostałe wersje' }
+};
+
+class Component extends DCLogic {
+  state = { lang: null, fading: false, zoom: null, menuOpen: false };
+  componentDidMount() {
+    let s = null;
+    try { s = localStorage.getItem('kuba-lang'); } catch (e) {}
+    this.setState({ lang: s || this.props.defaultLang || 'en' });
+    this._esc = (e) => { if (e.key === 'Escape') this.setState({ zoom: null, menuOpen: false }); };
+    window.addEventListener('keydown', this._esc);
+  }
+  componentWillUnmount() {
+    clearTimeout(this._t);
+    window.removeEventListener('keydown', this._esc);
+  }
+  set(l) {
+    const cur = this.state.lang || this.props.defaultLang || 'en';
+    if (l === cur || this.state.fading) return;
+    this.setState({ fading: true });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.setState({ lang: l, fading: false });
+      try { localStorage.setItem('kuba-lang', l); } catch (e) {}
+    }, 180);
+  }
+  renderVals() {
+    const lang = this.state.lang || this.props.defaultLang || 'en';
+    const isPl = lang === 'pl';
+    const fading = !!this.state.fading;
+    const label = (on) => ({
+      position: 'relative', zIndex: 1, pointerEvents: 'none',
+      fontFamily: "'Montserrat', sans-serif", fontSize: '9.5px', fontWeight: 500,
+      letterSpacing: '0.1em', padding: '4px 9px', lineHeight: 1.2,
+      color: on ? '#fff' : '#8a8a8a', transition: 'color .3s ease'
+    });
+    const open = {}, openKey = {};
+    Object.keys(PAGES).forEach((k) => {
+      open[k] = () => this.setState({ zoom: k });
+      openKey[k] = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.setState({ zoom: k }); }
+      };
+    });
+    const z = this.state.zoom ? PAGES[this.state.zoom] : null;
+    return {
+      isEn: !isPl, isPl, zero: 0,
+      open, openKey,
+      zoomOpen: !!z,
+      zoomLabel: z ? (isPl ? z.pl : z.en) : '',
+      zoomImage: z ? React.createElement('img', {
+        src: z.src,
+        alt: isPl ? z.pl : z.en,
+        style: { display: 'block', width: '100%', height: 'auto', borderRadius: '12px' }
+      }) : null,
+      closeLabel: isPl ? 'Zamknij ✕' : 'Close ✕',
+      close: () => this.setState({ zoom: null }),
+      stop: (e) => e.stopPropagation(),
+      menuOpen: !!this.state.menuOpen,
+      toggleMenu: () => this.setState(st => ({ menuOpen: !st.menuOpen })),
+      toggleMenuKey: (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); this.setState(st => ({ menuOpen: !st.menuOpen })); } },
+      closeMenu: () => this.setState({ menuOpen: false }),
+      burgerTopStyle: { display: 'block', width: '18px', height: '2px', background: '#1c1c1c', borderRadius: '2px', transition: 'transform .35s cubic-bezier(.33,.9,.25,1)', transform: this.state.menuOpen ? 'translateY(6px) rotate(45deg)' : 'none' },
+      burgerMidStyle: { display: 'block', width: '18px', height: '2px', background: '#1c1c1c', borderRadius: '2px', transition: 'opacity .2s ease, transform .35s cubic-bezier(.33,.9,.25,1)', opacity: this.state.menuOpen ? 0 : 1, transform: this.state.menuOpen ? 'scaleX(.4)' : 'none' },
+      burgerBotStyle: { display: 'block', width: '18px', height: '2px', background: '#1c1c1c', borderRadius: '2px', transition: 'transform .35s cubic-bezier(.33,.9,.25,1)', transform: this.state.menuOpen ? 'translateY(-6px) rotate(-45deg)' : 'none' },
+      toggle: () => this.set(isPl ? 'en' : 'pl'),
+      toggleKey: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.set(isPl ? 'en' : 'pl'); } },
+      enLabelStyle: label(!isPl),
+      plLabelStyle: label(isPl),
+      thumbStyle: {
+        position: 'absolute', top: '3px', left: '3px',
+        width: 'calc(50% - 3px)', height: 'calc(100% - 6px)',
+        borderRadius: '999px', background: '#1c1c1c',
+        transform: isPl ? 'translateX(100%)' : 'translateX(0)',
+        transition: 'transform .32s cubic-bezier(.2,.8,.2,1)'
+      },
+      swapStyle: {
+        opacity: fading ? 0 : 1,
+        transform: fading ? 'translateY(-6px)' : 'none',
+        transition: 'opacity .18s ease, transform .18s ease'
+      }
+    };
+  }
+}
+
+</script>
+</body>
+</html>
