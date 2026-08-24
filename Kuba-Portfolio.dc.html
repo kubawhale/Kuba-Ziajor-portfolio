@@ -323,7 +323,7 @@
         <p style="margin:0;color:rgba(255,255,255,0.6);font-size:15px">Otwarty na nowe projekty i współprace.</p>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a href="mailto:kuba.ziastudio@gmail.com" onClick="{{ copyEmail }}" title="Kliknij, aby skopiować adres" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:12px 20px;transition:background .5s ease,color .2s ease,border-color .5s ease;background:{{ copiedBg }};border-color:{{ copiedBorderColor }}" style-hover="background:#FF4718;border-color:#FF4718;color:#fff">E-mail<span style="{{ copiedStyle }}">{{ copiedLabel }}</span></a>
+        <a onClick="{{ copyEmail }}"  title="Kliknij, aby skopiować adres" style="cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:12px 20px;transition:background .5s ease,color .2s ease,border-color .5s ease;background:{{ copiedBg }};border-color:{{ copiedBorderColor }}" style-hover="background:#FF4718;border-color:#FF4718;color:#fff">E-mail<span style="{{ copiedStyle }}">{{ copiedLabel }}</span></a>
         <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:12px 20px;transition:background .2s ease,color .2s ease,border-color .2s ease" style-hover="background:#FF4718;border-color:#FF4718;color:#fff">Instagram</a>
         <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:12px 20px;transition:background .2s ease,color .2s ease,border-color .2s ease" style-hover="background:#FF4718;border-color:#FF4718;color:#fff">LinkedIn</a>
       </div>
@@ -370,7 +370,8 @@ class Component extends DCLogic {
         ta.setAttribute('readonly', '');
         ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
         document.body.appendChild(ta);
-        ta.focus(); ta.select(); ta.setSelectionRange(0, em.length);
+        try { ta.focus({ preventScroll: true }); } catch (e2) {}
+        ta.select(); ta.setSelectionRange(0, em.length);
         const ok = document.execCommand('copy');
         document.body.removeChild(ta);
         return ok;
