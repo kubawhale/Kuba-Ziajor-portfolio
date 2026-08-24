@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#ebebeb;color:#1c1c1c;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:#1c1c1c;text-decoration:none}
+  a:hover{color:#FF4718}
+  @keyframes cvSwap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#ebebeb">
+
+  <header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(235,235,235,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.06)">
+    <a href="Kuba-Portfolio.dc.html" style="font-weight:800;font-size:17px;letter-spacing:-0.02em">KUBA<span style="color:#FF4718">.</span></a>
+    <nav style="display:flex;gap:24px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ toggle }}" onKeyDown="{{ toggleKey }}" style="position:relative;display:flex;background:#ffffff;border-radius:999px;padding:3px;box-shadow:0 1px 0 rgba(0,0,0,0.04);cursor:pointer;user-select:none">
+        <div style="{{ thumbStyle }}"></div>
+        <span style="{{ enLabelStyle }}">EN</span>
+        <span style="{{ plLabelStyle }}">PL</span>
+      </div>
+      <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+      <a href="Kuba-Portfolio.dc.html#work" style="color:#6b6b6b;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Work</a>
+      <a href="Kuba-CV.dc.html" style="color:#1c1c1c;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
+      <a href="Kuba-Portfolio.dc.html#contact" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Contact</a>
+    </sc-if>
+      <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+      <a href="Kuba-Portfolio.dc.html#work" style="color:#6b6b6b;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Projekty</a>
+      <a href="Kuba-CV.dc.html" style="color:#1c1c1c;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
+      <a href="Kuba-Portfolio.dc.html#contact" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Kontakt</a>
+    </sc-if>
+    </nav>
+  </header>
+
+  <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+  <div style="{{ swapStyle }}">
+  <div style="max-width:1180px;margin:0 auto;padding:56px 32px 72px;animation:cvSwap .38s cubic-bezier(.2,.8,.2,1) both">
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;margin-bottom:34px">
+      <div>
+        <span style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:16px">Curriculum Vitae</span>
+        <h1 style="font-size:clamp(38px,5.4vw,62px);line-height:1;font-weight:700;letter-spacing:-0.04em;margin:0 0 14px">Jakub Ziajor</h1>
+        <p style="margin:0;font-size:18px;color:#6b6b6b;font-weight:500">Brand &amp; graphic designer — product, identity, interfaces</p>
+      </div>
+      
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1.55fr;gap:22px;align-items:start">
+
+      <div style="display:grid;gap:22px">
+        <div style="background:#fff;border-radius:18px;padding:26px">
+          <h2 style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0 0 18px">Details</h2>
+          <div style="display:grid;gap:14px;font-size:14.5px;line-height:1.45">
+            <div><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6b6b6b;margin-bottom:4px">Based in</span>Rzeszów, Poland</div>
+            <div><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6b6b6b;margin-bottom:4px">Phone</span>512 045 081</div>
+            <div><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6b6b6b;margin-bottom:4px">Email</span><a href="mailto:kuba.ziastudio@gmail.com" onClick="{{ copyEmail }}" title="Kliknij, aby skopiować adres" style="color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.2)" style-hover="color:#FF4718;border-color:#FF4718">kuba.ziastudio@gmail.com<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#FF4718;letter-spacing:0.04em">{{ copiedTag }}</span></a></div>
+            <div><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6b6b6b;margin-bottom:4px">Languages</span>Polish — native · English — C1</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:18px;padding:26px">
+          <h2 style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0 0 18px">Skills</h2>
+          <div style="display:grid;gap:11px;font-size:14.5px;line-height:1.45">
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Visual identity and branding</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Creative graphic concepts and marketing collateral</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Adobe Photoshop and Illustrator, fluent</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>DTP and print-ready artwork preparation</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Photo retouching and photomontage</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>3D modelling, visualisation, prototyping</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Vector file preparation for CNC</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Brand analysis and visual strategy</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:18px;padding:26px">
+          <h2 style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0 0 18px">Tools &amp; interests</h2>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Figma</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Claude Code</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Product design</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Interactive art</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Multimedia</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Creative events</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Music &amp; live acts</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Snowboard · sailing</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;gap:22px">
+        <div style="background:#fff;border-radius:18px;padding:30px 30px 12px">
+          <h2 style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0 0 8px">Experience</h2>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2023 — now</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Under Seoul · ZIA Studio</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Graphic Designer</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Rzeszów</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2023 — 2025</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Signum Pracownia Reklamy</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Brand &amp; Graphic Designer</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Rzeszów</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2020 — 2023</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">MPP — Presejo, Artibo, Nphoto</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Industrial Designer / Graphic Designer</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Rzeszów</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2019 — 2020</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Forum Designu</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Sales Assistant</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Kraków</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2016 — 2018</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Deco Echo Jewellery</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Goldsmith</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Kraków</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0 24px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2015 — 2016</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Empik</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Sales Assistant</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Kraków</p>
+            </div>
+          </div>
+                  </div>
+
+        <div style="background:#fff;border-radius:18px;padding:30px 30px 12px">
+          <h2 style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0 0 8px">Education</h2>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2017 — 2019</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">MA, Art &amp; Design</h3>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Pedagogical University of Kraków</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2013 — 2017</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">BA, Industrial Design</h3>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Pedagogical University of Kraków</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2011 — 2012</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Journalism &amp; social communication</h3>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">University of Information Technology and Management, Rzeszów — with computer graphics</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0 24px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2007 — 2011</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Piotr Michałowski Art School, Rzeszów</h3>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Applied forms — metalwork</p>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin:0;padding:0 6px;font-size:12px;line-height:1.6;color:#8a8a8a">I consent to the processing of my personal data for the purposes of the recruitment process, in accordance with GDPR.</p>
+      </div>
+    </div>
+  </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+  <div style="{{ swapStyle }}">
+  <div style="max-width:1180px;margin:0 auto;padding:56px 32px 72px;animation:cvSwap .38s cubic-bezier(.2,.8,.2,1) both">
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;margin-bottom:34px">
+      <div>
+        <span style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:16px">Curriculum Vitae</span>
+        <h1 style="font-size:clamp(38px,5.4vw,62px);line-height:1;font-weight:700;letter-spacing:-0.04em;margin:0 0 14px">Jakub Ziajor</h1>
+        <p style="margin:0;font-size:18px;color:#6b6b6b;font-weight:500">Brand &amp; graphic designer — produkt, identyfikacja, interfejsy</p>
+      </div>
+      
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1.55fr;gap:22px;align-items:start">
+
+      <div style="display:grid;gap:22px">
+        <div style="background:#fff;border-radius:18px;padding:26px">
+          <h2 style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0 0 18px">Dane personalne</h2>
+          <div style="display:grid;gap:14px;font-size:14.5px;line-height:1.45">
+            <div><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6b6b6b;margin-bottom:4px">Miejsce zamieszkania</span>Rzeszów</div>
+            <div><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6b6b6b;margin-bottom:4px">Telefon</span>512 045 081</div>
+            <div><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6b6b6b;margin-bottom:4px">E-mail</span><a href="mailto:kuba.ziastudio@gmail.com" onClick="{{ copyEmail }}" title="Kliknij, aby skopiować adres" style="color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.2)" style-hover="color:#FF4718;border-color:#FF4718">kuba.ziastudio@gmail.com<span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#FF4718;letter-spacing:0.04em">{{ copiedTag }}</span></a></div>
+            <div><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6b6b6b;margin-bottom:4px">Języki</span>Polski — ojczysty · Angielski — C1</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:18px;padding:26px">
+          <h2 style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0 0 18px">Umiejętności</h2>
+          <div style="display:grid;gap:11px;font-size:14.5px;line-height:1.45">
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Identyfikacja wizualna i branding</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Kreatywne koncepcje graficzne i materiały marketingowe</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Biegła obsługa Adobe (Photoshop, Illustrator)</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Projektowanie DTP i przygotowanie do druku</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Postprodukcja zdjęć i fotomontaże</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Modelowanie 3D, wizualizacje i prototypowanie</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Tworzenie plików wektorowych do CNC</div>
+            <div style="display:flex;gap:11px"><span style="color:#FF4718;font-family:'JetBrains Mono',monospace">·</span>Analiza i strategia wizualna marek</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:18px;padding:26px">
+          <h2 style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0 0 18px">Narzędzia i zainteresowania</h2>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Figma</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Claude Code</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Projektowanie produktu</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Sztuka interaktywna</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Multimedia</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Eventy</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Muzyka &amp; live acty</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;background:#f2f2f2;border-radius:8px;padding:8px 12px">Snowboard · żagle</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;gap:22px">
+        <div style="background:#fff;border-radius:18px;padding:30px 30px 12px">
+          <h2 style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0 0 8px">Doświadczenie zawodowe</h2>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2023 — obecnie</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Under Seoul · ZIA Studio</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Grafik projektant</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Rzeszów</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2023 — 2025</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Signum Pracownia Reklamy</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Brand &amp; Graphic Designer</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Rzeszów</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2020 — 2023</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">MPP — Presejo, Artibo, Nphoto</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Industrial Designer / Graphic Designer</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Rzeszów</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2019 — 2020</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Forum Designu</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Sprzedawca</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Kraków</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2016 — 2018</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Deco Echo Jewellery</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Złotnik</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Kraków</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0 24px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2015 — 2016</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Empik</h3>
+              <p style="margin:0 0 8px;font-size:14px;color:#1c1c1c;font-weight:600">Sprzedawca</p>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Kraków</p>
+            </div>
+          </div>
+                  </div>
+
+        <div style="background:#fff;border-radius:18px;padding:30px 30px 12px">
+          <h2 style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0 0 8px">Edukacja</h2>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2017 — 2019</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Magister: Art &amp; Design</h3>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Uniwersytet Pedagogiczny w Krakowie</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2013 — 2017</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Licencjat: Wzornictwo Przemysłowe</h3>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Uniwersytet Pedagogiczny w Krakowie</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid rgba(0,0,0,0.08)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2011 — 2012</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Dziennikarstwo i komunikacja społeczna</h3>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Wyższa Szkoła Informatyki i Zarządzania w Rzeszowie — z elementami grafiki komputerowej</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:132px 1fr;gap:24px;padding:20px 0 24px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#FF4718;padding-top:4px">2007 — 2011</span>
+            <div>
+              <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;letter-spacing:-0.015em">Liceum Plastyczne im. Piotra Michałowskiego w Rzeszowie</h3>
+              <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Profil: formy użytkowe — metaloplastyka</p>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin:0;padding:0 6px;font-size:12px;line-height:1.6;color:#8a8a8a">Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb niezbędnych do realizacji procesu rekrutacji zgodnie z RODO.</p>
+      </div>
+    </div>
+  </div>
+  </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;pl&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en' | 'pl'&quot;}}">
+class Component extends DCLogic {
+  state = { lang: null, fading: false };
+  componentDidMount() {
+    let s = null;
+    try { s = localStorage.getItem('kuba-lang'); } catch (e) {}
+    this.setState({ lang: s || this.props.defaultLang || 'en' });
+  }
+  componentWillUnmount() { clearTimeout(this._t); }
+  set(l) {
+    const cur = this.state.lang || this.props.defaultLang || 'en';
+    if (l === cur || this.state.fading) return;
+    this.setState({ fading: true });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.setState({ lang: l, fading: false });
+      try { localStorage.setItem('kuba-lang', l); } catch (e) {}
+    }, 180);
+  }
+  copyEmail = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const em = 'kuba.ziastudio@gmail.com';
+    const flag = (ok) => {
+      this.setState({ copied: ok ? 1 : 2 });
+      clearTimeout(this._ct);
+      this._ct = setTimeout(() => this.setState({ copied: 0 }), 2000);
+    };
+    const legacy = () => {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = em;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select(); ta.setSelectionRange(0, em.length);
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+      } catch (err) { return false; }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(em).then(() => flag(true), () => flag(legacy()));
+      return;
+    }
+    flag(legacy());
+  };
+  renderVals() {
+    const lang = this.state.lang || this.props.defaultLang || 'en';
+    const isPl = lang === 'pl';
+    const fading = !!this.state.fading;
+    const label = (on) => ({
+      position: 'relative', zIndex: 1, pointerEvents: 'none',
+      fontFamily: "'JetBrains Mono', monospace", fontSize: '9.5px', fontWeight: 500,
+      letterSpacing: '0.1em', padding: '4px 9px', lineHeight: 1.2,
+      color: on ? '#fff' : '#8a8a8a', transition: 'color .3s ease'
+    });
+    return {
+      isEn: !isPl, isPl,
+      copyEmail: this.copyEmail,
+      copiedTag: this.state.copied === 1 ? (isPl ? ' · skopiowano' : ' · copied') : (this.state.copied === 2 ? (isPl ? ' · ' + 'kuba.ziastudio@gmail.com' : ' · ' + 'kuba.ziastudio@gmail.com') : ''),
+      zero: 0,
+      toggle: () => this.set(isPl ? 'en' : 'pl'),
+      toggleKey: (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.set(isPl ? 'en' : 'pl'); }
+      },
+      enLabelStyle: label(!isPl),
+      plLabelStyle: label(isPl),
+      thumbStyle: {
+        position: 'absolute', top: '3px', left: '3px',
+        width: 'calc(50% - 3px)', height: 'calc(100% - 6px)',
+        borderRadius: '999px', background: '#1c1c1c',
+        transform: isPl ? 'translateX(100%)' : 'translateX(0)',
+        transition: 'transform .32s cubic-bezier(.2,.8,.2,1)'
+      },
+      swapStyle: {
+        opacity: fading ? 0 : 1,
+        transform: fading ? 'translateY(-6px)' : 'none',
+        transition: 'opacity .18s ease, transform .18s ease'
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

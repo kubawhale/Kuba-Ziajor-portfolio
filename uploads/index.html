@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuba — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ebebeb;
+    --box:#ffffff;
+    --text:#1c1c1c;
+    --muted:#6b6b6b;
+    --accent:#FF4718; /* deep CMF-style orange */
+    --accent-dim:#ffe4d6;
+    --radius:20px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Montserrat', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* HEADER */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 32px;
+    background:rgba(235,235,235,0.85);
+    backdrop-filter:blur(10px);
+  }
+  .logo{
+    font-weight:800;
+    font-size:18px;
+    letter-spacing:-0.02em;
+  }
+  .logo span{color:var(--accent);}
+  nav{display:flex;gap:28px;}
+  nav a{
+    color:var(--text);
+    text-decoration:none;
+    font-size:14px;
+    font-weight:500;
+    opacity:0.7;
+    transition:opacity .2s ease, color .2s ease;
+  }
+  nav a:hover{opacity:1;color:var(--accent);}
+
+  /* HERO */
+  .hero{
+    max-width:1300px;
+    margin:0 auto;
+    padding:16px 32px 40px;
+  }
+  .hero-photo{
+    position:relative;
+    height:78vh;
+    min-height:460px;
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 25% 20%, rgba(255,71,24,0.55), transparent 55%),
+      linear-gradient(160deg, #2b2b2b 0%, #111 60%);
+    display:flex;
+    align-items:flex-end;
+  }
+  .hero-photo::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 6px);
+    opacity:.5;
+  }
+  .hero-caption{
+    position:relative;
+    z-index:2;
+    margin:32px;
+    color:#fff;
+    max-width:520px;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:14px;
+  }
+  .hero-caption h1{
+    font-size:clamp(32px, 5vw, 56px);
+    line-height:1.05;
+    font-weight:700;
+    margin:0 0 14px;
+    letter-spacing:-0.02em;
+  }
+  .hero-caption p{
+    font-size:16px;
+    line-height:1.5;
+    color:rgba(255,255,255,0.75);
+    margin:0;
+    max-width:440px;
+  }
+
+  /* GALLERY */
+  .gallery-section{
+    max-width:1300px;
+    margin:0 auto;
+    padding:20px 32px 60px;
+  }
+  .gallery-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .gallery-head h2{
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--muted);
+    font-weight:600;
+    margin:0;
+  }
+  .scroll-hint{
+    font-size:12px;
+    color:var(--muted);
+  }
+  .gallery-track{
+    display:flex;
+    gap:20px;
+    overflow-x:auto;
+    overflow-y:visible;
+    scroll-snap-type:x mandatory;
+    padding:14px 4px 12px;
+    -ms-overflow-style:none;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .gallery-track::-webkit-scrollbar{display:none;}
+
+  .card{
+    position:relative;
+    flex:0 0 340px;
+    scroll-snap-align:start;
+    background:var(--box);
+    border-radius:16px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease;
+    box-shadow:0 1px 0 rgba(0,0,0,0.04);
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 40px -12px rgba(0,0,0,0.25);
+  }
+  .card-thumb{
+    height:220px;
+    background:linear-gradient(135deg, #d8d8d8, #bdbdbd);
+    position:relative;
+    overflow:hidden;
+  }
+  .card:nth-child(1) .card-thumb{background:linear-gradient(135deg,#3a3a3a,#161616);}
+  .card:nth-child(2) .card-thumb{background:linear-gradient(135deg,var(--accent),#7a2200);}
+  .card:nth-child(3) .card-thumb{background:linear-gradient(135deg,#c9c9c9,#8f8f8f);}
+  .card:nth-child(4) .card-thumb{background:linear-gradient(135deg,#242424,#4a4a4a);}
+  .card:nth-child(5) .card-thumb{background:linear-gradient(135deg,#ffb28e,var(--accent));}
+
+  .card-body{padding:18px 20px 22px;}
+  .card-tag{
+    display:inline-block;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:8px;
+  }
+  .card-body h3{
+    margin:0 0 6px;
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  .card-body p{
+    margin:0;
+    font-size:13.5px;
+    color:var(--muted);
+    line-height:1.4;
+  }
+
+  /* DISCIPLINES STRIP */
+  .disciplines{
+    max-width:1300px;
+    margin:0 auto;
+    padding:0 32px 60px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+  .discipline{
+    background:var(--box);
+    border-radius:16px;
+    padding:24px;
+  }
+  .discipline .num{
+    font-size:12px;
+    color:var(--accent);
+    font-weight:700;
+    margin-bottom:10px;
+    display:block;
+  }
+  .discipline h4{
+    margin:0 0 8px;
+    font-size:16px;
+    font-weight:700;
+  }
+  .discipline p{
+    margin:0;
+    font-size:13.5px;
+    color:var(--muted);
+    line-height:1.5;
+  }
+
+  /* FOOTER */
+  footer{
+    max-width:1300px;
+    margin:0 auto;
+    padding:40px 32px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:24px;
+  }
+  .footer-cta h3{
+    font-size:clamp(26px,4vw,40px);
+    margin:0 0 6px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+  }
+  .footer-cta p{margin:0;color:var(--muted);font-size:14px;}
+  .footer-links{
+    display:flex;
+    gap:20px;
+  }
+  .footer-links a{
+    text-decoration:none;
+    color:var(--text);
+    font-size:13px;
+    font-weight:500;
+    padding-bottom:2px;
+    border-bottom:1px solid transparent;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .footer-links a:hover{
+    color:var(--accent);
+    border-color:var(--accent);
+  }
+
+  @media (max-width:760px){
+    .disciplines{grid-template-columns:1fr;}
+    header{padding:14px 18px;}
+    nav{gap:18px;}
+    nav a{font-size:13px;}
+    .hero{padding:10px 18px 20px;}
+    .hero-photo{height:64vh;min-height:380px;border-radius:16px;}
+    .hero-caption{margin:22px;max-width:100%;}
+    .hero-caption h1{font-size:clamp(26px,8vw,38px);}
+    .hero-caption p{font-size:14px;max-width:100%;}
+    .gallery-section{padding:14px 18px 36px;}
+    .gallery-head{margin-bottom:12px;}
+    .card{flex-basis:78vw;}
+    .card-thumb{height:180px;}
+    .disciplines{padding:0 18px 40px;gap:12px;}
+    .discipline{padding:20px;}
+    footer{padding:28px 18px 36px;flex-direction:column;align-items:flex-start;}
+    .footer-links{gap:16px;flex-wrap:wrap;}
+  }
+
+  @media (max-width:420px){
+    .card{flex-basis:84vw;}
+    .hero-photo{height:58vh;min-height:340px;}
+  }
+
+  /* Touch devices: skip hover-only lift, rely on tap/scroll instead */
+  @media (hover:none){
+    .card:hover{
+      transform:none;
+      box-shadow:0 1px 0 rgba(0,0,0,0.04);
+    }
+    .card:active{
+      transform:translateY(-4px);
+      box-shadow:0 14px 28px -10px rgba(0,0,0,0.22);
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">KUBA<span>.</span></div>
+  <nav>
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-photo">
+    <div class="hero-caption">
+      <span class="eyebrow">UI/UX · Music · Hardware</span>
+      <h1>I design things<br>you can touch,<br>see, and hear.</h1>
+      <p>Rzeszów-based designer working across interfaces, instruments, and the tools in between.</p>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section" id="work">
+  <div class="gallery-head">
+    <h2>Selected work</h2>
+    <span class="scroll-hint">Scroll →</span>
+  </div>
+  <div class="gallery-track" id="track">
+    <div class="card"><div class="card-thumb"></div><div class="card-body"><span class="card-tag">UI/UX</span><h3>Portfolio Redesign</h3><p>A fluid, module-driven identity for this very site.</p></div></div>
+    <div class="card"><div class="card-thumb"></div><div class="card-body"><span class="card-tag">Hardware</span><h3>Kalimboy</h3><p>A kalimba reimagined as a gamepad instrument, DSP core built from scratch.</p></div></div>
+    <div class="card"><div class="card-thumb"></div><div class="card-body"><span class="card-tag">UI/UX</span><h3>Case Study 03</h3><p>Interface work, from wireframe to shipped product.</p></div></div>
+    <div class="card"><div class="card-thumb"></div><div class="card-body"><span class="card-tag">Hardware</span><h3>Satellite FX Box</h3><p>Portable stereo reverb/delay for the OP-Z, built on Daisy Seed.</p></div></div>
+    <div class="card"><div class="card-thumb"></div><div class="card-body"><span class="card-tag">Music</span><h3>Sound Design</h3><p>Sound engine and patch design across performance rigs.</p></div></div>
+  </div>
+</section>
+
+<section class="disciplines" id="about">
+  <div class="discipline">
+    <span class="num">01</span>
+    <h4>UI/UX Design</h4>
+    <p>Interfaces, wireframes, and design systems, built for clarity first.</p>
+  </div>
+  <div class="discipline">
+    <span class="num">02</span>
+    <h4>Music Production</h4>
+    <p>Performance, sound design, and gear built around live rigs.</p>
+  </div>
+  <div class="discipline">
+    <span class="num">03</span>
+    <h4>Hardware Making</h4>
+    <p>DSP, embedded audio, and instruments that don't exist yet.</p>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="footer-cta">
+    <h3>Let's build something.</h3>
+    <p>Open to new projects and collaborations.</p>
+  </div>
+  <div class="footer-links">
+    <a href="#">Email</a>
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+  // Shift+scroll or wheel converts to horizontal scroll on the gallery track
+  const track = document.getElementById('track');
+  track.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      e.preventDefault();
+      track.scrollLeft += e.deltaY;
+    }
+  }, { passive: false });
+</script>
+
+</body>
+</html>

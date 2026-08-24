@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#ebebeb;color:#1c1c1c;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:#1c1c1c;text-decoration:none}
+  a:hover{color:#FF4718}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#ebebeb">
+
+  <header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(235,235,235,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.06)">
+    <a href="Kuba-Portfolio.dc.html" style="font-weight:800;font-size:17px;letter-spacing:-0.02em">KUBA<span style="color:#FF4718">.</span></a>
+    <nav style="display:flex;gap:26px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ toggle }}" onKeyDown="{{ toggleKey }}" style="position:relative;display:flex;background:#ffffff;border-radius:999px;padding:3px;box-shadow:0 1px 0 rgba(0,0,0,0.04);cursor:pointer;user-select:none">
+        <div style="{{ thumbStyle }}"></div>
+        <span style="{{ enLabelStyle }}">EN</span>
+        <span style="{{ plLabelStyle }}">PL</span>
+      </div>
+      <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+      <a href="Kuba-Portfolio.dc.html#work" style="color:#6b6b6b;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Work</a>
+      <a href="Kuba-CV.dc.html" style="color:#6b6b6b;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
+      <a href="#contact" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Contact</a>
+    </sc-if>
+      <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+      <a href="Kuba-Portfolio.dc.html#work" style="color:#6b6b6b;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Projekty</a>
+      <a href="Kuba-CV.dc.html" style="color:#6b6b6b;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
+      <a href="#contact" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Kontakt</a>
+    </sc-if>
+    </nav>
+  </header>
+  <div style="{{ swapStyle }}">
+  <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+
+  <section style="max-width:1300px;margin:0 auto;padding:60px 32px 40px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:36px;align-items:start">
+    <div>
+      <span style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:20px">About</span>
+      <h1 style="font-size:clamp(34px,4.6vw,58px);line-height:1.05;font-weight:700;letter-spacing:-0.035em;margin:0 0 24px;text-wrap:balance">Designer, and the person who solders it together after.</h1>
+      <p style="font-size:17px;line-height:1.6;color:#1c1c1c;margin:0 0 18px;max-width:560px;text-wrap:pretty">I work between three things that keep turning out to be the same thing: interfaces, instruments, and the tools that sit in between. Screens teach me how people expect to be understood; hardware keeps me honest about what actually gets built.</p>
+      <p style="font-size:16px;line-height:1.6;color:#6b6b6b;margin:0;max-width:560px;text-wrap:pretty">Based in Rzeszów, Poland. Most weeks that means wireframes and design-system work by day, and a bench with a Daisy Seed on it in the evening.</p>
+    </div>
+    <div style="border-radius:20px;overflow:hidden;aspect-ratio:4/5;background:linear-gradient(150deg,#2b2b2b,#111);position:relative;display:flex;align-items:flex-end;padding:22px">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 70% 20%,rgba(255,71,24,0.4),transparent 60%)"></div>
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,0.05) 0 2px,transparent 2px 7px);opacity:.6"></div>
+      <span style="position:relative;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.6)">portrait — at the bench</span>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:24px 32px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:24px">
+      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0">What I can be hired for</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div style="background:#fff;border-radius:18px;padding:26px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF4718;margin-bottom:14px">01</span>
+        <h3 style="margin:0 0 10px;font-size:17px;font-weight:700;letter-spacing:-0.01em">Product &amp; UI design</h3>
+        <p style="margin:0 0 16px;font-size:14px;color:#6b6b6b;line-height:1.55">End-to-end screens: flows, wireframes, hi-fi UI, and the design system that keeps them consistent.</p>
+        <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#1c1c1c;line-height:1.8">Figma · design systems · prototyping</p>
+      </div>
+      <div style="background:#fff;border-radius:18px;padding:26px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF4718;margin-bottom:14px">02</span>
+        <h3 style="margin:0 0 10px;font-size:17px;font-weight:700;letter-spacing:-0.01em">Hardware &amp; embedded audio</h3>
+        <p style="margin:0 0 16px;font-size:14px;color:#6b6b6b;line-height:1.55">Instruments and effects from concept to working prototype — enclosure, electronics, and the DSP that runs on them.</p>
+        <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#1c1c1c;line-height:1.8">Daisy Seed · C++ · Fusion 360</p>
+      </div>
+      <div style="background:#fff;border-radius:18px;padding:26px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF4718;margin-bottom:14px">03</span>
+        <h3 style="margin:0 0 10px;font-size:17px;font-weight:700;letter-spacing:-0.01em">Sound design</h3>
+        <p style="margin:0 0 16px;font-size:14px;color:#6b6b6b;line-height:1.55">Patch and engine design for performance rigs, plus the interface decisions that make them playable live.</p>
+        <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#1c1c1c;line-height:1.8">Ableton · OP-Z · modular</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:8px">
+      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0">Track record</h2>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6b6b">edit these three rows with your real history</span>
+    </div>
+    <div style="display:grid">
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:28px;padding:24px 4px;border-bottom:1px solid rgba(0,0,0,0.08)">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF4718;padding-top:4px">2024 — now</span>
+        <div>
+          <h3 style="margin:0 0 6px;font-size:19px;font-weight:700;letter-spacing:-0.015em">Role — Company</h3>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55;max-width:620px">One line on what you own there, and one on the outcome a hiring manager would care about.</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:28px;padding:24px 4px;border-bottom:1px solid rgba(0,0,0,0.08)">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF4718;padding-top:4px">2022 — 2024</span>
+        <div>
+          <h3 style="margin:0 0 6px;font-size:19px;font-weight:700;letter-spacing:-0.015em">Role — Company</h3>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55;max-width:620px">Same shape: scope, then result.</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:28px;padding:24px 4px;border-bottom:1px solid rgba(0,0,0,0.08)">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF4718;padding-top:4px">Education</span>
+        <div>
+          <h3 style="margin:0 0 6px;font-size:19px;font-weight:700;letter-spacing:-0.015em">Programme — Institution</h3>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55;max-width:620px">Field of study, and anything relevant you built while there.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact" style="max-width:1300px;margin:0 auto;padding:72px 32px 56px">
+    <div style="background:#1c1c1c;border-radius:22px;padding:48px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:32px">
+      <div>
+        <span style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:18px">Contact</span>
+        <h3 style="font-size:clamp(30px,4.2vw,46px);margin:0 0 10px;font-weight:700;letter-spacing:-0.03em;color:#fff">Let's build something.</h3>
+        <p style="margin:0;color:rgba(255,255,255,0.6);font-size:15px">Open to new projects and collaborations.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:12px 20px;transition:background .2s ease,border-color .2s ease" style-hover="background:#FF4718;border-color:#FF4718;color:#fff">Email</a>
+        <a href="https://www.instagram.com/mlekospozywcze/" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:12px 20px;transition:background .2s ease,border-color .2s ease" style-hover="background:#FF4718;border-color:#FF4718;color:#fff">Instagram</a>
+        <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:12px 20px;transition:background .2s ease,border-color .2s ease" style-hover="background:#FF4718;border-color:#FF4718;color:#fff">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+</sc-if>
+  <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+
+  <section style="max-width:1300px;margin:0 auto;padding:60px 32px 40px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:36px;align-items:start">
+    <div>
+      <span style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:20px">O mnie</span>
+      <h1 style="font-size:clamp(34px,4.6vw,58px);line-height:1.05;font-weight:700;letter-spacing:-0.035em;margin:0 0 24px;text-wrap:balance">Projektant, który potem sam to lutuje i skleja.</h1>
+      <p style="font-size:17px;line-height:1.6;color:#1c1c1c;margin:0 0 18px;max-width:560px;text-wrap:pretty">Pracuję między trzema rzeczami, które ciągle okazują się jedną: interfejsami, instrumentami i narzędziami pomiędzy. Ekrany uczą mnie, jak ludzie chcą być rozumiani; hardware pilnuje, żeby to naprawdę dało się zbudować.</p>
+      <p style="font-size:16px;line-height:1.6;color:#6b6b6b;margin:0;max-width:560px;text-wrap:pretty">Mieszkam w Rzeszowie. W praktyce: makiety i design systemy w ciągu dnia, wieczorem stół warsztatowy z Daisy Seed.</p>
+    </div>
+    <div style="border-radius:20px;overflow:hidden;aspect-ratio:4/5;background:linear-gradient(150deg,#2b2b2b,#111);position:relative;display:flex;align-items:flex-end;padding:22px">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 70% 20%,rgba(255,71,24,0.4),transparent 60%)"></div>
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,0.05) 0 2px,transparent 2px 7px);opacity:.6"></div>
+      <span style="position:relative;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.6)">portret — przy warsztacie</span>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:24px 32px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:24px">
+      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0">Do czego można mnie zatrudnić</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div style="background:#fff;border-radius:18px;padding:26px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF4718;margin-bottom:14px">01</span>
+        <h3 style="margin:0 0 10px;font-size:17px;font-weight:700;letter-spacing:-0.01em">Projektowanie produktu i UI</h3>
+        <p style="margin:0 0 16px;font-size:14px;color:#6b6b6b;line-height:1.55">Ekrany end-to-end: przepływy, makiety, hi-fi UI i design system, który trzyma je w spójności.</p>
+        <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#1c1c1c;line-height:1.8">Figma · design systemy · prototypowanie</p>
+      </div>
+      <div style="background:#fff;border-radius:18px;padding:26px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF4718;margin-bottom:14px">02</span>
+        <h3 style="margin:0 0 10px;font-size:17px;font-weight:700;letter-spacing:-0.01em">Hardware i audio embedded</h3>
+        <p style="margin:0 0 16px;font-size:14px;color:#6b6b6b;line-height:1.55">Instrumenty i efekty od koncepcji do działającego prototypu — obudowa, elektronika i DSP, które na nich działa.</p>
+        <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#1c1c1c;line-height:1.8">Daisy Seed · C++ · Fusion 360</p>
+      </div>
+      <div style="background:#fff;border-radius:18px;padding:26px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF4718;margin-bottom:14px">03</span>
+        <h3 style="margin:0 0 10px;font-size:17px;font-weight:700;letter-spacing:-0.01em">Sound design</h3>
+        <p style="margin:0 0 16px;font-size:14px;color:#6b6b6b;line-height:1.55">Projektowanie patchy i silników dźwięku do setupów live oraz decyzje interfejsowe, które czynią je grywalnymi.</p>
+        <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#1c1c1c;line-height:1.8">Ableton · OP-Z · modular</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:8px">
+      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0">Doświadczenie</h2>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6b6b">uzupełnij te trzy wiersze prawdziwą historią</span>
+    </div>
+    <div style="display:grid">
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:28px;padding:24px 4px;border-bottom:1px solid rgba(0,0,0,0.08)">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF4718;padding-top:4px">2024 — now</span>
+        <div>
+          <h3 style="margin:0 0 6px;font-size:19px;font-weight:700;letter-spacing:-0.015em">Stanowisko — Firma</h3>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55;max-width:620px">Jedno zdanie o zakresie, drugie o efekcie, który interesuje rekrutera.</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:28px;padding:24px 4px;border-bottom:1px solid rgba(0,0,0,0.08)">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF4718;padding-top:4px">2022 — 2024</span>
+        <div>
+          <h3 style="margin:0 0 6px;font-size:19px;font-weight:700;letter-spacing:-0.015em">Stanowisko — Firma</h3>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55;max-width:620px">Ten sam schemat: zakres, potem wynik.</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:28px;padding:24px 4px;border-bottom:1px solid rgba(0,0,0,0.08)">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF4718;padding-top:4px">Edukacja</span>
+        <div>
+          <h3 style="margin:0 0 6px;font-size:19px;font-weight:700;letter-spacing:-0.015em">Kierunek — Uczelnia</h3>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55;max-width:620px">Kierunek studiów i to, co wtedy powstało.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact" style="max-width:1300px;margin:0 auto;padding:72px 32px 56px">
+    <div style="background:#1c1c1c;border-radius:22px;padding:48px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:32px">
+      <div>
+        <span style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:18px">Kontakt</span>
+        <h3 style="font-size:clamp(30px,4.2vw,46px);margin:0 0 10px;font-weight:700;letter-spacing:-0.03em;color:#fff">Zbudujmy coś razem.</h3>
+        <p style="margin:0;color:rgba(255,255,255,0.6);font-size:15px">Otwarty na nowe projekty i współprace.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="mailto:kuba.ziastudio@gmail.com" onClick="{{ copyEmail }}" title="Kliknij, aby skopiować adres" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:12px 20px;transition:background .5s ease,border-color .5s ease;background:{{ copiedBg }};border-color:{{ copiedBorderColor }}" style-hover="background:#FF4718;border-color:#FF4718;color:#fff">E-mail<span style="{{ copiedStyle }}">{{ copiedLabel }}</span></a>
+        <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:12px 20px;transition:background .2s ease,border-color .2s ease" style-hover="background:#FF4718;border-color:#FF4718;color:#fff">Instagram</a>
+        <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:999px;padding:12px 20px;transition:background .2s ease,border-color .2s ease" style-hover="background:#FF4718;border-color:#FF4718;color:#fff">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+</sc-if>
+  </div>
+</div>
+
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;pl&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en' | 'pl'&quot;}}">
+class Component extends DCLogic {
+  state = { lang: null, fading: false };
+  componentDidMount() {
+    let s = null;
+    try { s = localStorage.getItem('kuba-lang'); } catch (e) {}
+    this.setState({ lang: s || this.props.defaultLang || 'en' });
+  }
+  componentWillUnmount() { clearTimeout(this._t); }
+  set(l) {
+    const cur = this.state.lang || this.props.defaultLang || 'en';
+    if (l === cur || this.state.fading) return;
+    this.setState({ fading: true });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.setState({ lang: l, fading: false });
+      try { localStorage.setItem('kuba-lang', l); } catch (e) {}
+    }, 180);
+  }
+  copyEmail = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const em = 'kuba.ziastudio@gmail.com';
+    const flag = (ok) => {
+      this.setState({ copied: ok ? 1 : 2 });
+      clearTimeout(this._ct);
+      this._ct = setTimeout(() => this.setState({ copied: 0 }), 2800);
+    };
+    const legacy = () => {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = em;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select(); ta.setSelectionRange(0, em.length);
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+      } catch (err) { return false; }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(em).then(() => flag(true), () => flag(legacy()));
+      return;
+    }
+    flag(legacy());
+  };
+  renderVals() {
+    const lang = this.state.lang || this.props.defaultLang || 'en';
+    const isPl = lang === 'pl';
+    const fading = !!this.state.fading;
+    const label = (on) => ({
+      position: 'relative', zIndex: 1, pointerEvents: 'none',
+      fontFamily: "'JetBrains Mono', monospace", fontSize: '9.5px', fontWeight: 500,
+      letterSpacing: '0.1em', padding: '4px 9px', lineHeight: 1.2,
+      color: on ? '#fff' : '#8a8a8a', transition: 'color .3s ease'
+    });
+    return {
+      isEn: !isPl, isPl,
+      copyEmail: this.copyEmail,
+      copiedBg: this.state.copied ? '#FF4718' : 'transparent',
+      copiedBorderColor: this.state.copied ? '#FF4718' : 'rgba(255,255,255,0.2)',
+      copiedLabel: this.state.copied === 2 ? 'kuba.ziastudio@gmail.com' : (isPl ? 'skopiowano' : 'copied'),
+      copiedStyle: {
+        display: 'inline-block', overflow: 'hidden', whiteSpace: 'nowrap', verticalAlign: 'bottom',
+        textTransform: 'none', letterSpacing: '0.04em', opacity: this.state.copied ? 0.75 : 0,
+        maxWidth: this.state.copied ? '220px' : '0px',
+        paddingLeft: this.state.copied ? '7px' : '0px',
+        transition: 'max-width 1.05s cubic-bezier(.33,.9,.25,1), padding-left 1.05s cubic-bezier(.33,.9,.25,1), opacity .5s ease ' + (this.state.copied ? '.42s' : '0s')
+      },
+      copiedTag: this.state.copied === 1 ? (isPl ? ' · skopiowano' : ' · copied') : (this.state.copied === 2 ? (isPl ? ' · ' + 'kuba.ziastudio@gmail.com' : ' · ' + 'kuba.ziastudio@gmail.com') : ''),
+      zero: 0,
+      toggle: () => this.set(isPl ? 'en' : 'pl'),
+      toggleKey: (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.set(isPl ? 'en' : 'pl'); }
+      },
+      enLabelStyle: label(!isPl),
+      plLabelStyle: label(isPl),
+      thumbStyle: {
+        position: 'absolute', top: '3px', left: '3px',
+        width: 'calc(50% - 3px)', height: 'calc(100% - 6px)',
+        borderRadius: '999px', background: '#1c1c1c',
+        transform: isPl ? 'translateX(100%)' : 'translateX(0)',
+        transition: 'transform .32s cubic-bezier(.2,.8,.2,1)'
+      },
+      swapStyle: {
+        opacity: fading ? 0 : 1,
+        transform: fading ? 'translateY(-6px)' : 'none',
+        transition: 'opacity .18s ease, transform .18s ease'
+      },
+      showAvailability: this.props.showAvailability ?? true,
+      showDisciplines: this.props.showDisciplines ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>

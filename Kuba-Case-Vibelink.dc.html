@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#ebebeb;color:#1c1c1c;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:#1c1c1c;text-decoration:none}
+  a:hover{color:#FF4718}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#ebebeb">
+
+  <header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(235,235,235,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.06)">
+    <a href="Kuba-Portfolio.dc.html" style="font-weight:800;font-size:17px;letter-spacing:-0.02em">KUBA<span style="color:#FF4718">.</span></a>
+    <nav style="display:flex;gap:26px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">
+      <div role="button" tabIndex="{{ zero }}" onClick="{{ toggle }}" onKeyDown="{{ toggleKey }}" style="position:relative;display:flex;background:#ffffff;border-radius:999px;padding:3px;box-shadow:0 1px 0 rgba(0,0,0,0.04);cursor:pointer;user-select:none">
+        <div style="{{ thumbStyle }}"></div>
+        <span style="{{ enLabelStyle }}">EN</span>
+        <span style="{{ plLabelStyle }}">PL</span>
+      </div>
+      <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+      <a href="Kuba-Portfolio.dc.html#work" style="color:#6b6b6b;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Work</a>
+      <a href="Kuba-CV.dc.html" style="color:#6b6b6b;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
+      <a href="Kuba-Portfolio.dc.html#contact" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Contact</a>
+    </sc-if>
+      <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+      <a href="Kuba-Portfolio.dc.html#work" style="color:#6b6b6b;display:inline-block;width:70px;text-align:center" style-hover="color:#FF4718">Projekty</a>
+      <a href="Kuba-CV.dc.html" style="color:#6b6b6b;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
+      <a href="Kuba-Portfolio.dc.html#contact" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Kontakt</a>
+    </sc-if>
+    </nav>
+  </header>
+
+  <div style="{{ swapStyle }}">
+
+  <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+
+  <section style="max-width:1000px;margin:0 auto;padding:60px 32px 36px">
+    <a href="Kuba-Portfolio.dc.html#work" style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:34px" style-hover="color:#FF4718">← All work</a>
+    <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:18px">Brand · UI · Motion</span>
+    <h1 style="font-size:clamp(40px,6vw,74px);line-height:1;font-weight:700;letter-spacing:-0.04em;margin:0 0 22px">Vibelink</h1>
+    <p style="font-size:19px;line-height:1.5;color:#1c1c1c;margin:0;max-width:660px;text-wrap:pretty">A site for sharing music — paste one link, get links to every service. Share through Vibelink and your friends can play the track on whichever streaming service they use.</p>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:0 32px 30px">
+    <div style="border-radius:22px;overflow:hidden;background:linear-gradient(150deg,#1a0f4d 0%,#0d0724 100%);position:relative;display:flex;justify-content:center;align-items:center;padding:56px 32px;min-height:720px">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 12%,rgba(101,70,255,0.42),transparent 62%)"></div>
+      <img src="assets/vibelink-title.gif" alt="Vibelink title screen" style="position:relative;display:block;width:340px;max-width:100%;border-radius:22px;box-shadow:0 24px 60px -18px rgba(0,0,0,0.7)">
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:0 32px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Role</span>
+        <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Identity, UI, motion</p>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Product</span>
+        <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Vibelink — cross-service music sharing</p>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Tools</span>
+        <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Figma, Illustrator</p>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Deliverables</span>
+        <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Logo, UI kit, animated prototype</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1000px;margin:0 auto;padding:72px 32px 0">
+    <div style="display:grid;grid-template-columns:180px 1fr;gap:32px;padding-bottom:28px;border-bottom:1px solid rgba(0,0,0,0.12)">
+      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">The problem</h2>
+      <div>
+        <p style="margin:0;font-size:17px;line-height:1.6;text-wrap:pretty">Sharing a song means sharing a service. The person on the other end opens a link to a platform they don't use, and the recommendation dies there.</p>
+        <p style="margin:0;font-size:17px;line-height:1.6;color:#6b6b6b;text-wrap:pretty">Vibelink resolves one link into all of them — so the design had to make a technical lookup feel like handing someone a record.</p>
+      </div>
+    </div>
+  </section>
+
+  
+  <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:24px">
+      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0">The flow</h2>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6b6b">03 screens, animated</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div style="background:#fff;border-radius:18px;overflow:hidden">
+        <div style="background:linear-gradient(160deg,#f4f2ff,#e6e2f7);display:flex;justify-content:center;padding:26px 26px 0">
+          <img src="assets/vibelink-title.gif" alt="Paste a link" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
+        </div>
+        <div style="padding:20px 22px 24px">
+          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">01 — Paste</span>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">A link or a song ID goes in. The record sleeve reacts before any result loads.</p>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:18px;overflow:hidden">
+        <div style="background:linear-gradient(160deg,#f4f2ff,#e6e2f7);display:flex;justify-content:center;padding:26px 26px 0">
+          <img src="assets/vibelink-link.gif" alt="Resolving the track" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
+        </div>
+        <div style="padding:20px 22px 24px">
+          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">02 — Resolve</span>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">The track resolves into artwork, title, and artist on one card.</p>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:18px;overflow:hidden">
+        <div style="background:linear-gradient(160deg,#f4f2ff,#e6e2f7);display:flex;justify-content:center;padding:26px 26px 0">
+          <img src="assets/vibelink-links.gif" alt="All services listed" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
+        </div>
+        <div style="padding:20px 22px 24px">
+          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">03 — Share</span>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Every service as its own pill row: platform icon, title, play. One share button above them all.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:grid;grid-template-columns:1.35fr 0.65fr;gap:20px;align-items:stretch">
+      <div style="background:linear-gradient(150deg,#1a0f4d,#0d0724);border-radius:18px;position:relative;overflow:hidden;display:flex;justify-content:center;align-items:center;padding:44px 26px;min-height:620px">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 15%,rgba(101,70,255,0.4),transparent 62%)"></div>
+        <img src="assets/vibelink-cover.gif" alt="Cover animation" style="position:relative;display:block;width:311px;max-width:100%;border-radius:18px;box-shadow:0 20px 50px -18px rgba(0,0,0,0.7)">
+      </div>
+      <div style="display:grid;gap:20px">
+        <div style="background:#fff;border-radius:18px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;gap:20px">
+          <div>
+            <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Component study</span>
+            <h3 style="margin:0 0 8px;font-size:17px;font-weight:700;letter-spacing:-0.015em">The play button</h3>
+            <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">A single control carrying the whole material: violet gradient, soft outer shadow, inner light. Press depth does the acknowledging.</p>
+          </div>
+          <div style="background:#f2f2f2;border-radius:12px;display:flex;justify-content:center;padding:14px">
+            <img src="assets/vibelink-play.gif" alt="Play button animation" style="display:block;width:100%;max-width:200px;border-radius:8px">
+          </div>
+        </div>
+        <div style="background:#13017c;border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:18px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55)">The mark</span>
+          <img src="assets/vibelink-logo.svg" alt="Vibelink mark" style="height:92px;width:auto;display:block;align-self:center">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#13017C</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#421F87</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#7A4394</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1000px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:grid;grid-template-columns:180px 1fr;gap:32px">
+      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">Outcome</h2>
+      <div>
+        <p style="margin:0;font-size:17px;line-height:1.6;text-wrap:pretty">A complete animated prototype: identity, UI kit, and the three screens that carry the entire product — paste, resolve, share.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:72px 32px 56px">
+    <a href="Kuba-Case-HeartBeat.dc.html" style="display:flex;justify-content:space-between;align-items:center;gap:24px;background:#1c1c1c;border-radius:22px;padding:40px 44px;transition:background .2s ease" style-hover="background:#FF4718">
+      <div>
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:12px">Next case study</span>
+        <h3 style="margin:0;font-size:clamp(24px,3.4vw,38px);font-weight:700;letter-spacing:-0.03em;color:#fff">Heart Beat</h3>
+      </div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:22px;color:#fff">→</span>
+    </a>
+  </section>
+
+  </sc-if>
+
+  <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+
+  <section style="max-width:1000px;margin:0 auto;padding:60px 32px 36px">
+    <a href="Kuba-Portfolio.dc.html#work" style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:34px" style-hover="color:#FF4718">← Wszystkie projekty</a>
+    <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF4718;margin-bottom:18px">Brand · UI · Motion</span>
+    <h1 style="font-size:clamp(40px,6vw,74px);line-height:1;font-weight:700;letter-spacing:-0.04em;margin:0 0 22px">Vibelink</h1>
+    <p style="font-size:19px;line-height:1.5;color:#1c1c1c;margin:0;max-width:660px;text-wrap:pretty">Strona do dzielenia się muzyką — wklejasz jeden link, dostajesz linki do kilku serwisów. Jeśli udostępnisz przez Vibelinka, twoi znajomi mogą odsłuchiwać utwory przez swój ulubiony serwis streamingowy.</p>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:0 32px 30px">
+    <div style="border-radius:22px;overflow:hidden;background:linear-gradient(150deg,#1a0f4d 0%,#0d0724 100%);position:relative;display:flex;justify-content:center;align-items:center;padding:56px 32px;min-height:720px">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 12%,rgba(101,70,255,0.42),transparent 62%)"></div>
+      <img src="assets/vibelink-title.gif" alt="Ekran startowy Vibelink" style="position:relative;display:block;width:340px;max-width:100%;border-radius:22px;box-shadow:0 24px 60px -18px rgba(0,0,0,0.7)">
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:0 32px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Rola</span>
+        <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Identyfikacja, UI, motion</p>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Produkt</span>
+        <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Vibelink — udostępnianie muzyki między serwisami</p>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Narzędzia</span>
+        <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Figma, Illustrator</p>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:22px">
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Zakres</span>
+        <p style="margin:0;font-size:15px;font-weight:600;line-height:1.4">Logo, UI kit, animowany prototyp</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1000px;margin:0 auto;padding:72px 32px 0">
+    <div style="display:grid;grid-template-columns:180px 1fr;gap:32px;padding-bottom:28px;border-bottom:1px solid rgba(0,0,0,0.12)">
+      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">Problem</h2>
+      <div>
+        <p style="margin:0;font-size:17px;line-height:1.6;text-wrap:pretty">Udostępniając utwór, udostępniasz też serwis. Osoba po drugiej stronie otwiera link do platformy, której nie używa — i rekomendacja umiera w tym miejscu.</p>
+        <p style="margin:0;font-size:17px;line-height:1.6;color:#6b6b6b;text-wrap:pretty">Vibelink zamienia jeden link na wszystkie. Projekt musiał sprawić, żeby techniczne wyszukiwanie działało jak podanie komuś płyty do ręki.</p>
+      </div>
+    </div>
+  </section>
+
+  
+  <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.12);margin-bottom:24px">
+      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0">Przebieg</h2>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6b6b">03 ekrany, animowane</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div style="background:#fff;border-radius:18px;overflow:hidden">
+        <div style="background:linear-gradient(160deg,#f4f2ff,#e6e2f7);display:flex;justify-content:center;padding:26px 26px 0">
+          <img src="assets/vibelink-title.gif" alt="Wklejanie linku" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
+        </div>
+        <div style="padding:20px 22px 24px">
+          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">01 — Wklej</span>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Wchodzi link albo ID utworu. Okładka reaguje, zanim pojawi się wynik.</p>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:18px;overflow:hidden">
+        <div style="background:linear-gradient(160deg,#f4f2ff,#e6e2f7);display:flex;justify-content:center;padding:26px 26px 0">
+          <img src="assets/vibelink-link.gif" alt="Rozpoznanie utworu" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
+        </div>
+        <div style="padding:20px 22px 24px">
+          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">02 — Rozpoznaj</span>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Utwór rozwija się w okładkę, tytuł i wykonawcę na jednej karcie.</p>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:18px;overflow:hidden">
+        <div style="background:linear-gradient(160deg,#f4f2ff,#e6e2f7);display:flex;justify-content:center;padding:26px 26px 0">
+          <img src="assets/vibelink-links.gif" alt="Lista serwisów" style="display:block;width:100%;max-width:311px;border-radius:16px 16px 0 0;box-shadow:0 -8px 34px -14px rgba(26,15,77,0.45)">
+        </div>
+        <div style="padding:20px 22px 24px">
+          <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#FF4718;margin-bottom:8px">03 — Udostępnij</span>
+          <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Każdy serwis jako osobny wiersz: ikona platformy, tytuł, play. Nad nimi jeden przycisk udostępniania.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:grid;grid-template-columns:1.35fr 0.65fr;gap:20px;align-items:stretch">
+      <div style="background:linear-gradient(150deg,#1a0f4d,#0d0724);border-radius:18px;position:relative;overflow:hidden;display:flex;justify-content:center;align-items:center;padding:44px 26px;min-height:620px">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 15%,rgba(101,70,255,0.4),transparent 62%)"></div>
+        <img src="assets/vibelink-cover.gif" alt="Animacja okładki" style="position:relative;display:block;width:311px;max-width:100%;border-radius:18px;box-shadow:0 20px 50px -18px rgba(0,0,0,0.7)">
+      </div>
+      <div style="display:grid;gap:20px">
+        <div style="background:#fff;border-radius:18px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;gap:20px">
+          <div>
+            <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px">Studium komponentu</span>
+            <h3 style="margin:0 0 8px;font-size:17px;font-weight:700;letter-spacing:-0.015em">Przycisk play</h3>
+            <p style="margin:0;font-size:14.5px;color:#6b6b6b;line-height:1.55">Jedna kontrolka nosząca cały materiał: fioletowy gradient, miękki cień, wewnętrzne światło. Głębia wciśnięcia załatwia potwierdzenie.</p>
+          </div>
+          <div style="background:#f2f2f2;border-radius:12px;display:flex;justify-content:center;padding:14px">
+            <img src="assets/vibelink-play.gif" alt="Animacja przycisku play" style="display:block;width:100%;max-width:200px;border-radius:8px">
+          </div>
+        </div>
+        <div style="background:#13017c;border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:18px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55)">Znak</span>
+          <img src="assets/vibelink-logo.svg" alt="Znak Vibelink" style="height:92px;width:auto;display:block;align-self:center">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#13017C</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#421F87</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#fff;background:rgba(255,255,255,0.12);border-radius:7px;padding:7px 10px">#7A4394</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1000px;margin:0 auto;padding:56px 32px 0">
+    <div style="display:grid;grid-template-columns:180px 1fr;gap:32px">
+      <h2 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin:0;padding-top:6px">Efekt</h2>
+      <div>
+        <p style="margin:0;font-size:17px;line-height:1.6;text-wrap:pretty">Kompletny animowany prototyp: identyfikacja, UI kit i trzy ekrany, które unoszą cały produkt — wklej, rozpoznaj, udostępnij.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1300px;margin:0 auto;padding:72px 32px 56px">
+    <a href="Kuba-Case-HeartBeat.dc.html" style="display:flex;justify-content:space-between;align-items:center;gap:24px;background:#1c1c1c;border-radius:22px;padding:40px 44px;transition:background .2s ease" style-hover="background:#FF4718">
+      <div>
+        <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:12px">Następne case study</span>
+        <h3 style="margin:0;font-size:clamp(24px,3.4vw,38px);font-weight:700;letter-spacing:-0.03em;color:#fff">Heart Beat</h3>
+      </div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:22px;color:#fff">→</span>
+    </a>
+  </section>
+
+  </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;pl&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en' | 'pl'&quot;}}">
+class Component extends DCLogic {
+  state = { lang: null, fading: false };
+  componentDidMount() {
+    let s = null;
+    try { s = localStorage.getItem('kuba-lang'); } catch (e) {}
+    this.setState({ lang: s || this.props.defaultLang || 'en' });
+  }
+  componentWillUnmount() { clearTimeout(this._t); }
+  set(l) {
+    const cur = this.state.lang || this.props.defaultLang || 'en';
+    if (l === cur || this.state.fading) return;
+    this.setState({ fading: true });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.setState({ lang: l, fading: false });
+      try { localStorage.setItem('kuba-lang', l); } catch (e) {}
+    }, 180);
+  }
+  copyEmail = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const em = 'kuba.ziastudio@gmail.com';
+    const flag = (ok) => {
+      this.setState({ copied: ok ? 1 : 2 });
+      clearTimeout(this._ct);
+      this._ct = setTimeout(() => this.setState({ copied: 0 }), 2000);
+    };
+    const legacy = () => {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = em;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select(); ta.setSelectionRange(0, em.length);
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+      } catch (err) { return false; }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(em).then(() => flag(true), () => flag(legacy()));
+      return;
+    }
+    flag(legacy());
+  };
+  renderVals() {
+    const lang = this.state.lang || this.props.defaultLang || 'en';
+    const isPl = lang === 'pl';
+    const fading = !!this.state.fading;
+    const label = (on) => ({
+      position: 'relative', zIndex: 1, pointerEvents: 'none',
+      fontFamily: "'JetBrains Mono', monospace", fontSize: '9.5px', fontWeight: 500,
+      letterSpacing: '0.1em', padding: '4px 9px', lineHeight: 1.2,
+      color: on ? '#fff' : '#8a8a8a', transition: 'color .3s ease'
+    });
+    return {
+      isEn: !isPl, isPl,
+      copyEmail: this.copyEmail,
+      copiedTag: this.state.copied === 1 ? (isPl ? ' · skopiowano' : ' · copied') : (this.state.copied === 2 ? (isPl ? ' · ' + 'kuba.ziastudio@gmail.com' : ' · ' + 'kuba.ziastudio@gmail.com') : ''),
+      zero: 0,
+      toggle: () => this.set(isPl ? 'en' : 'pl'),
+      toggleKey: (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.set(isPl ? 'en' : 'pl'); }
+      },
+      enLabelStyle: label(!isPl),
+      plLabelStyle: label(isPl),
+      thumbStyle: {
+        position: 'absolute', top: '3px', left: '3px',
+        width: 'calc(50% - 3px)', height: 'calc(100% - 6px)',
+        borderRadius: '999px', background: '#1c1c1c',
+        transform: isPl ? 'translateX(100%)' : 'translateX(0)',
+        transition: 'transform .32s cubic-bezier(.2,.8,.2,1)'
+      },
+      swapStyle: {
+        opacity: fading ? 0 : 1,
+        transform: fading ? 'translateY(-6px)' : 'none',
+        transition: 'opacity .18s ease, transform .18s ease'
+      }
+    };
+  }
+}
+
+</script>
+</body>
+</html>
