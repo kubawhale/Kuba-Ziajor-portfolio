@@ -17,6 +17,26 @@
   a{color:#1c1c1c;text-decoration:none}
   a:hover{color:#FF4718}
   @keyframes cvSwap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  @media (max-width: 820px){
+    header{padding:12px 16px !important}
+    header nav{gap:12px !important;font-size:10px !important;flex-wrap:wrap;justify-content:flex-end}
+    header nav a{display:none !important}
+    [data-burger]{display:flex !important}
+    section, footer{padding-left:16px !important;padding-right:16px !important}
+    [style*="grid-template-columns"]{grid-template-columns:1fr !important}
+    [style*="grid-column: span"], [style*="grid-column:span"]{grid-column:auto !important}
+    [style*="height: 320px"], [style*="height:320px"],
+    [style*="height: 300px"], [style*="height:300px"],
+    [style*="height: 230px"], [style*="height:230px"]{height:auto !important}
+    [style*="aspect-ratio: 4 / 5"], [style*="aspect-ratio:4/5"]{aspect-ratio:4 / 3 !important}
+    footer > div{padding:28px 22px !important}
+    h1{font-size:clamp(30px,9vw,40px) !important}
+  }
+  @media (max-width: 520px){
+    header nav{gap:10px !important}
+    [style*="padding: 34px"]{padding:22px !important}
+  }
 </style>
 </helmet>
 
@@ -40,7 +60,26 @@
       <a href="Kuba-CV.dc.html" style="color:#1c1c1c;display:inline-block;width:26px;text-align:center" style-hover="color:#FF4718">CV</a>
       <a href="Kuba-Portfolio.dc.html#contact" style="color:#6b6b6b;display:inline-block;width:62px;text-align:center" style-hover="color:#FF4718">Kontakt</a>
     </sc-if>
+          <div data-burger="1" role="button" tabIndex="{{ zero }}" aria-label="Menu" onClick="{{ toggleMenu }}" onKeyDown="{{ toggleMenuKey }}" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:40px;height:40px;border-radius:999px;background:#fff;cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,0.04);flex:0 0 auto">
+        <span style="{{ burgerTopStyle }}"></span>
+        <span style="{{ burgerMidStyle }}"></span>
+        <span style="{{ burgerBotStyle }}"></span>
+      </div>
     </nav>
+      <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-menu="1" style="position:absolute;top:100%;left:0;right:0;background:rgba(235,235,235,0.97);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,0.08);padding:8px 18px 18px;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;box-shadow:0 18px 30px -22px rgba(0,0,0,0.35)">
+      <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
+        <a href="Kuba-Portfolio.dc.html#work" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Work</a>
+        <a href="Kuba-CV.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">CV</a>
+        <a href="Kuba-Portfolio.dc.html#contact" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Contact</a>
+      </sc-if>
+      <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+        <a href="Kuba-Portfolio.dc.html#work" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Projekty</a>
+        <a href="Kuba-CV.dc.html" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">CV</a>
+        <a href="Kuba-Portfolio.dc.html#contact" onClick="{{ closeMenu }}" style="padding:15px 4px;color:#1c1c1c;border-bottom:1px solid rgba(0,0,0,0.07)" style-hover="color:#FF4718">Kontakt</a>
+      </sc-if>
+    </div>
+    </sc-if>
   </header>
 
   <sc-if value="{{ isEn }}" hint-placeholder-val="{{ true }}">
@@ -400,6 +439,13 @@ class Component extends DCLogic {
     return {
       isEn: !isPl, isPl,
       copyEmail: this.copyEmail,
+      menuOpen: !!this.state.menuOpen,
+      toggleMenu: () => this.setState(st => ({ menuOpen: !st.menuOpen })),
+      toggleMenuKey: (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); this.setState(st => ({ menuOpen: !st.menuOpen })); } },
+      closeMenu: () => this.setState({ menuOpen: false }),
+      burgerTopStyle: { display: 'block', width: '18px', height: '2px', background: '#1c1c1c', borderRadius: '2px', transition: 'transform .35s cubic-bezier(.33,.9,.25,1)', transform: this.state.menuOpen ? 'translateY(6px) rotate(45deg)' : 'none' },
+      burgerMidStyle: { display: 'block', width: '18px', height: '2px', background: '#1c1c1c', borderRadius: '2px', transition: 'opacity .2s ease, transform .35s cubic-bezier(.33,.9,.25,1)', opacity: this.state.menuOpen ? 0 : 1, transform: this.state.menuOpen ? 'scaleX(.4)' : 'none' },
+      burgerBotStyle: { display: 'block', width: '18px', height: '2px', background: '#1c1c1c', borderRadius: '2px', transition: 'transform .35s cubic-bezier(.33,.9,.25,1)', transform: this.state.menuOpen ? 'translateY(-6px) rotate(-45deg)' : 'none' },
       copiedTag: this.state.copied === 1 ? (isPl ? ' · skopiowano' : ' · copied') : (this.state.copied === 2 ? (isPl ? ' · ' + 'kuba.ziastudio@gmail.com' : ' · ' + 'kuba.ziastudio@gmail.com') : ''),
       zero: 0,
       toggle: () => this.set(isPl ? 'en' : 'pl'),
