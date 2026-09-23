@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jestem w Under</title>
+<meta name="description" content="Rejestrator godzin pracy w Under: wejścia, przerwy, wyjścia i podsumowanie do PNG/CSV.">
+<meta name="theme-color" content="#ECEEF3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D0F15" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Under">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#ECEEF3; --surface:#FFFFFF; --sunk:#E2E5EC; --ink:#141720; --muted:#5C6274; --line:#D3D8E2;
+  --accent:#3445D1; --accent-ink:#FFFFFF;
+  --on:#15885C; --on-soft:#DDF3EA; --pause:#B8680F; --pause-soft:#FBEBD6; --danger:#B8322B;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0D0F15; --surface:#161922; --sunk:#1C202B; --ink:#E8EBF2; --muted:#8C92A5; --line:#282D3A;
+    --accent:#8391FF; --accent-ink:#0D0F15;
+    --on:#3DCB90; --on-soft:#12281F; --pause:#F2A64A; --pause-soft:#2C2112; --danger:#F07A72;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0D0F15; --surface:#161922; --sunk:#1C202B; --ink:#E8EBF2; --muted:#8C92A5; --line:#282D3A;
+  --accent:#8391FF; --accent-ink:#0D0F15;
+  --on:#3DCB90; --on-soft:#12281F; --pause:#F2A64A; --pause-soft:#2C2112; --danger:#F07A72;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;padding:20px 16px 48px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.brand{font-family:var(--display);font-stretch:75%;font-weight:800;font-size:22px;letter-spacing:.01em;text-transform:uppercase}
+.brand span{color:var(--accent)}
+.who{color:var(--muted);font-size:13px;text-align:right}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* status */
+.status{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px 20px 20px;display:flex;flex-direction:column;gap:18px}
+.pill{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 11px;border-radius:99px;background:var(--sunk);color:var(--muted)}
+.pill i{width:8px;height:8px;border-radius:50%;background:currentColor}
+.pill.in{background:var(--on-soft);color:var(--on)}
+.pill.break{background:var(--pause-soft);color:var(--pause)}
+.pill.in i{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.pill.in i{animation:none}}
+.clock{display:flex;flex-direction:column;gap:2px}
+.clock .big{font-family:var(--mono);font-weight:600;font-size:clamp(44px,14vw,64px);line-height:1;letter-spacing:-.02em}
+.clock .sub{color:var(--muted);font-size:14px}
+.actions{display:grid;grid-template-columns:1fr;gap:10px}
+.actions.two{grid-template-columns:1fr 1fr}
+button{font:inherit;cursor:pointer;border:0;border-radius:12px}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.primary{background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-weight:800;font-stretch:85%;font-size:21px;letter-spacing:.01em;padding:20px 16px;text-transform:uppercase}
+.primary.leave{background:var(--ink);color:var(--bg)}
+.secondary{background:var(--sunk);color:var(--ink);font-weight:700;font-size:16px;padding:18px 14px}
+.secondary.pause{background:var(--pause-soft);color:var(--pause)}
+button:disabled{opacity:.5;cursor:default}
+.ghost{background:none;color:var(--accent);font-weight:600;padding:6px 4px;font-size:14px}
+
+h2{font-family:var(--display);font-stretch:80%;font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;margin:0;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:12px}
+.sechead{display:flex;justify-content:space-between;align-items:center}
+
+/* segments */
+.days{display:flex;flex-direction:column;gap:14px}
+.day{display:flex;flex-direction:column;gap:6px}
+.dayhead{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:4px}
+.dayhead b{font-weight:700}
+.dayhead .mono{font-weight:600}
+.seg{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:6px 0}
+.seg .range{font-family:var(--mono);font-size:15px}
+.seg .dur{font-family:var(--mono);color:var(--muted);font-size:14px}
+.seg button.edit{background:none;color:inherit;text-align:left;padding:0;border-radius:6px}
+.seg .live{color:var(--on);font-weight:600}
+.gap{font-size:12px;color:var(--pause);padding-left:2px}
+.empty{color:var(--muted);font-size:14px;padding:6px 0}
+
+/* editor */
+.editor{background:var(--sunk);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.editor .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+label{min-width:0}
+input[type=date],input[type=datetime-local]{-webkit-appearance:none;appearance:none;max-width:100%;font-size:14px}
+label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.03em}
+input{font:inherit;font-family:var(--mono);font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:9px 10px;width:100%;min-width:0}
+.editor .btns{display:flex;gap:8px;flex-wrap:wrap}
+.editor .btns button{padding:10px 14px;font-weight:700;font-size:14px}
+.btn-ok{background:var(--accent);color:var(--accent-ink)}
+.btn-plain{background:var(--surface);color:var(--ink);border:1px solid var(--line)!important}
+.btn-del{background:none;color:var(--danger);margin-left:auto}
+.err{color:var(--danger);font-size:13px}
+
+/* summary */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.chip{background:var(--sunk);color:var(--ink);font-size:13px;font-weight:600;padding:7px 12px;border-radius:99px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-top:2px solid var(--ink);padding-top:12px}
+.total .big{font-family:var(--mono);font-weight:600;font-size:34px;line-height:1}
+.total .meta{color:var(--muted);font-size:13px}
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dl button{padding:14px;font-weight:700}
+.dl .png{background:var(--accent);color:var(--accent-ink)}
+.dl .csv{background:var(--sunk);color:var(--ink)}
+.note{color:var(--muted);font-size:13px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;max-width:calc(100% - 32px)}
+.blocked{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;color:var(--muted)}
+
+html{-webkit-text-size-adjust:100%}
+body{margin:0;padding-top:calc(20px + env(safe-area-inset-top,0px));padding-bottom:calc(48px + env(safe-area-inset-bottom,0px));-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+.install{background:var(--surface);border:1px dashed var(--accent);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.install b{color:var(--ink)}
+.install p{margin:0;color:var(--muted)}
+.install .x{align-self:flex-start;background:none;color:var(--accent);font-weight:600;padding:2px 0;font-size:14px}
+.settings{display:flex;flex-direction:column;gap:12px}
+.settings .btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.settings .btnrow button{background:var(--sunk);color:var(--ink);font-weight:600;font-size:14px;padding:11px 14px}
+.who button{background:none;color:var(--muted);font-size:13px;padding:0;text-decoration:underline;text-underline-offset:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Jestem w <span>Under</span></div>
+    <div class="who" id="who"></div>
+  </header>
+
+  <div class="install" id="install" hidden>
+    <b>Dodaj apkę do ekranu głównego</b>
+    <p>W Safari stuknij <strong>Udostępnij</strong>, potem <strong>Do ekranu początkowego</strong>. Wtedy iPhone nie wyczyści zapisanych godzin, a apka otwiera się jak zwykła aplikacja.</p>
+    <button class="x" type="button" id="installX">Rozumiem</button>
+  </div>
+
+  <div class="status" id="statusCard">
+    <div class="pill" id="pill"><i></i><span id="pillText">Poza pracą</span></div>
+    <div class="clock">
+      <div class="big" id="bigClock">0:00</div>
+      <div class="sub" id="clockSub">przepracowane dziś</div>
+    </div>
+    <div class="actions" id="actions"></div>
+  </div>
+
+  <section>
+    <div class="sechead"><h2>Dziś</h2></div>
+    <div class="days" id="today"></div>
+  </section>
+
+  <section>
+    <div class="sechead"><h2>Podsumowanie</h2><button class="ghost" id="addBtn" type="button">+ Dodaj wpis</button></div>
+    <div class="card">
+      <div class="presets" id="presets">
+        <button class="chip" type="button" data-p="week">Ten tydzień</button>
+        <button class="chip" type="button" data-p="month" aria-pressed="true">Ten miesiąc</button>
+        <button class="chip" type="button" data-p="prev">Poprzedni miesiąc</button>
+      </div>
+      <div class="editor" style="background:none;padding:0">
+        <div class="row">
+          <label for="from">Od<input type="date" id="from"></label>
+          <label for="to">Do<input type="date" id="to"></label>
+        </div>
+      </div>
+      <div id="addForm" hidden></div>
+      <div class="days" id="summary"></div>
+      <div class="total">
+        <div><div class="big" id="sumTotal">0 h 00 min</div><div class="meta" id="sumMeta"></div></div>
+      </div>
+      <div class="dl">
+        <button class="png" type="button" id="pngBtn">Pobierz PNG</button>
+        <button class="csv" type="button" id="csvBtn">Pobierz CSV</button>
+      </div>
+      <div class="note">Czas zmiany liczony jest do dnia, w którym zaczęła się zmiana, więc praca po północy wlicza się do poprzedniego dnia. Przerwy się nie liczą.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead"><h2>Ustawienia</h2></div>
+    <div class="card settings">
+      <label for="nameInput">Imię i nazwisko na podsumowaniu<input type="text" id="nameInput" autocomplete="name" placeholder="np. Jan Kowalski" style="font-family:var(--body)"></label>
+      <div class="note">Godziny zapisują się tylko na tym telefonie. Co jakiś czas zapisz kopię, żeby nie stracić danych przy zmianie telefonu.</div>
+      <div class="btnrow">
+        <button type="button" id="backupBtn">Zapisz kopię</button>
+        <button type="button" id="restoreBtn">Wczytaj kopię</button>
+        <input type="file" id="restoreFile" accept="application/json,.json" hidden>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const DAYS = ["niedz.","pon.","wt.","śr.","czw.","pt.","sob."];
+const pad = n => String(n).padStart(2,"0");
+const hm = ts => { const d = new Date(ts); return pad(d.getHours())+":"+pad(d.getMinutes()); };
+const dayKey = ts => { const d = new Date(ts); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); };
+const fmtDur = ms => { const m = Math.max(0, Math.round(ms/60000)); return Math.floor(m/60)+" h "+pad(m%60)+" min"; };
+const fmtClock = ms => { const s = Math.max(0, Math.floor(ms/1000)); return Math.floor(s/3600)+":"+pad(Math.floor(s/60)%60); };
+const dec = ms => (Math.round(ms/36000)/100).toFixed(2).replace(".",",");
+const dayLabel = key => { const [y,m,d] = key.split("-").map(Number); const dt = new Date(y,m-1,d); return DAYS[dt.getDay()]+" "+pad(d)+"."+pad(m)+"."+y; };
+const toLocalInput = ts => { const d = new Date(ts); return dayKey(ts)+"T"+pad(d.getHours())+":"+pad(d.getMinutes()); };
+const uidGen = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+
+/* ---------- storage (this device only) ---------- */
+const KEY = "under.v1";
+let store = { state:{status:"out"}, segs:[], name:"" };
+let storageOk = true;
+try { const raw = localStorage.getItem(KEY); if (raw) store = Object.assign(store, JSON.parse(raw)); }
+catch(e){ storageOk = false; }
+function persist(){
+  try { localStorage.setItem(KEY, JSON.stringify(store)); }
+  catch(e){ toast("Nie udało się zapisać. Sprawdź, czy przeglądarka nie jest w trybie prywatnym."); }
+}
+try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch(e){}
+window.addEventListener("storage", e => { if (e.key===KEY && e.newValue){ try { store = Object.assign(store, JSON.parse(e.newValue)); renderAll(true); } catch(_){} } });
+
+const getState = () => store.state;
+function setState(s){ store.state = s; persist(); renderAll(true); }
+function addSeg(seg){ store.segs.push(seg); store.segs.sort((a,b)=>a.in-b.in); persist(); }
+function removeSeg(id){ store.segs = store.segs.filter(s=>s.id!==id); persist(); }
+
+let editing = null, toastT;
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2600); }
+
+/* ---------- actions ---------- */
+const act = {
+  in(){ setState({status:"in", since:Date.now()}); },
+  pause(){ const now=Date.now(), since=getState().since; if (now-since>=60000) addSeg({id:uidGen(),in:since,out:now}); setState({status:"break", since:now}); },
+  resume(){ setState({status:"in", since:Date.now()}); },
+  out(){ const now=Date.now(), was=getState(); if (was.status==="in" && now-was.since>=60000) addSeg({id:uidGen(),in:was.since,out:now}); setState({status:"out"}); toast("Zapisano wyjście o "+hm(now)); }
+};
+
+/* ---------- data helpers ---------- */
+function segsForRange(fromKey, toKey){
+  const st = getState();
+  const out = store.segs.filter(s => { const k=dayKey(s.in); return k>=fromKey && k<=toKey; });
+  if (st.status==="in"){ const k=dayKey(st.since); if (k>=fromKey && k<=toKey) out.push({id:"__open", in:st.since, out:null}); }
+  return out.sort((a,b)=>a.in-b.in);
+}
+const segMs = s => (s.out ?? Date.now()) - s.in;
+function groupByDay(segs){ const g = {}; segs.forEach(s => (g[dayKey(s.in)] ||= []).push(s)); return g; }
+
+/* ---------- render ---------- */
+function renderStatus(){
+  const st = getState();
+  const today = dayKey(Date.now());
+  const total = segsForRange(today, today).reduce((a,s)=>a+segMs(s),0);
+  const pill=$("pill"), a=$("actions");
+  pill.className = "pill "+(st.status==="out"?"":st.status);
+  $("pillText").textContent = st.status==="in" ? "W pracy od "+hm(st.since) : st.status==="break" ? "Przerwa od "+hm(st.since) : "Poza pracą";
+  $("bigClock").textContent = fmtClock(total);
+  $("clockSub").textContent = st.status==="break" ? "przepracowane dziś · przerwa trwa "+fmtClock(Date.now()-st.since) : "przepracowane dziś";
+  if (a.dataset.sig !== st.status){
+    a.dataset.sig = st.status; a.textContent = "";
+    const mk = (cls, txt, fn) => { const b=document.createElement("button"); b.type="button"; b.className=cls; b.textContent=txt; b.onclick=fn; a.appendChild(b); };
+    if (st.status==="out"){ a.className="actions"; mk("primary","Jestem w Under",act.in); }
+    else if (st.status==="in"){ a.className="actions two"; mk("secondary pause","Przerwa",act.pause); mk("primary leave","Wychodzę z pracy",act.out); }
+    else { a.className="actions two"; mk("secondary","Wracam z przerwy",act.resume); mk("primary leave","Wychodzę z pracy",act.out); }
+  }
+}
+
+function renderDays(el, segs, showHead){
+  const g = groupByDay(segs); const keys = Object.keys(g).sort();
+  el.textContent = "";
+  if (!keys.length){ const e=document.createElement("div"); e.className="empty"; e.textContent = showHead ? "Brak wpisów w tym okresie." : "Dziś jeszcze nie było wejścia."; el.appendChild(e); return; }
+  keys.forEach(k => {
+    const day=document.createElement("div"); day.className="day";
+    if (showHead){
+      const h=document.createElement("div"); h.className="dayhead";
+      const b=document.createElement("b"); b.textContent=dayLabel(k);
+      const t=document.createElement("span"); t.className="mono"; t.textContent=fmtDur(g[k].reduce((a,s)=>a+segMs(s),0));
+      h.append(b,t); day.appendChild(h);
+    }
+    g[k].forEach((s,i) => {
+      if (i>0 && g[k][i-1].out){ const gap=document.createElement("div"); gap.className="gap"; gap.textContent="przerwa "+fmtDur(s.in-g[k][i-1].out); day.appendChild(gap); }
+      if (editing===s.id && showHead){ day.appendChild(editorFor(s)); return; }
+      const row=document.createElement("div"); row.className="seg";
+      const btn=document.createElement("button"); btn.type="button"; btn.className="edit range"; btn.title="Popraw godziny";
+      btn.textContent = hm(s.in)+" – "+(s.out? hm(s.out) + (dayKey(s.out)!==k?" (+1)":"") : "teraz");
+      if (s.id==="__open") btn.disabled = true; else btn.onclick=()=>{ editing=s.id; ensureInRange(s.in); renderAll(true); scrollToEditor(); };
+      const d=document.createElement("span"); d.className="dur"+(s.out?"":" live"); d.textContent=fmtDur(segMs(s));
+      row.append(btn,d); day.appendChild(row);
+    });
+    el.appendChild(day);
+  });
+}
+function scrollToEditor(){ requestAnimationFrame(()=>{ const e=document.querySelector("#summary .editor"); if (e) e.scrollIntoView({block:"center",behavior:"smooth"}); }); }
+function ensureInRange(ts){ const k=dayKey(ts); if (k<range.from||k>range.to){ const d=new Date(ts); range={from:dayKey(new Date(d.getFullYear(),d.getMonth(),1).getTime()), to:dayKey(new Date(d.getFullYear(),d.getMonth()+1,0).getTime()), preset:null}; $("from").value=range.from; $("to").value=range.to; markPreset(null); } }
+
+function editorFor(s){
+  const box=document.createElement("div"); box.className="editor";
+  box.innerHTML = '<div class="row"><label>Wejście<input type="datetime-local"></label><label>Wyjście<input type="datetime-local"></label></div><div class="err" hidden></div><div class="btns"><button type="button" class="btn-ok">Zapisz</button><button type="button" class="btn-plain">Anuluj</button><button type="button" class="btn-del">Usuń wpis</button></div>';
+  const [iIn,iOut] = box.querySelectorAll("input"); iIn.id="ed-in-"+s.id; iOut.id="ed-out-"+s.id;
+  const err = box.querySelector(".err");
+  const isNew = s.id==="__new";
+  iIn.value = toLocalInput(s.in); iOut.value = toLocalInput(s.out);
+  const [ok,cancel,del] = box.querySelectorAll("button");
+  if (isNew) del.hidden = true;
+  cancel.onclick = () => { editing=null; if (isNew) $("addForm").hidden=true; renderAll(true); };
+  del.onclick = () => {
+    if (del.dataset.confirm!=="1"){ del.dataset.confirm="1"; del.textContent="Na pewno usunąć?"; return; }
+    editing=null; removeSeg(s.id); renderAll(true); toast("Usunięto wpis");
+  };
+  ok.onclick = () => {
+    const a = new Date(iIn.value).getTime(), b = new Date(iOut.value).getTime();
+    const fail = m => { err.textContent=m; err.hidden=false; };
+    if (!a || !b) return fail("Uzupełnij obie godziny.");
+    if (b<=a) return fail("Wyjście musi być później niż wejście.");
+    if (b-a > 24*3600e3) return fail("Wpis nie może trwać dłużej niż 24 h.");
+    editing=null; if (isNew) $("addForm").hidden=true;
+    if (!isNew) removeSeg(s.id);
+    addSeg({id:isNew?uidGen():s.id,in:a,out:b}); ensureInRange(a); renderAll(true); toast("Zapisano");
+  };
+  return box;
+}
+
+/* summary */
+let range = {from:"", to:"", preset:"month"};
+function presetRange(p){
+  const n=new Date(); let f,t;
+  if (p==="week"){ const d=(n.getDay()+6)%7; f=new Date(n.getFullYear(),n.getMonth(),n.getDate()-d); t=new Date(f.getFullYear(),f.getMonth(),f.getDate()+6); }
+  else if (p==="prev"){ f=new Date(n.getFullYear(),n.getMonth()-1,1); t=new Date(n.getFullYear(),n.getMonth(),0); }
+  else { f=new Date(n.getFullYear(),n.getMonth(),1); t=new Date(n.getFullYear(),n.getMonth()+1,0); }
+  return {from:dayKey(f.getTime()), to:dayKey(t.getTime())};
+}
+function markPreset(p){ document.querySelectorAll("#presets .chip").forEach(c=>c.setAttribute("aria-pressed", String(c.dataset.p===p))); }
+function applyPreset(p){ range = {...presetRange(p), preset:p}; $("from").value=range.from; $("to").value=range.to; markPreset(p); renderAll(true); }
+function summaryData(){
+  if (!range.from||!range.to||range.from>range.to) return {segs:[], total:0, days:0};
+  const segs = segsForRange(range.from, range.to);
+  return {segs, total:segs.reduce((a,s)=>a+segMs(s),0), days:Object.keys(groupByDay(segs)).length};
+}
+function renderSummary(){
+  const {segs,total,days} = summaryData();
+  renderDays($("summary"), segs, true);
+  $("sumTotal").textContent = fmtDur(total);
+  $("sumMeta").textContent = range.from>range.to ? "Data „od” jest późniejsza niż „do”." : days+" "+(days===1?"dzień":"dni")+" · "+dec(total)+" h";
+  $("pngBtn").disabled = $("csvBtn").disabled = !segs.length;
+}
+function renderWho(){ $("who").textContent = store.name || ""; }
+function renderAll(force){
+  renderStatus();
+  if (force || !editing){ const t=dayKey(Date.now()); renderDays($("today"), segsForRange(t,t), false); renderSummary(); }
+  renderWho();
+}
+
+/* ---------- files ---------- */
+const rangeLabel = () => { const f=k=>k.split("-").reverse().join("."); return f(range.from)+" – "+f(range.to); };
+const fileBase = () => "Under_godziny_"+range.from+"_"+range.to;
+async function saveFile(filename, blob){
+  const file = new File([blob], filename, {type: blob.type});
+  // iPhone: share sheet lets you save the image to Photos or send it
+  if (navigator.canShare && navigator.canShare({files:[file]})){
+    try { await navigator.share({files:[file]}); return; }
+    catch(e){ if (e && e.name==="AbortError") return; }
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 4000);
+  toast("Zapisano "+filename);
+}
+function csv(){
+  const {segs,total} = summaryData();
+  const rows = [["Data","Dzień","Wejście","Wyjście","Czas (h)","Czas"]];
+  segs.forEach(s => { const k=dayKey(s.in); rows.push([k.split("-").reverse().join("."), dayLabel(k).split(" ")[0], hm(s.in), s.out?hm(s.out):"w trakcie", dec(segMs(s)), fmtDur(segMs(s))]); });
+  rows.push([]); rows.push(["RAZEM","","","",dec(total),fmtDur(total)]);
+  if (store.name) rows.unshift([store.name]);
+  const text = "﻿"+rows.map(r=>r.map(c=>/[;"\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c).join(";")).join("\r\n");
+  saveFile(fileBase()+".csv", new Blob([text], {type:"text/csv"}));
+}
+async function png(){
+  try { await document.fonts.ready; } catch(e){}
+  const {segs,total,days} = summaryData();
+  const g = groupByDay(segs); const keys=Object.keys(g).sort();
+  const W=1080, P=72, rowH=54;
+  const lines = keys.reduce((a,k)=>a+g[k].length,0);
+  const H = 420 + keys.length*22 + lines*rowH + 260;
+  const c=document.createElement("canvas"); c.width=W; c.height=H; const x=c.getContext("2d");
+  const C={bg:"#0D0F15",ink:"#E8EBF2",muted:"#8C92A5",line:"#282D3A",acc:"#8391FF",on:"#3DCB90",band:"#161922"};
+  x.fillStyle=C.bg; x.fillRect(0,0,W,H);
+  x.fillStyle=C.acc; x.fillRect(0,0,W,10);
+  x.fillStyle=C.ink; x.font='800 64px "Archivo", "Arial Narrow", sans-serif';
+  x.fillText("CZAS PRACY", P, 128);
+  x.fillStyle=C.acc; x.fillText("UNDER", P + x.measureText("CZAS PRACY ").width, 128);
+  x.fillStyle=C.muted; x.font='500 30px "IBM Plex Mono", monospace';
+  x.fillText(rangeLabel(), P, 182);
+  if (store.name){ x.fillStyle=C.ink; x.font='600 32px "Archivo", sans-serif'; x.fillText(store.name, P, 232); }
+  let y = 300;
+  x.fillStyle=C.muted; x.font='700 22px "Archivo", sans-serif';
+  x.fillText("DZIEŃ", P, y); x.fillText("WEJŚCIE – WYJŚCIE", 420, y); x.textAlign="right"; x.fillText("CZAS", W-P, y); x.textAlign="left";
+  y += 20; x.fillStyle=C.line; x.fillRect(P,y,W-2*P,2); y += 10;
+  keys.forEach((k,di) => {
+    const daySegs=g[k]; const dayTot=daySegs.reduce((a,s)=>a+segMs(s),0);
+    const blockH = daySegs.length*rowH + 12;
+    if (di%2===0){ x.fillStyle=C.band; x.fillRect(P-20,y,W-2*P+40,blockH); }
+    daySegs.forEach((s,i) => {
+      const ty = y + 38 + i*rowH;
+      if (i===0){ x.fillStyle=C.ink; x.font='600 30px "Archivo", sans-serif'; x.fillText(dayLabel(k), P, ty); }
+      x.fillStyle=C.ink; x.font='500 30px "IBM Plex Mono", monospace';
+      x.fillText(hm(s.in)+" – "+(s.out?hm(s.out):"teraz"), 420, ty);
+      if (i===daySegs.length-1){ x.textAlign="right"; x.font='600 30px "IBM Plex Mono", monospace'; x.fillText(fmtDur(dayTot), W-P, ty); x.textAlign="left"; }
+    });
+    y += blockH + 10;
+  });
+  y += 30; x.fillStyle=C.ink; x.fillRect(P,y,W-2*P,4); y += 90;
+  x.fillStyle=C.muted; x.font='700 26px "Archivo", sans-serif'; x.fillText("RAZEM", P, y-40);
+  x.fillStyle=C.on; x.font='600 76px "IBM Plex Mono", monospace'; x.fillText(fmtDur(total), P, y+30);
+  x.fillStyle=C.muted; x.font='500 28px "IBM Plex Mono", monospace'; x.textAlign="right";
+  x.fillText(dec(total)+" h · "+days+" "+(days===1?"dzień":"dni"), W-P, y+26); x.textAlign="left";
+  x.font='400 20px "IBM Plex Mono", monospace'; x.fillText("Wygenerowano "+dayLabel(dayKey(Date.now()))+" "+hm(Date.now()), P, H-40);
+  c.toBlob(b => b ? saveFile(fileBase()+".png", b) : toast("Nie udało się utworzyć obrazu."), "image/png");
+}
+
+/* backup */
+$("backupBtn").onclick = () => {
+  const data = JSON.stringify({app:"under", version:1, exported:Date.now(), name:store.name, state:store.state, segs:store.segs}, null, 1);
+  saveFile("Under_kopia_"+dayKey(Date.now())+".json", new Blob([data], {type:"application/json"}));
+};
+$("restoreBtn").onclick = () => $("restoreFile").click();
+$("restoreFile").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  try {
+    const d = JSON.parse(await f.text());
+    if (d.app!=="under" || !Array.isArray(d.segs)) throw 0;
+    const have = new Set(store.segs.map(s=>s.id)); let added = 0;
+    d.segs.forEach(s => { if (s && s.id && typeof s.in==="number" && typeof s.out==="number" && !have.has(s.id)){ store.segs.push({id:s.id,in:s.in,out:s.out}); added++; } });
+    store.segs.sort((a,b)=>a.in-b.in);
+    if (!store.name && d.name) store.name = d.name;
+    persist(); $("nameInput").value = store.name; renderAll(true);
+    toast(added ? "Wczytano "+added+" wpisów" : "Nic nowego w tej kopii");
+  } catch(_){ toast("To nie jest plik kopii z tej apki."); }
+};
+
+/* manual add */
+$("addBtn").onclick = () => {
+  const f=$("addForm"); f.textContent=""; const n=new Date(); n.setMinutes(0,0,0);
+  editing="__new"; f.appendChild(editorFor({id:"__new", in:n.getTime()-8*3600e3, out:n.getTime()})); f.hidden=false;
+};
+
+/* install hint (iPhone Safari, not yet on home screen) */
+const standalone = window.navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
+const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+let hintSeen = false; try { hintSeen = localStorage.getItem("under.hint")==="1"; } catch(e){}
+if (ios && !standalone && !hintSeen) $("install").hidden = false;
+$("installX").onclick = () => { $("install").hidden = true; try { localStorage.setItem("under.hint","1"); } catch(e){} };
+
+/* wiring */
+$("nameInput").value = store.name || "";
+$("nameInput").oninput = e => { store.name = e.target.value.trim(); persist(); renderWho(); };
+document.querySelectorAll("#presets .chip").forEach(c => c.onclick = () => applyPreset(c.dataset.p));
+["from","to"].forEach(id => $(id).onchange = () => { range={from:$("from").value,to:$("to").value,preset:null}; markPreset(null); renderAll(true); });
+$("pngBtn").onclick = png; $("csvBtn").onclick = csv;
+setInterval(() => { if (getState().status!=="out") renderStatus(); }, 1000);
+setInterval(() => { if (getState().status!=="out") renderAll(); }, 30000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) renderAll(); });
+
+if (!storageOk) toast("Ta przeglądarka blokuje zapis danych. Wyłącz tryb prywatny.");
+applyPreset("month");
+
+if ("serviceWorker" in navigator && location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+})();
+</script>
+</body>
+</html>
