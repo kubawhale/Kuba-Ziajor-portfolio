@@ -212,6 +212,7 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
 
   <section>
     <div class="sechead"><h2>Podsumowanie</h2><button class="ghost" id="addBtn" type="button">+ Dodaj wpis</button></div>
+    <div id="addForm" hidden></div>
     <div class="card">
       <div class="cal" id="cal">
         <div class="calhead">
@@ -224,7 +225,6 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
         <div class="calsel"><div><span class="lbl">Od</span><b id="selFrom"></b></div><div><span class="lbl">Do</span><b id="selTo"></b></div></div>
         <div class="calhint" id="calHint"></div>
       </div>
-      <div id="addForm" hidden></div>
       <div class="days" id="summary"></div>
       <div class="total">
         <div><div class="big" id="sumTotal">0 h 00 min</div><div class="meta" id="sumMeta"></div></div>
@@ -537,6 +537,7 @@ $("restoreFile").onchange = async e => {
 $("addBtn").onclick = () => {
   const f=$("addForm"); f.textContent=""; const n=new Date(); n.setMinutes(0,0,0);
   editing="__new"; f.appendChild(editorFor({id:"__new", in:n.getTime()-8*3600e3, out:n.getTime()})); f.hidden=false;
+  requestAnimationFrame(()=>f.scrollIntoView({block:"nearest", behavior:"smooth"}));
 };
 
 /* install hint (iPhone Safari, not yet on home screen) */
