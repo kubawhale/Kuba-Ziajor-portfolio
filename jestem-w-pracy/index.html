@@ -104,9 +104,31 @@ input:focus{border-color:var(--ink)}
 
 /* summary */
 .card{background:var(--surface);border:1.5px solid var(--edge);box-shadow:var(--lift);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:16px}
-.presets{display:flex;gap:6px;flex-wrap:wrap}
-.chip{background:var(--bg);border:1.5px solid var(--edge);font-size:13px;font-weight:700;padding:8px 13px;border-radius:99px}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink);box-shadow:var(--lift)}
+/* range calendar */
+.cal{display:flex;flex-direction:column;gap:8px}
+.calhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.calnav{width:44px;height:44px;border-radius:12px;background:var(--bg);border:1.5px solid var(--edge);font-size:24px;line-height:1;font-weight:600}
+.caltitle{background:none;font-weight:800;font-size:16px;padding:10px;text-transform:capitalize}
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));row-gap:4px}
+.calwd span{text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:4px 0}
+.cd{position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:none;border-radius:0;font-weight:600;font-size:15px;padding:0}
+.cd b{position:relative;z-index:1;width:88%;height:88%;display:flex;align-items:center;justify-content:center;border-radius:12px;font-weight:inherit}
+.cd.today b{box-shadow:inset 0 0 0 1.5px var(--line)}
+.cd.has::after{content:"";position:absolute;bottom:14%;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:currentColor;opacity:.55;z-index:2}
+.cd.inr{background:var(--line)}
+.cd.start{background:linear-gradient(90deg,transparent 50%,var(--line) 50%)}
+.cd.end{background:linear-gradient(90deg,var(--line) 50%,transparent 50%)}
+.cd.start.end{background:none}
+.cd.start b,.cd.end b{background:var(--ink);color:var(--surface);box-shadow:var(--lift)}
+.cd.start.has::after,.cd.end.has::after{background:var(--surface);opacity:.8}
+.cd.inr:nth-child(7n+1),.cd.end:nth-child(7n+1){border-radius:12px 0 0 12px}
+.cd.inr:nth-child(7n),.cd.start:nth-child(7n){border-radius:0 12px 12px 0}
+.calsel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.calsel>div{background:var(--bg);border:1.5px solid var(--edge);border-radius:12px;padding:8px 12px;display:flex;flex-direction:column}
+.calsel .lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.calsel b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.calsel>div.active{border-color:var(--ink);box-shadow:inset 0 0 0 .5px var(--ink)}
+.calhint{font-size:13px;color:var(--muted);min-height:1.2em}
 .total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-top:2px solid var(--ink);padding-top:14px}
 .total .big{font-weight:800;font-size:34px;line-height:1;letter-spacing:-.02em}
 .total .meta{color:var(--muted);font-size:13px;margin-top:4px}
@@ -156,14 +178,16 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
   <section>
     <div class="sechead"><h2>Podsumowanie</h2><button class="ghost" id="addBtn" type="button">+ Dodaj wpis</button></div>
     <div class="card">
-      <div class="presets" id="presets">
-        <button class="chip" type="button" data-p="week">Ten tydzień</button>
-        <button class="chip" type="button" data-p="month" aria-pressed="true">Ten miesiąc</button>
-        <button class="chip" type="button" data-p="prev">Poprzedni miesiąc</button>
-      </div>
-      <div class="row2">
-        <label for="from">Od<input type="date" id="from"></label>
-        <label for="to">Do<input type="date" id="to"></label>
+      <div class="cal" id="cal">
+        <div class="calhead">
+          <button type="button" class="calnav" id="calPrev" aria-label="Poprzedni miesiąc">‹</button>
+          <button type="button" class="caltitle" id="calTitle" title="Zaznacz cały miesiąc"></button>
+          <button type="button" class="calnav" id="calNext" aria-label="Następny miesiąc">›</button>
+        </div>
+        <div class="calgrid calwd"><span>Pn</span><span>Wt</span><span>Śr</span><span>Cz</span><span>Pt</span><span>So</span><span>Nd</span></div>
+        <div class="calgrid" id="calDays"></div>
+        <div class="calsel"><div><span class="lbl">Od</span><b id="selFrom"></b></div><div><span class="lbl">Do</span><b id="selTo"></b></div></div>
+        <div class="calhint" id="calHint"></div>
       </div>
       <div id="addForm" hidden></div>
       <div class="days" id="summary"></div>
@@ -290,7 +314,7 @@ function renderDays(el, segs, showHead){
   });
 }
 function scrollToEditor(){ requestAnimationFrame(()=>{ const e=document.querySelector("#summary .editor"); if (e) e.scrollIntoView({block:"center",behavior:"smooth"}); }); }
-function ensureInRange(ts){ const k=dayKey(ts); if (k<range.from||k>range.to){ const d=new Date(ts); range={from:dayKey(new Date(d.getFullYear(),d.getMonth(),1).getTime()), to:dayKey(new Date(d.getFullYear(),d.getMonth()+1,0).getTime()), preset:null}; $("from").value=range.from; $("to").value=range.to; markPreset(null); } }
+function ensureInRange(ts){ const k=dayKey(ts); if (k<range.from||k>range.to){ const d=new Date(ts); range=monthRange(d.getFullYear(),d.getMonth()); picking=false; calView=new Date(d.getFullYear(),d.getMonth(),1); } }
 
 function editorFor(s){
   const isNew = s.id==="__new";
@@ -330,27 +354,55 @@ function editorFor(s){
   return box;
 }
 
-/* summary */
-let range = {from:"", to:"", preset:"month"};
-function presetRange(p){
-  const n=new Date(); let f,t;
-  if (p==="week"){ const d=(n.getDay()+6)%7; f=new Date(n.getFullYear(),n.getMonth(),n.getDate()-d); t=new Date(f.getFullYear(),f.getMonth(),f.getDate()+6); }
-  else if (p==="prev"){ f=new Date(n.getFullYear(),n.getMonth()-1,1); t=new Date(n.getFullYear(),n.getMonth(),0); }
-  else { f=new Date(n.getFullYear(),n.getMonth(),1); t=new Date(n.getFullYear(),n.getMonth()+1,0); }
-  return {from:dayKey(f.getTime()), to:dayKey(t.getTime())};
+/* summary: range calendar (tap start, then end) */
+const MONTHS = ["styczeń","luty","marzec","kwiecień","maj","czerwiec","lipiec","sierpień","wrzesień","październik","listopad","grudzień"];
+let range = {from:"", to:""}, picking = false, calView = new Date();
+const keyOf = (y,m,d) => dayKey(new Date(y,m,d).getTime());
+const shortLabel = k => { const [y,m,d] = k.split("-").map(Number); return dayLabel(k).split(" ")[0]+" "+d+"."+pad(m)+"."+y; };
+function monthRange(y,m){ return {from:keyOf(y,m,1), to:keyOf(y,m+1,0)}; }
+function setRange(r){ range = r; picking = false; renderAll(true); }
+function renderCal(){
+  const y = calView.getFullYear(), m = calView.getMonth();
+  $("calTitle").textContent = MONTHS[m]+" "+y;
+  const worked = new Set(store.segs.map(s=>dayKey(s.in))); const st=getState(); if (st.status==="in") worked.add(dayKey(st.since));
+  const today = dayKey(Date.now()), grid = $("calDays"); grid.textContent = "";
+  const lead = (new Date(y,m,1).getDay()+6)%7, n = new Date(y,m+1,0).getDate();
+  for (let i=0;i<lead;i++) grid.appendChild(document.createElement("span"));
+  for (let d=1; d<=n; d++){
+    const k = keyOf(y,m,d), c = document.createElement("button"); c.type="button"; c.className="cd";
+    const b = document.createElement("b"); b.textContent = d; c.appendChild(b);
+    if (k===today) c.classList.add("today");
+    if (worked.has(k)) c.classList.add("has");
+    if (k===range.from) c.classList.add("start");
+    if (k===range.to) c.classList.add("end");
+    if (k>range.from && k<range.to) c.classList.add("inr");
+    c.setAttribute("aria-label", dayLabel(k)); c.setAttribute("aria-pressed", String(k>=range.from && k<=range.to));
+    c.onclick = () => {
+      if (!picking){ range = {from:k, to:k}; picking = true; }
+      else if (k<range.from){ range = {from:k, to:k}; }
+      else { range = {from:range.from, to:k}; picking = false; }
+      renderAll(true);
+    };
+    grid.appendChild(c);
+  }
+  $("selFrom").textContent = shortLabel(range.from); $("selTo").textContent = picking ? "wybierz…" : shortLabel(range.to);
+  $("selFrom").parentNode.classList.toggle("active", !picking); $("selTo").parentNode.classList.toggle("active", picking);
+  $("calHint").textContent = picking ? "Stuknij dzień końcowy (albo ten sam dzień dla jednego dnia)." : "Stuknij dwa dni: początek i koniec. Nazwa miesiąca zaznacza cały miesiąc. Kropka = dzień z wpisami.";
 }
-function markPreset(p){ document.querySelectorAll("#presets .chip").forEach(c=>c.setAttribute("aria-pressed", String(c.dataset.p===p))); }
-function applyPreset(p){ range = {...presetRange(p), preset:p}; $("from").value=range.from; $("to").value=range.to; markPreset(p); renderAll(true); }
+$("calPrev").onclick = () => { calView = new Date(calView.getFullYear(), calView.getMonth()-1, 1); renderCal(); };
+$("calNext").onclick = () => { calView = new Date(calView.getFullYear(), calView.getMonth()+1, 1); renderCal(); };
+$("calTitle").onclick = () => setRange(monthRange(calView.getFullYear(), calView.getMonth()));
 function summaryData(){
-  if (!range.from||!range.to||range.from>range.to) return {segs:[], total:0, days:0};
+  if (!range.from||!range.to) return {segs:[], total:0, days:0};
   const segs = segsForRange(range.from, range.to);
   return {segs, total:segs.reduce((a,s)=>a+segMs(s),0), days:Object.keys(groupByDay(segs)).length};
 }
 function renderSummary(){
   const {segs,total,days} = summaryData();
+  renderCal();
   renderDays($("summary"), segs, true);
   $("sumTotal").textContent = fmtDur(total);
-  $("sumMeta").textContent = range.from>range.to ? "Data „od” jest późniejsza niż „do”." : days+" "+(days===1?"dzień":"dni")+" · "+dec(total)+" h";
+  $("sumMeta").textContent = days+" "+(days===1?"dzień":"dni")+" · "+dec(total)+" h";
   $("pngBtn").disabled = $("csvBtn").disabled = !segs.length;
 }
 function renderWho(){ $("who").textContent = store.name || ""; }
@@ -462,15 +514,13 @@ $("installX").onclick = () => { $("install").hidden = true; try { localStorage.s
 /* wiring */
 $("nameInput").value = store.name || "";
 $("nameInput").oninput = e => { store.name = e.target.value.trim(); persist(); renderWho(); };
-document.querySelectorAll("#presets .chip").forEach(c => c.onclick = () => applyPreset(c.dataset.p));
-["from","to"].forEach(id => $(id).onchange = () => { range={from:$("from").value,to:$("to").value,preset:null}; markPreset(null); renderAll(true); });
 $("pngBtn").onclick = png; $("csvBtn").onclick = csv;
 setInterval(() => { if (getState().status!=="out") renderStatus(); }, 1000);
 setInterval(() => { if (getState().status!=="out") renderAll(); }, 30000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden) renderAll(); });
 
 if (!storageOk) toast("Ta przeglądarka blokuje zapis danych. Wyłącz tryb prywatny.");
-applyPreset("month");
+range = monthRange(calView.getFullYear(), calView.getMonth()); renderAll(true);
 
 if ("serviceWorker" in navigator && location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
 })();
