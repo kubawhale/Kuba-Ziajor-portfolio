@@ -97,7 +97,9 @@ section{display:flex;flex-direction:column;gap:12px}
 .seg{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}
 .seg .range{font-size:15px}
 .seg .dur{color:var(--muted);font-size:13px}
-.seg button.edit{background:none;text-align:left;padding:6px 0;border-radius:6px;text-decoration:underline dotted;text-decoration-color:var(--line);text-underline-offset:5px}
+.seg button.edit{background:none;text-align:left;padding:6px 0;border-radius:6px;display:inline-flex;align-items:center;gap:8px}
+.seg .pen{width:13px;height:13px;flex:none;opacity:.4}
+.forgot{align-self:flex-start;margin-top:-4px}
 .seg button.edit:disabled{opacity:1;text-decoration:none}
 .seg .live{color:var(--ink);font-weight:600}
 .gap{font-size:12px;color:var(--muted);padding-left:2px}
@@ -201,6 +203,7 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
     <div class="clock">
       <div class="big" id="bigClock">0:00</div>
       <div class="sub" id="clockSub">przepracowane dziś</div>
+      <button class="ghost forgot" id="forgot" type="button" hidden>Zapomniałeś wyjść? Popraw godzinę wyjścia</button>
     </div>
     <div class="actions" id="actions"></div>
   </div>
@@ -212,6 +215,7 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
 
   <section>
     <div class="sechead"><h2>Podsumowanie</h2><button class="ghost" id="addBtn" type="button">+ Dodaj wpis</button></div>
+    <div id="addForm" hidden></div>
     <div class="card">
       <div class="cal" id="cal">
         <div class="calhead">
@@ -224,7 +228,6 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
         <div class="calsel"><div><span class="lbl">Od</span><b id="selFrom"></b></div><div><span class="lbl">Do</span><b id="selTo"></b></div></div>
         <div class="calhint" id="calHint"></div>
       </div>
-      <div id="addForm" hidden></div>
       <div class="days" id="summary"></div>
       <div class="total">
         <div><div class="big" id="sumTotal">0 h 00 min</div><div class="meta" id="sumMeta"></div></div>
@@ -283,7 +286,7 @@ function setState(s){ store.state = s; persist(); renderAll(true); }
 function addSeg(seg){ store.segs.push(seg); store.segs.sort((a,b)=>a.in-b.in); persist(); }
 function removeSeg(id){ store.segs = store.segs.filter(s=>s.id!==id); persist(); }
 
-let editing = null, toastT;
+let editing = null, editingIn = null, toastT;
 function toast(msg){ const t=$("toast"); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2600); }
 
 /* ---------- actions ---------- */
@@ -314,6 +317,7 @@ function renderStatus(){
   $("pillText").textContent = st.status==="in" ? "W pracy od "+hm(st.since) : st.status==="break" ? "Przerwa od "+hm(st.since) : "Poza pracą";
   $("bigClock").textContent = fmtClock(total);
   $("clockSub").textContent = st.status==="break" ? "przepracowane dziś · przerwa trwa "+fmtClock(Date.now()-st.since) : "przepracowane dziś";
+  $("forgot").hidden = !(st.status==="in" && Date.now()-st.since > 12*3600e3);
   if (a.dataset.sig !== st.status){
     a.dataset.sig = st.status; a.textContent = "";
     const mk = (cls, txt, fn) => { const b=document.createElement("button"); b.type="button"; b.className=cls; b.textContent=txt; if (txt.endsWith(" Under")){ b.classList.add("brandbtn"); b.textContent=txt.slice(0,-5); const u=document.createElement("span"); u.className="under"; u.textContent="Under"; b.appendChild(u); } b.onclick=fn; a.appendChild(b); };
@@ -323,7 +327,10 @@ function renderStatus(){
   }
 }
 
+const PEN = '<svg class="pen" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.3 1.7a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L5.6 13.4 1.8 14.2l.8-3.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+function openEditor(id, where, ts){ editing=id; editingIn=where; if (where==="summary") ensureInRange(ts); renderAll(true); scrollToEditor(); }
 function renderDays(el, segs, showHead){
+  const where = showHead ? "summary" : "today";
   const g = groupByDay(segs); const keys = Object.keys(g).sort();
   el.textContent = "";
   if (!keys.length){ const e=document.createElement("div"); e.className="empty"; e.textContent = showHead ? "Brak wpisów w tym okresie." : "Dziś jeszcze nie było wejścia."; el.appendChild(e); return; }
@@ -337,29 +344,30 @@ function renderDays(el, segs, showHead){
     }
     g[k].forEach((s,i) => {
       if (i>0 && g[k][i-1].out && s.in-g[k][i-1].out>=60000){ const gap=document.createElement("div"); gap.className="gap"; gap.textContent="przerwa "+fmtDur(s.in-g[k][i-1].out); day.appendChild(gap); }
-      if (editing===s.id && showHead){ day.appendChild(editorFor(s)); return; }
+      if (editing===s.id && editingIn===where){ day.appendChild(editorFor(s)); return; }
       const row=document.createElement("div"); row.className="seg";
       const btn=document.createElement("button"); btn.type="button"; btn.className="edit range"; btn.title="Popraw godziny";
-      btn.textContent = hm(s.in)+" – "+(s.out? hm(s.out) + (dayKey(s.out)!==k?" (+1)":"") : "teraz");
-      if (s.id==="__open") btn.disabled = true; else btn.onclick=()=>{ editing=s.id; ensureInRange(s.in); renderAll(true); scrollToEditor(); };
+      const txt=document.createElement("span"); txt.textContent = hm(s.in)+" – "+(s.out? hm(s.out) + (dayKey(s.out)!==k?" (+1)":"") : "teraz");
+      btn.append(txt); btn.insertAdjacentHTML("beforeend", PEN);
+      btn.onclick = () => openEditor(s.id, where, s.in);
       const d=document.createElement("span"); d.className="dur"+(s.out?"":" live"); d.textContent=fmtDur(segMs(s));
       row.append(btn,d); day.appendChild(row);
     });
     el.appendChild(day);
   });
 }
-function scrollToEditor(){ requestAnimationFrame(()=>{ const e=document.querySelector("#summary .editor"); if (e) e.scrollIntoView({block:"center",behavior:"smooth"}); }); }
+function scrollToEditor(){ requestAnimationFrame(()=>{ const e=document.querySelector(".days .editor"); if (e) e.scrollIntoView({block:"center",behavior:"smooth"}); }); }
 function ensureInRange(ts){ const k=dayKey(ts); if (k<range.from||k>range.to){ const d=new Date(ts); range=monthRange(d.getFullYear(),d.getMonth()); picking=false; calView=new Date(d.getFullYear(),d.getMonth(),1); } }
 
 function editorFor(s){
-  const isNew = s.id==="__new";
+  const isNew = s.id==="__new", isOpen = s.id==="__open";
   const box=document.createElement("div"); box.className="editor";
   box.innerHTML = '<div class="title"></div><label>Dzień<input type="date" required></label><div class="row2"><label>Wejście<input type="time" required></label><label>Wyjście<input type="time" required></label></div><div class="hint"></div><div class="err" hidden></div><div class="btns"><button type="button" class="btn-plain">Anuluj</button><button type="button" class="btn-ok">Zapisz</button><button type="button" class="btn-del">Usuń wpis</button></div>';
-  box.querySelector(".title").textContent = isNew ? "Nowy wpis" : "Popraw wpis";
+  box.querySelector(".title").textContent = isNew ? "Nowy wpis" : isOpen ? "Trwająca zmiana" : "Popraw wpis";
   const [iDay,iIn,iOut] = box.querySelectorAll("input");
   iDay.id="ed-day-"+s.id; iIn.id="ed-in-"+s.id; iOut.id="ed-out-"+s.id;
   const hint = box.querySelector(".hint"), err = box.querySelector(".err");
-  iDay.value = dayKey(s.in); iIn.value = hm(s.in); iOut.value = hm(s.out);
+  iDay.value = dayKey(s.in); iIn.value = hm(s.in); iOut.value = hm(isOpen ? Date.now() : s.out);
   // exit earlier than entry = shift ended after midnight
   const calc = () => {
     if (!iDay.value || !iIn.value || !iOut.value) return null;
@@ -369,19 +377,26 @@ function editorFor(s){
     if (next) b = at(iOut.value,1);
     return {a,b,next};
   };
-  const upd = () => { err.hidden=true; const v=calc(); hint.textContent = v ? "Czas: "+fmtDur(v.b-v.a)+(v.next?" · wyjście następnego dnia":"") : ""; };
+  const upd = () => { err.hidden=true; const v=calc(); hint.textContent = (isOpen ? "Wpisz, o której faktycznie wyszedłeś. " : "") + (v ? "Czas: "+fmtDur(v.b-v.a)+(v.next?" · wyjście następnego dnia":"") : ""); };
   [iDay,iIn,iOut].forEach(i => { i.oninput = upd; i.onchange = upd; }); upd();
   const [cancel,ok,del] = box.querySelectorAll("button");
   if (isNew) del.hidden = true;
+  if (isOpen){ ok.textContent = "Zakończ zmianę"; del.textContent = "Usuń tę zmianę"; }
   cancel.onclick = () => { editing=null; if (isNew) $("addForm").hidden=true; renderAll(true); };
   del.onclick = () => {
     if (del.dataset.confirm!=="1"){ del.dataset.confirm="1"; del.textContent="Na pewno usunąć? Stuknij jeszcze raz"; return; }
-    editing=null; removeSeg(s.id); renderAll(true); toast("Usunięto wpis");
+    editing=null;
+    if (isOpen){ setState({status:"out"}); toast("Usunięto trwającą zmianę"); return; }
+    removeSeg(s.id); renderAll(true); toast("Usunięto wpis");
   };
   ok.onclick = () => {
     const v = calc();
     const fail = m => { err.textContent=m; err.hidden=false; };
     if (!v) return fail("Uzupełnij dzień i obie godziny.");
+    if (isOpen){
+      if (v.b > Date.now()+60000) return fail("Godzina wyjścia jest w przyszłości.");
+      editing=null; addSeg({id:uidGen(),in:v.a,out:v.b}); ensureInRange(v.a); setState({status:"out"}); toast("Zapisano wyjście o "+hm(v.b)); return;
+    }
     editing=null; if (isNew) $("addForm").hidden=true;
     if (!isNew) removeSeg(s.id);
     addSeg({id:isNew?uidGen():s.id,in:v.a,out:v.b}); ensureInRange(v.a); renderAll(true); toast("Zapisano");
@@ -533,10 +548,13 @@ $("restoreFile").onchange = async e => {
   } catch(_){ toast("To nie jest plik kopii z tej apki."); }
 };
 
+$("forgot").onclick = () => openEditor("__open", "summary", getState().since);
+
 /* manual add */
 $("addBtn").onclick = () => {
   const f=$("addForm"); f.textContent=""; const n=new Date(); n.setMinutes(0,0,0);
   editing="__new"; f.appendChild(editorFor({id:"__new", in:n.getTime()-8*3600e3, out:n.getTime()})); f.hidden=false;
+  requestAnimationFrame(()=>f.scrollIntoView({block:"nearest", behavior:"smooth"}));
 };
 
 /* install hint (iPhone Safari, not yet on home screen) */
