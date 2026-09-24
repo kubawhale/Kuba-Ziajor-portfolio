@@ -16,15 +16,17 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..800&display=swap">
 <style>
+@font-face{font-family:"Baron Neue";src:url("fonts/baron-neue-700-normal.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
 :root{
   --bg:#ECEEF3; --surface:#FFFFFF; --sunk:#E2E5EC; --ink:#141720; --muted:#5C6274; --line:#D3D8E2;
   --accent:#3445D1; --accent-ink:#FFFFFF;
   --on:#15885C; --on-soft:#DDF3EA; --pause:#B8680F; --pause-soft:#FBEBD6; --danger:#B8322B;
-  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
-  --body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --display:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --brand:"Baron Neue","Montserrat",sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -41,10 +43,11 @@
   --on:#3DCB90; --on-soft:#12281F; --pause:#F2A64A; --pause-soft:#2C2112; --danger:#F07A72;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;padding:20px 16px 48px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;font-variant-numeric:tabular-nums;padding:20px 16px 48px}
 .wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
 header{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 .brand{font-family:var(--display);font-stretch:75%;font-weight:800;font-size:22px;letter-spacing:.01em;text-transform:uppercase}
+.brand span,.under{font-family:var(--brand);font-weight:700;letter-spacing:.04em}
 .brand span{color:var(--accent)}
 .who{color:var(--muted);font-size:13px;text-align:right}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
@@ -267,7 +270,7 @@ function renderStatus(){
   $("clockSub").textContent = st.status==="break" ? "przepracowane dziś · przerwa trwa "+fmtClock(Date.now()-st.since) : "przepracowane dziś";
   if (a.dataset.sig !== st.status){
     a.dataset.sig = st.status; a.textContent = "";
-    const mk = (cls, txt, fn) => { const b=document.createElement("button"); b.type="button"; b.className=cls; b.textContent=txt; b.onclick=fn; a.appendChild(b); };
+    const mk = (cls, txt, fn) => { const b=document.createElement("button"); b.type="button"; b.className=cls; b.textContent=txt; if (txt.endsWith(" Under")){ b.textContent=txt.slice(0,-5); const u=document.createElement("span"); u.className="under"; u.textContent="Under"; b.appendChild(u); } b.onclick=fn; a.appendChild(b); };
     if (st.status==="out"){ a.className="actions"; mk("primary","Jestem w Under",act.in); }
     else if (st.status==="in"){ a.className="actions two"; mk("secondary pause","Przerwa",act.pause); mk("primary leave","Wychodzę z pracy",act.out); }
     else { a.className="actions two"; mk("secondary","Wracam z przerwy",act.resume); mk("primary leave","Wychodzę z pracy",act.out); }
@@ -384,7 +387,7 @@ function csv(){
   saveFile(fileBase()+".csv", new Blob([text], {type:"text/csv"}));
 }
 async function png(){
-  try { await document.fonts.ready; } catch(e){}
+  try { await Promise.all([document.fonts.load('700 64px "Baron Neue"'), document.fonts.load('800 64px "Montserrat"'), document.fonts.ready]); } catch(e){}
   const {segs,total,days} = summaryData();
   const g = groupByDay(segs); const keys=Object.keys(g).sort();
   const W=1080, P=72, rowH=54;
@@ -394,14 +397,14 @@ async function png(){
   const C={bg:"#0D0F15",ink:"#E8EBF2",muted:"#8C92A5",line:"#282D3A",acc:"#8391FF",on:"#3DCB90",band:"#161922"};
   x.fillStyle=C.bg; x.fillRect(0,0,W,H);
   x.fillStyle=C.acc; x.fillRect(0,0,W,10);
-  x.fillStyle=C.ink; x.font='800 64px "Archivo", "Arial Narrow", sans-serif';
+  x.fillStyle=C.ink; x.font='800 64px "Montserrat", sans-serif';
   x.fillText("CZAS PRACY", P, 128);
-  x.fillStyle=C.acc; x.fillText("UNDER", P + x.measureText("CZAS PRACY ").width, 128);
-  x.fillStyle=C.muted; x.font='500 30px "IBM Plex Mono", monospace';
+  const ux = P + x.measureText("CZAS PRACY ").width; x.fillStyle=C.acc; x.font='700 64px "Baron Neue", "Montserrat", sans-serif'; x.fillText("UNDER", ux, 128);
+  x.fillStyle=C.muted; x.font='500 30px "Montserrat", sans-serif';
   x.fillText(rangeLabel(), P, 182);
-  if (store.name){ x.fillStyle=C.ink; x.font='600 32px "Archivo", sans-serif'; x.fillText(store.name, P, 232); }
+  if (store.name){ x.fillStyle=C.ink; x.font='600 32px "Montserrat", sans-serif'; x.fillText(store.name, P, 232); }
   let y = 300;
-  x.fillStyle=C.muted; x.font='700 22px "Archivo", sans-serif';
+  x.fillStyle=C.muted; x.font='700 22px "Montserrat", sans-serif';
   x.fillText("DZIEŃ", P, y); x.fillText("WEJŚCIE – WYJŚCIE", 420, y); x.textAlign="right"; x.fillText("CZAS", W-P, y); x.textAlign="left";
   y += 20; x.fillStyle=C.line; x.fillRect(P,y,W-2*P,2); y += 10;
   keys.forEach((k,di) => {
@@ -410,19 +413,19 @@ async function png(){
     if (di%2===0){ x.fillStyle=C.band; x.fillRect(P-20,y,W-2*P+40,blockH); }
     daySegs.forEach((s,i) => {
       const ty = y + 38 + i*rowH;
-      if (i===0){ x.fillStyle=C.ink; x.font='600 30px "Archivo", sans-serif'; x.fillText(dayLabel(k), P, ty); }
-      x.fillStyle=C.ink; x.font='500 30px "IBM Plex Mono", monospace';
+      if (i===0){ x.fillStyle=C.ink; x.font='600 30px "Montserrat", sans-serif'; x.fillText(dayLabel(k), P, ty); }
+      x.fillStyle=C.ink; x.font='500 30px "Montserrat", sans-serif';
       x.fillText(hm(s.in)+" – "+(s.out?hm(s.out):"teraz"), 420, ty);
-      if (i===daySegs.length-1){ x.textAlign="right"; x.font='600 30px "IBM Plex Mono", monospace'; x.fillText(fmtDur(dayTot), W-P, ty); x.textAlign="left"; }
+      if (i===daySegs.length-1){ x.textAlign="right"; x.font='600 30px "Montserrat", sans-serif'; x.fillText(fmtDur(dayTot), W-P, ty); x.textAlign="left"; }
     });
     y += blockH + 10;
   });
   y += 30; x.fillStyle=C.ink; x.fillRect(P,y,W-2*P,4); y += 90;
-  x.fillStyle=C.muted; x.font='700 26px "Archivo", sans-serif'; x.fillText("RAZEM", P, y-40);
-  x.fillStyle=C.on; x.font='600 76px "IBM Plex Mono", monospace'; x.fillText(fmtDur(total), P, y+30);
-  x.fillStyle=C.muted; x.font='500 28px "IBM Plex Mono", monospace'; x.textAlign="right";
+  x.fillStyle=C.muted; x.font='700 26px "Montserrat", sans-serif'; x.fillText("RAZEM", P, y-40);
+  x.fillStyle=C.on; x.font='600 76px "Montserrat", sans-serif'; x.fillText(fmtDur(total), P, y+30);
+  x.fillStyle=C.muted; x.font='500 28px "Montserrat", sans-serif'; x.textAlign="right";
   x.fillText(dec(total)+" h · "+days+" "+(days===1?"dzień":"dni"), W-P, y+26); x.textAlign="left";
-  x.font='400 20px "IBM Plex Mono", monospace'; x.fillText("Wygenerowano "+dayLabel(dayKey(Date.now()))+" "+hm(Date.now()), P, H-40);
+  x.font='400 20px "Montserrat", sans-serif'; x.fillText("Wygenerowano "+dayLabel(dayKey(Date.now()))+" "+hm(Date.now()), P, H-40);
   c.toBlob(b => b ? saveFile(fileBase()+".png", b) : toast("Nie udało się utworzyć obrazu."), "image/png");
 }
 
