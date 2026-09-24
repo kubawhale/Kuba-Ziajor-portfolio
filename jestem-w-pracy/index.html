@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..800&display=swap">
 <style>
-@font-face{font-family:"Baron Neue";src:url("fonts/baron-neue-700-normal.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Baron Neue";src:url("fonts/baron-neue-900-normal.woff2") format("woff2");font-weight:900;font-style:normal;font-display:swap}
 :root{
   --bg:#F3F2EE; --surface:#FBFAF7; --ink:#000000;
   --muted:rgba(0,0,0,.55); --line:rgba(0,0,0,.12); --edge:transparent; --band:rgba(0,0,0,.12);
@@ -38,8 +38,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font
 [hidden]{display:none!important}
 .wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
 header{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.brand{font-weight:800;font-size:22px;text-transform:uppercase}
-.brand span,.under{font-family:var(--brand);font-weight:700;letter-spacing:.04em}
+.brand{font-weight:500;font-size:22px;text-transform:uppercase;letter-spacing:.02em}
+.brand span,.under{font-family:var(--brand);font-weight:900;letter-spacing:.04em}
+.brand span{font-size:1.12em}
 .who{color:var(--muted);font-size:13px;text-align:right}
 .mono{font-variant-numeric:tabular-nums}
 
@@ -59,7 +60,8 @@ header{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 button{font:inherit;cursor:pointer;border:0;border-radius:12px;color:inherit}
 button:focus-visible,input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .primary{background:var(--ink);color:var(--surface);box-shadow:var(--lift-hi);font-weight:800;font-size:17px;padding:20px 12px;text-transform:uppercase;letter-spacing:.02em;line-height:1.15}
-.primary .under{font-size:1.1em}
+.primary.brandbtn{font-weight:500;letter-spacing:.04em}
+.primary .under{font-size:1.15em}
 .secondary{background:var(--surface);color:var(--ink);border:1.5px solid var(--edge);box-shadow:var(--lift);font-weight:700;font-size:16px;padding:18px 12px}
 button:disabled{opacity:.35;cursor:default}
 .ghost{background:none;color:var(--ink);font-weight:700;padding:8px 2px;font-size:14px;text-decoration:underline;text-underline-offset:4px}
@@ -281,7 +283,7 @@ function renderStatus(){
   $("clockSub").textContent = st.status==="break" ? "przepracowane dziś · przerwa trwa "+fmtClock(Date.now()-st.since) : "przepracowane dziś";
   if (a.dataset.sig !== st.status){
     a.dataset.sig = st.status; a.textContent = "";
-    const mk = (cls, txt, fn) => { const b=document.createElement("button"); b.type="button"; b.className=cls; b.textContent=txt; if (txt.endsWith(" Under")){ b.textContent=txt.slice(0,-5); const u=document.createElement("span"); u.className="under"; u.textContent="Under"; b.appendChild(u); } b.onclick=fn; a.appendChild(b); };
+    const mk = (cls, txt, fn) => { const b=document.createElement("button"); b.type="button"; b.className=cls; b.textContent=txt; if (txt.endsWith(" Under")){ b.classList.add("brandbtn"); b.textContent=txt.slice(0,-5); const u=document.createElement("span"); u.className="under"; u.textContent="Under"; b.appendChild(u); } b.onclick=fn; a.appendChild(b); };
     if (st.status==="out"){ a.className="actions"; mk("primary","Jestem w Under",act.in); }
     else if (st.status==="in"){ a.className="actions two"; mk("secondary","Przerwa",act.pause); mk("primary","Wychodzę z pracy",act.out); }
     else { a.className="actions two"; mk("secondary","Wracam z przerwy",act.resume); mk("primary","Wychodzę z pracy",act.out); }
@@ -437,7 +439,7 @@ function csv(){
   saveFile(fileBase()+".csv", new Blob([text], {type:"text/csv"}));
 }
 async function png(){
-  try { await Promise.all([document.fonts.load('700 64px "Baron Neue"'), document.fonts.load('800 64px "Montserrat"'), document.fonts.ready]); } catch(e){}
+  try { await Promise.all([document.fonts.load('900 64px "Baron Neue"'), document.fonts.load('500 64px "Montserrat"'), document.fonts.ready]); } catch(e){}
   const {segs,total,days} = summaryData();
   const g = groupByDay(segs); const keys=Object.keys(g).sort();
   const W=1080, P=72, rowH=54;
@@ -446,9 +448,9 @@ async function png(){
   const c=document.createElement("canvas"); c.width=W; c.height=H; const x=c.getContext("2d");
   const C={bg:"#000000",ink:"#FFFFFF",muted:"rgba(255,255,255,.6)",line:"rgba(255,255,255,.2)",acc:"#FFFFFF",on:"#FFFFFF",band:"rgba(255,255,255,.07)"};
   x.fillStyle=C.bg; x.fillRect(0,0,W,H);
-  x.fillStyle=C.ink; x.font='800 64px "Montserrat", sans-serif';
+  x.fillStyle=C.ink; x.font='500 64px "Montserrat", sans-serif';
   x.fillText("CZAS PRACY", P, 128);
-  const ux = P + x.measureText("CZAS PRACY ").width; x.fillStyle=C.acc; x.font='700 64px "Baron Neue", "Montserrat", sans-serif'; x.fillText("UNDER", ux, 128);
+  const ux = P + x.measureText("CZAS PRACY ").width; x.fillStyle=C.acc; x.font='900 70px "Baron Neue", "Montserrat", sans-serif'; x.fillText("UNDER", ux, 128);
   x.fillStyle=C.muted; x.font='500 30px "Montserrat", sans-serif';
   x.fillText(rangeLabel(), P, 182);
   if (store.name){ x.fillStyle=C.ink; x.font='600 32px "Montserrat", sans-serif'; x.fillText(store.name, P, 232); }
