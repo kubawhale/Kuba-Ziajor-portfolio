@@ -186,6 +186,18 @@ input:focus{border-color:var(--ink)}
 .dl .png{background:var(--ink);color:var(--surface);box-shadow:var(--lift)}
 .dl .csv{background:var(--surface);border:1px solid var(--edge);box-shadow:var(--lift)}
 .note{color:var(--muted);font-size:12px}
+.sheet{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center;padding:16px 12px calc(12px + env(safe-area-inset-bottom,0px))}
+.sheet .box{width:100%;max-width:520px;max-height:100%;background:var(--surface);color:var(--ink);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--lift-hi)}
+.sheet .bar{display:flex;justify-content:space-between;align-items:center}
+.sheet .bar b{font-size:14px}
+.sheet .x{width:32px;height:32px;border-radius:50%;background:var(--bg);font-size:18px;line-height:1;padding:0}
+.sheet .img{overflow:auto;border-radius:10px;min-height:0;flex:1;-webkit-touch-callout:default}
+.sheet .img img{display:block;width:100%;height:auto;-webkit-user-select:auto;user-select:auto}
+.sheet .hint{font-size:12px;color:var(--muted);margin:0}
+.sheet .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sheet .btns button{padding:13px;font-weight:600;font-size:14px}
+.sheet .btns .save{background:var(--ink);color:var(--surface)}
+.sheet .btns .send{background:var(--surface);border:1px solid var(--line)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);box-shadow:var(--lift-hi);padding:12px 18px;border-radius:12px;font-weight:600;font-size:14px;max-width:calc(100% - 32px)}
 .install{background:var(--surface);border:1px solid var(--edge);box-shadow:var(--lift);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-size:14px}
 .install p{margin:0;color:var(--muted)}
@@ -284,6 +296,14 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
       </div>
     </div>
   </section>
+</div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="box">
+    <div class="bar"><b id="sheetTitle">Rozliczenie</b><button type="button" class="x" id="sheetX" aria-label="Zamknij">×</button></div>
+    <div class="img"><img id="sheetImg" alt="Podgląd rozliczenia"></div>
+    <p class="hint" id="sheetHint" hidden></p>
+    <div class="btns"><button type="button" class="send" id="sheetSend">Wyślij</button><button type="button" class="save" id="sheetSave">Zapisz w telefonie</button></div>
+  </div>
 </div>
 <div class="toast" id="toast" hidden></div>
 
@@ -530,6 +550,32 @@ function renderAll(force){
 /* ---------- files ---------- */
 const rangeLabel = () => { const f=k=>k.split("-").reverse().join("."); return f(range.from)+" – "+f(range.to); };
 const fileBase = () => "Under_godziny_"+range.from+"_"+range.to;
+/* preview of the summary image: save to the phone or send */
+let sheetUrl = null;
+function showPreview(blob, filename){
+  const file = new File([blob], filename, {type:"image/png"});
+  const canShare = !!(navigator.canShare && navigator.canShare({files:[file]}));
+  const isIos = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+  if (sheetUrl) URL.revokeObjectURL(sheetUrl);
+  sheetUrl = URL.createObjectURL(blob); $("sheetImg").src = sheetUrl;
+  // iPhone cannot download straight to Photos: long-press the image, or "Zapisz obraz" in the share sheet
+  $("sheetHint").hidden = !isIos;
+  $("sheetHint").textContent = "Przytrzymaj obrazek i wybierz „Dodaj do Zdjęć”.";
+  $("sheetSend").hidden = !canShare;
+  $("sheetSend").parentNode.style.gridTemplateColumns = canShare ? "1fr 1fr" : "1fr";
+  $("sheetSave").onclick = async () => {
+    if (isIos && canShare){ try { await navigator.share({files:[file]}); } catch(e){} return; }
+    const a = document.createElement("a"); a.href = sheetUrl; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    toast("Zapisano w Pobranych");
+  };
+  $("sheetSend").onclick = async () => { try { await navigator.share({files:[file]}); } catch(e){} };
+  $("sheet").hidden = false;
+}
+function closePreview(){ $("sheet").hidden = true; }
+$("sheetX").onclick = closePreview;
+$("sheet").onclick = e => { if (e.target === $("sheet")) closePreview(); };
+document.addEventListener("keydown", e => { if (e.key==="Escape" && !$("sheet").hidden) closePreview(); });
+
 async function saveFile(filename, blob){
   const file = new File([blob], filename, {type: blob.type});
   // iPhone: share sheet lets you save the image to Photos or send it
@@ -584,7 +630,7 @@ async function png(){
   if (unpaidMs !== total) x.fillText("do rozliczenia: "+fmtDur(unpaidMs), W-P, y+66);
   x.textAlign="left";
   x.font='400 20px "Montserrat", sans-serif'; x.fillText("Wygenerowano "+dayLabel(dayKey(Date.now()))+" "+hm(Date.now()), P, H-40);
-  c.toBlob(b => b ? saveFile(fileBase()+".png", b) : toast("Nie udało się utworzyć obrazu."), "image/png");
+  c.toBlob(b => b ? showPreview(b, fileBase()+".png") : toast("Nie udało się utworzyć obrazu."), "image/png");
 }
 
 /* backup */
