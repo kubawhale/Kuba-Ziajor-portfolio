@@ -419,6 +419,7 @@ function renderDays(el, segs, showHead, emptyMsg){
       btn.append(txt); btn.insertAdjacentHTML("beforeend", PEN);
       btn.onclick = () => openEditor(s.id, where, s.in);
       const d=document.createElement("span"); d.className="dur"+(s.out?"":" live"); d.textContent=fmtDur(segMs(s));
+      if (showHead && g[k].length===1) d.textContent = ""; // same as the day total above
       row.append(btn,d); day.appendChild(row);
     });
     el.appendChild(day);
