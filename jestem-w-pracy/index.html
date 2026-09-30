@@ -94,6 +94,12 @@ section{display:flex;flex-direction:column;gap:12px}
 .day{display:flex;flex-direction:column;gap:2px}
 .dayhead{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:2px}
 .dayhead b,.dayhead .mono{font-weight:600}
+.dayhead .dright{display:flex;align-items:center;gap:10px}
+.paidbtn{font-size:11px;font-weight:600;letter-spacing:.02em;padding:4px 9px;border-radius:99px;background:none;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.paidbtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.day.paid .seg,.day.paid .gap,.day.paid .dayhead b,.day.paid .dayhead .mono{opacity:.5}
+.paidrow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.paidrow .meta{color:var(--muted);font-size:12px}
 .seg{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}
 .seg .range{font-size:15px}
 .seg .dur{color:var(--muted);font-size:13px}
@@ -137,6 +143,7 @@ input:focus{border-color:var(--ink)}
 .cd{position:relative;height:38px;display:flex;align-items:center;justify-content:center;background:none;border-radius:0;font-weight:500;font-size:14px;padding:0}
 .cd b{position:relative;z-index:1;width:34px;max-width:92%;height:34px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-weight:inherit}
 .cd.today b{box-shadow:inset 0 0 0 1.5px var(--line)}
+.cd.paid::after{width:6px!important;height:3px!important;margin-left:-3px!important;border-radius:0!important;background:none!important;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);opacity:.8!important;bottom:6px!important}
 .cd.has::after{content:"";position:absolute;bottom:5px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:currentColor;opacity:.55;z-index:2}
 .cd.inr{background:var(--band)}
 .cd.start{background:linear-gradient(90deg,transparent 50%,var(--band) 50%)}
@@ -232,6 +239,7 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
       <div class="total">
         <div><div class="big" id="sumTotal">0 h 00 min</div><div class="meta" id="sumMeta"></div></div>
       </div>
+      <div class="paidrow"><div class="meta" id="paidMeta"></div><button class="ghost" id="paidAll" type="button">Oznacz zakres jako rozliczony</button></div>
       <div class="dl">
         <button class="png" type="button" id="pngBtn">Pobierz PNG</button>
         <button class="csv" type="button" id="csvBtn">Pobierz CSV</button>
@@ -270,7 +278,7 @@ const uidGen = () => Date.now().toString(36)+Math.random().toString(36).slice(2,
 
 /* ---------- storage (this device only) ---------- */
 const KEY = "under.v1";
-let store = { state:{status:"out"}, segs:[], name:"" };
+let store = { state:{status:"out"}, segs:[], name:"", paid:{} };
 let storageOk = true;
 try { const raw = localStorage.getItem(KEY); if (raw) store = Object.assign(store, JSON.parse(raw)); }
 catch(e){ storageOk = false; }
@@ -285,6 +293,9 @@ const getState = () => store.state;
 function setState(s){ store.state = s; persist(); renderAll(true); }
 function addSeg(seg){ store.segs.push(seg); store.segs.sort((a,b)=>a.in-b.in); persist(); }
 function removeSeg(id){ store.segs = store.segs.filter(s=>s.id!==id); persist(); }
+// settled (paid) days: {"2026-09-01": timestamp when marked}
+const isPaid = k => !!(store.paid && store.paid[k]);
+function setPaid(keys, on){ store.paid = store.paid || {}; keys.forEach(k => { if (on) store.paid[k] = store.paid[k] || Date.now(); else delete store.paid[k]; }); persist(); }
 
 let editing = null, editingIn = null, toastT;
 function toast(msg){ const t=$("toast"); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2600); }
@@ -340,7 +351,12 @@ function renderDays(el, segs, showHead){
       const h=document.createElement("div"); h.className="dayhead";
       const b=document.createElement("b"); b.textContent=dayLabel(k);
       const t=document.createElement("span"); t.className="mono"; t.textContent=fmtDur(g[k].reduce((a,s)=>a+segMs(s),0));
-      h.append(b,t); day.appendChild(h);
+      const pb=document.createElement("button"); pb.type="button"; pb.className="paidbtn"; pb.setAttribute("aria-pressed", String(isPaid(k)));
+      pb.textContent = isPaid(k) ? "✓ Rozliczony" : "Rozlicz";
+      pb.onclick = () => { const on = !isPaid(k); setPaid([k], on); renderAll(true); toast(on ? "Oznaczono "+dayLabel(k)+" jako rozliczony" : "Cofnięto rozliczenie "+dayLabel(k)); };
+      const right=document.createElement("span"); right.className="dright"; right.append(pb,t);
+      h.append(b,right); day.appendChild(h);
+      if (isPaid(k)) day.classList.add("paid");
     }
     g[k].forEach((s,i) => {
       if (i>0 && g[k][i-1].out && s.in-g[k][i-1].out>=60000){ const gap=document.createElement("div"); gap.className="gap"; gap.textContent="przerwa "+fmtDur(s.in-g[k][i-1].out); day.appendChild(gap); }
@@ -423,6 +439,7 @@ function renderCal(){
     const b = document.createElement("b"); b.textContent = d; c.appendChild(b);
     if (k===today) c.classList.add("today");
     if (worked.has(k)) c.classList.add("has");
+    if (worked.has(k) && isPaid(k)) c.classList.add("paid");
     if (k===range.from) c.classList.add("start");
     if (k===range.to) c.classList.add("end");
     if (k>range.from && k<range.to) c.classList.add("inr");
@@ -437,7 +454,7 @@ function renderCal(){
   }
   $("selFrom").textContent = shortLabel(range.from); $("selTo").textContent = picking ? "wybierz…" : shortLabel(range.to);
   $("selFrom").parentNode.classList.toggle("active", !picking); $("selTo").parentNode.classList.toggle("active", picking);
-  $("calHint").textContent = picking ? "Stuknij dzień końcowy (albo ten sam dzień dla jednego dnia)." : "Stuknij dwa dni: początek i koniec. Nazwa miesiąca zaznacza cały miesiąc. Kropka = dzień z wpisami.";
+  $("calHint").textContent = picking ? "Stuknij dzień końcowy (albo ten sam dzień dla jednego dnia)." : "Stuknij dwa dni: początek i koniec. Nazwa miesiąca zaznacza cały miesiąc. Kropka = dzień z wpisami, ✓ = rozliczony.";
 }
 $("calPrev").onclick = () => { calView = new Date(calView.getFullYear(), calView.getMonth()-1, 1); renderCal(); };
 $("calNext").onclick = () => { calView = new Date(calView.getFullYear(), calView.getMonth()+1, 1); renderCal(); };
@@ -453,6 +470,12 @@ function renderSummary(){
   renderDays($("summary"), segs, true);
   $("sumTotal").textContent = fmtDur(total);
   $("sumMeta").textContent = days+" "+(days===1?"dzień":"dni")+" · "+dec(total)+" h";
+  const keys = Object.keys(groupByDay(segs)), paidMs = segs.filter(s=>isPaid(dayKey(s.in))).reduce((a,s)=>a+segMs(s),0);
+  const allPaid = keys.length>0 && keys.every(isPaid);
+  $("paidMeta").textContent = !keys.length ? "" : allPaid ? "Wszystko rozliczone" : "Do rozliczenia: "+fmtDur(total-paidMs)+(paidMs ? " · rozliczone: "+fmtDur(paidMs) : "");
+  $("paidAll").hidden = !keys.length;
+  $("paidAll").textContent = allPaid ? "Cofnij rozliczenie zakresu" : "Oznacz zakres jako rozliczony";
+  $("paidAll").onclick = () => { setPaid(keys, !allPaid); renderAll(true); toast(allPaid ? "Cofnięto rozliczenie" : "Oznaczono "+keys.length+" "+(keys.length===1?"dzień":"dni")+" jako rozliczone"); };
   $("pngBtn").disabled = $("csvBtn").disabled = !segs.length;
 }
 function renderWho(){ $("who").textContent = store.name || ""; }
@@ -479,9 +502,10 @@ async function saveFile(filename, blob){
 }
 function csv(){
   const {segs,total} = summaryData();
-  const rows = [["Data","Dzień","Wejście","Wyjście","Czas (h)","Czas"]];
-  segs.forEach(s => { const k=dayKey(s.in); rows.push([k.split("-").reverse().join("."), dayLabel(k).split(" ")[0], hm(s.in), s.out?hm(s.out):"w trakcie", dec(segMs(s)), fmtDur(segMs(s))]); });
-  rows.push([]); rows.push(["RAZEM","","","",dec(total),fmtDur(total)]);
+  const rows = [["Data","Dzień","Wejście","Wyjście","Czas (h)","Czas","Rozliczony"]];
+  segs.forEach(s => { const k=dayKey(s.in); rows.push([k.split("-").reverse().join("."), dayLabel(k).split(" ")[0], hm(s.in), s.out?hm(s.out):"w trakcie", dec(segMs(s)), fmtDur(segMs(s)), isPaid(k)?"tak":"nie"]); });
+  const unpaid = segs.filter(s=>!isPaid(dayKey(s.in))).reduce((a,s)=>a+segMs(s),0);
+  rows.push([]); rows.push(["RAZEM","","","",dec(total),fmtDur(total),""]); rows.push(["DO ROZLICZENIA","","","",dec(unpaid),fmtDur(unpaid),""]);
   if (store.name) rows.unshift([store.name]);
   const text = "﻿"+rows.map(r=>r.map(c=>/[;"\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c).join(";")).join("\r\n");
   saveFile(fileBase()+".csv", new Blob([text], {type:"text/csv"}));
@@ -512,7 +536,7 @@ async function png(){
     if (di%2===0){ x.fillStyle=C.band; x.fillRect(P-20,y,W-2*P+40,blockH); }
     daySegs.forEach((s,i) => {
       const ty = y + 38 + i*rowH;
-      if (i===0){ x.fillStyle=C.ink; x.font='600 30px "Montserrat", sans-serif'; x.fillText(dayLabel(k), P, ty); }
+      if (i===0){ x.fillStyle=C.ink; x.font='600 30px "Montserrat", sans-serif'; x.fillText(dayLabel(k)+(isPaid(k)?"  ✓":""), P, ty); }
       x.fillStyle=C.ink; x.font='500 30px "Montserrat", sans-serif';
       x.fillText(hm(s.in)+" – "+(s.out?hm(s.out):"teraz"), 420, ty);
       if (i===daySegs.length-1){ x.textAlign="right"; x.font='600 30px "Montserrat", sans-serif'; x.fillText(fmtDur(dayTot), W-P, ty); x.textAlign="left"; }
@@ -523,14 +547,17 @@ async function png(){
   x.fillStyle=C.muted; x.font='700 26px "Montserrat", sans-serif'; x.fillText("RAZEM", P, y-40);
   x.fillStyle=C.on; x.font='600 76px "Montserrat", sans-serif'; x.fillText(fmtDur(total), P, y+30);
   x.fillStyle=C.muted; x.font='500 28px "Montserrat", sans-serif'; x.textAlign="right";
-  x.fillText(dec(total)+" h · "+days+" "+(days===1?"dzień":"dni"), W-P, y+26); x.textAlign="left";
+  x.fillText(dec(total)+" h · "+days+" "+(days===1?"dzień":"dni"), W-P, y+26);
+  const unpaidMs = segs.filter(s=>!isPaid(dayKey(s.in))).reduce((a,s)=>a+segMs(s),0);
+  if (unpaidMs !== total) x.fillText("do rozliczenia: "+fmtDur(unpaidMs), W-P, y+66);
+  x.textAlign="left";
   x.font='400 20px "Montserrat", sans-serif'; x.fillText("Wygenerowano "+dayLabel(dayKey(Date.now()))+" "+hm(Date.now()), P, H-40);
   c.toBlob(b => b ? saveFile(fileBase()+".png", b) : toast("Nie udało się utworzyć obrazu."), "image/png");
 }
 
 /* backup */
 $("backupBtn").onclick = () => {
-  const data = JSON.stringify({app:"under", version:1, exported:Date.now(), name:store.name, state:store.state, segs:store.segs}, null, 1);
+  const data = JSON.stringify({app:"under", version:1, exported:Date.now(), name:store.name, state:store.state, segs:store.segs, paid:store.paid||{}}, null, 1);
   saveFile("Under_kopia_"+dayKey(Date.now())+".json", new Blob([data], {type:"application/json"}));
 };
 $("restoreBtn").onclick = () => $("restoreFile").click();
@@ -543,6 +570,7 @@ $("restoreFile").onchange = async e => {
     d.segs.forEach(s => { if (s && s.id && typeof s.in==="number" && typeof s.out==="number" && !have.has(s.id)){ store.segs.push({id:s.id,in:s.in,out:s.out}); added++; } });
     store.segs.sort((a,b)=>a.in-b.in);
     if (!store.name && d.name) store.name = d.name;
+    if (d.paid && typeof d.paid==="object") store.paid = Object.assign({}, d.paid, store.paid||{});
     persist(); $("nameInput").value = store.name; renderAll(true);
     toast(added ? "Wczytano "+added+" wpisów" : "Nic nowego w tej kopii");
   } catch(_){ toast("To nie jest plik kopii z tej apki."); }
