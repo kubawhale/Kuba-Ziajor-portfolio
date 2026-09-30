@@ -169,15 +169,16 @@ input:focus{border-color:var(--ink)}
 .h2wrap{display:flex;align-items:center;gap:8px}
 .infobtn{width:22px;height:22px;border-radius:50%;padding:0;display:grid;place-items:center;background:none;border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:700;line-height:1}
 .infobtn[aria-expanded="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
-.tip{position:relative;background:var(--ink);color:var(--surface);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.45;display:flex;flex-direction:column;gap:10px;box-shadow:var(--lift-hi)}
-.tip::before{content:"";position:absolute;top:-6px;left:var(--tipx,20px);width:12px;height:12px;background:var(--ink);transform:rotate(45deg);border-radius:2px}
-.tip p{margin:0}
+.tip{position:absolute;left:0;width:min(300px,100%);z-index:30;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.45;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.14)}
+.tip::before{content:"";position:absolute;top:-7px;left:var(--tipx,20px);width:12px;height:12px;background:var(--surface);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg);border-radius:2px 0 0 0}
+.tip p{margin:0;color:var(--muted)}
+#sumSec{position:relative}
 .tip .legend{display:flex;flex-direction:column;gap:6px}
 .tip .legend div{display:flex;align-items:center;gap:10px}
 .tip .mk{width:14px;height:14px;display:grid;place-items:center;flex:none}
 .tip .mk.dot::after{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
 .tip .mk.tick::after{content:"";width:7px;height:3.5px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-1px) rotate(-45deg)}
-.tip .ok{align-self:flex-end;background:var(--surface);color:var(--ink);font-weight:600;font-size:13px;padding:6px 14px;border-radius:99px}
+.tip .ok{align-self:flex-end;background:var(--ink);color:var(--surface);font-weight:600;font-size:13px;padding:6px 14px;border-radius:99px}
 .total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-top:1.5px solid var(--ink);padding-top:12px}
 .total .big{font-weight:700;font-size:28px;line-height:1;letter-spacing:-.02em}
 .total .meta{color:var(--muted);font-size:13px;margin-top:4px}
@@ -251,7 +252,7 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
     <div class="days" id="today"></div>
   </section>
 
-  <section>
+  <section id="sumSec">
     <div class="sechead"><div class="h2wrap"><h2>Podsumowanie</h2><button class="infobtn" id="tipBtn" type="button" aria-label="Podpowiedzi" aria-expanded="false" aria-controls="tip">?</button></div><button class="ghost" id="addBtn" type="button">+ Dodaj wpis</button></div>
     <div class="tip" id="tip" hidden>
       <p>Stuknij dwa dni w kalendarzu: początek i koniec zakresu. Nazwa miesiąca zaznacza cały miesiąc.</p>
@@ -659,10 +660,15 @@ $("forgot").onclick = () => openEditor("__open", "summary", getState().since);
 /* tips */
 function showTip(on){
   const t=$("tip"), b=$("tipBtn"); t.hidden = !on; b.setAttribute("aria-expanded", String(on));
-  if (on){ const bx=b.getBoundingClientRect(), tx=t.getBoundingClientRect(); t.style.setProperty("--tipx", (bx.left+bx.width/2-tx.left-6)+"px"); } // arrow points at the "?"
+  if (on){ // float over the content just below the "?", arrow pointing at it
+    const sec=$("sumSec").getBoundingClientRect(), bx=b.getBoundingClientRect();
+    t.style.top = (bx.bottom-sec.top+10)+"px";
+    const tx=t.getBoundingClientRect(); t.style.setProperty("--tipx", (bx.left+bx.width/2-tx.left-6)+"px");
+  }
 }
 $("tipBtn").onclick = () => showTip($("tip").hidden);
 $("tipOk").onclick = () => showTip(false);
+document.addEventListener("click", e => { if (!$("tip").hidden && !$("tip").contains(e.target) && e.target!==$("tipBtn")) showTip(false); });
 try { const n = +(localStorage.getItem("under.tips")||0); if (n < 3){ localStorage.setItem("under.tips", String(n+1)); showTip(true); } } catch(e){}
 
 /* manual add */
