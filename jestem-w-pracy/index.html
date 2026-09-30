@@ -99,6 +99,14 @@ section{display:flex;flex-direction:column;gap:12px}
 .paidbtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
 .day.paid .seg,.day.paid .gap,.day.paid .dayhead b,.day.paid .dayhead .mono{opacity:.5}
 .paidrow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.listbar{display:flex;justify-content:flex-end}
+.switch{display:inline-flex;align-items:center;gap:8px;background:none;padding:4px 0;font-size:12px;font-weight:600;color:var(--muted)}
+.switch .track{position:relative;width:30px;height:18px;border-radius:99px;background:var(--line);transition:background-color .2s}
+.switch .track::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .2s}
+.switch[aria-checked="true"]{color:var(--ink)}
+.switch[aria-checked="true"] .track{background:var(--ink)}
+.switch[aria-checked="true"] .track::after{transform:translateX(12px)}
+.toast .undo{background:none;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:0 0 0 12px;font-size:14px}
 .paidrow .meta{color:var(--muted);font-size:12px}
 .seg{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px}
 .seg .range{font-size:15px}
@@ -235,6 +243,7 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
         <div class="calsel"><div><span class="lbl">Od</span><b id="selFrom"></b></div><div><span class="lbl">Do</span><b id="selTo"></b></div></div>
         <div class="calhint" id="calHint"></div>
       </div>
+      <div class="listbar" id="paidBar" hidden><button type="button" class="switch" id="showPaid" role="switch" aria-checked="false"><span class="track"></span><span id="showPaidLbl">Pokaż rozliczone</span></button></div>
       <div class="days" id="summary"></div>
       <div class="total">
         <div><div class="big" id="sumTotal">0 h 00 min</div><div class="meta" id="sumMeta"></div></div>
@@ -295,10 +304,15 @@ function addSeg(seg){ store.segs.push(seg); store.segs.sort((a,b)=>a.in-b.in); p
 function removeSeg(id){ store.segs = store.segs.filter(s=>s.id!==id); persist(); }
 // settled (paid) days: {"2026-09-01": timestamp when marked}
 const isPaid = k => !!(store.paid && store.paid[k]);
+let showPaid = false; try { showPaid = localStorage.getItem("under.showPaid")==="1"; } catch(e){}
 function setPaid(keys, on){ store.paid = store.paid || {}; keys.forEach(k => { if (on) store.paid[k] = store.paid[k] || Date.now(); else delete store.paid[k]; }); persist(); }
 
 let editing = null, editingIn = null, toastT;
-function toast(msg){ const t=$("toast"); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2600); }
+function toast(msg, undo){
+  const t=$("toast"); t.textContent=msg; t.hidden=false; clearTimeout(toastT);
+  if (undo){ const b=document.createElement("button"); b.type="button"; b.className="undo"; b.textContent="Cofnij"; b.onclick=()=>{ t.hidden=true; clearTimeout(toastT); undo(); }; t.appendChild(b); }
+  toastT=setTimeout(()=>t.hidden=true, undo ? 4500 : 2600);
+}
 
 /* ---------- actions ---------- */
 const act = {
@@ -340,11 +354,11 @@ function renderStatus(){
 
 const PEN = '<svg class="pen" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.3 1.7a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L5.6 13.4 1.8 14.2l.8-3.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
 function openEditor(id, where, ts){ editing=id; editingIn=where; if (where==="summary") ensureInRange(ts); renderAll(true); scrollToEditor(); }
-function renderDays(el, segs, showHead){
+function renderDays(el, segs, showHead, emptyMsg){
   const where = showHead ? "summary" : "today";
   const g = groupByDay(segs); const keys = Object.keys(g).sort();
   el.textContent = "";
-  if (!keys.length){ const e=document.createElement("div"); e.className="empty"; e.textContent = showHead ? "Brak wpisów w tym okresie." : "Dziś jeszcze nie było wejścia."; el.appendChild(e); return; }
+  if (!keys.length){ const e=document.createElement("div"); e.className="empty"; e.textContent = emptyMsg || (showHead ? "Brak wpisów w tym okresie." : "Dziś jeszcze nie było wejścia."); el.appendChild(e); return; }
   keys.forEach(k => {
     const day=document.createElement("div"); day.className="day";
     if (showHead){
@@ -353,7 +367,10 @@ function renderDays(el, segs, showHead){
       const t=document.createElement("span"); t.className="mono"; t.textContent=fmtDur(g[k].reduce((a,s)=>a+segMs(s),0));
       const pb=document.createElement("button"); pb.type="button"; pb.className="paidbtn"; pb.setAttribute("aria-pressed", String(isPaid(k)));
       pb.textContent = isPaid(k) ? "✓ Rozliczony" : "Rozlicz";
-      pb.onclick = () => { const on = !isPaid(k); setPaid([k], on); renderAll(true); toast(on ? "Oznaczono "+dayLabel(k)+" jako rozliczony" : "Cofnięto rozliczenie "+dayLabel(k)); };
+      pb.onclick = () => {
+        const on = !isPaid(k); setPaid([k], on); renderAll(true);
+        toast(on ? "Rozliczono "+dayLabel(k) : "Cofnięto rozliczenie "+dayLabel(k), () => { setPaid([k], !on); renderAll(true); });
+      };
       const right=document.createElement("span"); right.className="dright"; right.append(pb,t);
       h.append(b,right); day.appendChild(h);
       if (isPaid(k)) day.classList.add("paid");
@@ -460,24 +477,34 @@ $("calPrev").onclick = () => { calView = new Date(calView.getFullYear(), calView
 $("calNext").onclick = () => { calView = new Date(calView.getFullYear(), calView.getMonth()+1, 1); renderCal(); };
 $("calTitle").onclick = () => setRange(monthRange(calView.getFullYear(), calView.getMonth()));
 function summaryData(){
-  if (!range.from||!range.to) return {segs:[], total:0, days:0};
-  const segs = segsForRange(range.from, range.to);
-  return {segs, total:segs.reduce((a,s)=>a+segMs(s),0), days:Object.keys(groupByDay(segs)).length};
+  if (!range.from||!range.to) return {segs:[], all:[], total:0, days:0};
+  const all = segsForRange(range.from, range.to);
+  const segs = showPaid ? all : all.filter(s => !isPaid(dayKey(s.in)));
+  return {segs, all, total:segs.reduce((a,s)=>a+segMs(s),0), days:Object.keys(groupByDay(segs)).length};
 }
 function renderSummary(){
-  const {segs,total,days} = summaryData();
+  const {segs,all,total,days} = summaryData();
+  const allKeys = Object.keys(groupByDay(all)), paidKeys = allKeys.filter(isPaid), openKeys = allKeys.filter(k => !isPaid(k));
+  const paidMs = all.filter(s=>isPaid(dayKey(s.in))).reduce((a,s)=>a+segMs(s),0);
   renderCal();
-  renderDays($("summary"), segs, true);
+  renderDays($("summary"), segs, true, allKeys.length && !segs.length ? "Wszystko w tym okresie jest rozliczone." : "");
   $("sumTotal").textContent = fmtDur(total);
-  $("sumMeta").textContent = days+" "+(days===1?"dzień":"dni")+" · "+dec(total)+" h";
-  const keys = Object.keys(groupByDay(segs)), paidMs = segs.filter(s=>isPaid(dayKey(s.in))).reduce((a,s)=>a+segMs(s),0);
-  const allPaid = keys.length>0 && keys.every(isPaid);
-  $("paidMeta").textContent = !keys.length ? "" : allPaid ? "Wszystko rozliczone" : "Do rozliczenia: "+fmtDur(total-paidMs)+(paidMs ? " · rozliczone: "+fmtDur(paidMs) : "");
-  $("paidAll").hidden = !keys.length;
-  $("paidAll").textContent = allPaid ? "Cofnij rozliczenie zakresu" : "Oznacz zakres jako rozliczony";
-  $("paidAll").onclick = () => { setPaid(keys, !allPaid); renderAll(true); toast(allPaid ? "Cofnięto rozliczenie" : "Oznaczono "+keys.length+" "+(keys.length===1?"dzień":"dni")+" jako rozliczone"); };
+  $("sumMeta").textContent = days+" "+(days===1?"dzień":"dni")+" · "+dec(total)+" h"+(showPaid ? "" : " do rozliczenia");
+  // switch: only when something in the range is settled
+  $("paidBar").hidden = !paidKeys.length;
+  $("showPaid").setAttribute("aria-checked", String(showPaid));
+  $("showPaidLbl").textContent = "Pokaż rozliczone ("+paidKeys.length+" "+(paidKeys.length===1?"dzień":"dni")+" · "+fmtDur(paidMs)+")";
+  $("paidMeta").textContent = showPaid && paidKeys.length && openKeys.length ? "Do rozliczenia: "+fmtDur(total-paidMs)+" · rozliczone: "+fmtDur(paidMs) : "";
+  const undoAll = !openKeys.length;
+  $("paidAll").hidden = !allKeys.length;
+  $("paidAll").textContent = undoAll ? "Cofnij rozliczenie zakresu" : "Oznacz zakres jako rozliczony";
+  $("paidAll").onclick = () => {
+    const ks = undoAll ? paidKeys : openKeys; setPaid(ks, !undoAll); renderAll(true);
+    toast(undoAll ? "Cofnięto rozliczenie" : "Rozliczono "+ks.length+" "+(ks.length===1?"dzień":"dni"), () => { setPaid(ks, undoAll); renderAll(true); });
+  };
   $("pngBtn").disabled = $("csvBtn").disabled = !segs.length;
 }
+$("showPaid").onclick = () => { showPaid = !showPaid; try { localStorage.setItem("under.showPaid", showPaid ? "1" : "0"); } catch(e){} renderAll(true); };
 function renderWho(){ $("who").textContent = store.name || ""; }
 function renderAll(force){
   renderStatus();
