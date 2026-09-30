@@ -99,7 +99,8 @@ section{display:flex;flex-direction:column;gap:12px}
 .paidbtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
 .day.paid .seg,.day.paid .gap,.day.paid .dayhead b,.day.paid .dayhead .mono{opacity:.5}
 .paidrow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.listbar{display:flex;justify-content:flex-end}
+.listbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.listbar #addBtn{margin-left:auto}
 .switch{display:inline-flex;align-items:center;gap:8px;background:none;padding:4px 0;font-size:12px;font-weight:600;color:var(--muted)}
 .switch .track{position:relative;width:30px;height:18px;border-radius:99px;background:var(--line);transition:background-color .2s}
 .switch .track::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .2s}
@@ -166,18 +167,18 @@ input:focus{border-color:var(--ink)}
 .calsel .lbl{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .calsel b{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .calsel>div.active{border-color:var(--ink);box-shadow:inset 0 0 0 .5px var(--ink)}
-.h2wrap{display:flex;align-items:center;gap:8px}
 .infobtn{width:22px;height:22px;border-radius:50%;padding:0;display:grid;place-items:center;background:none;border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:700;line-height:1}
 .infobtn[aria-expanded="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
-.tip{position:relative;background:var(--ink);color:var(--surface);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.45;display:flex;flex-direction:column;gap:10px;box-shadow:var(--lift-hi)}
-.tip::before{content:"";position:absolute;top:-6px;left:var(--tipx,20px);width:12px;height:12px;background:var(--ink);transform:rotate(45deg);border-radius:2px}
-.tip p{margin:0}
+.tip{position:absolute;right:0;width:min(300px,100%);z-index:30;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.45;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.14)}
+.tip::before{content:"";position:absolute;top:-7px;left:var(--tipx,20px);width:12px;height:12px;background:var(--surface);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg);border-radius:2px 0 0 0}
+.tip p{margin:0;color:var(--muted)}
+#sumSec{position:relative}
 .tip .legend{display:flex;flex-direction:column;gap:6px}
 .tip .legend div{display:flex;align-items:center;gap:10px}
 .tip .mk{width:14px;height:14px;display:grid;place-items:center;flex:none}
 .tip .mk.dot::after{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
 .tip .mk.tick::after{content:"";width:7px;height:3.5px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-1px) rotate(-45deg)}
-.tip .ok{align-self:flex-end;background:var(--surface);color:var(--ink);font-weight:600;font-size:13px;padding:6px 14px;border-radius:99px}
+.tip .ok{align-self:flex-end;background:var(--ink);color:var(--surface);font-weight:600;font-size:13px;padding:6px 14px;border-radius:99px}
 .total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-top:1.5px solid var(--ink);padding-top:12px}
 .total .big{font-weight:700;font-size:28px;line-height:1;letter-spacing:-.02em}
 .total .meta{color:var(--muted);font-size:13px;margin-top:4px}
@@ -251,14 +252,13 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
     <div class="days" id="today"></div>
   </section>
 
-  <section>
-    <div class="sechead"><div class="h2wrap"><h2>Podsumowanie</h2><button class="infobtn" id="tipBtn" type="button" aria-label="Podpowiedzi" aria-expanded="false" aria-controls="tip">?</button></div><button class="ghost" id="addBtn" type="button">+ Dodaj wpis</button></div>
+  <section id="sumSec">
+    <div class="sechead"><h2>Podsumowanie</h2><button class="infobtn" id="tipBtn" type="button" aria-label="Podpowiedzi" aria-expanded="false" aria-controls="tip">?</button></div>
     <div class="tip" id="tip" hidden>
       <p>Stuknij dwa dni w kalendarzu: początek i koniec zakresu. Nazwa miesiąca zaznacza cały miesiąc.</p>
       <div class="legend"><div><span class="mk tick"></span>rozliczone</div><div><span class="mk dot"></span>nierozliczone</div></div>
       <button class="ok" type="button" id="tipOk">OK</button>
     </div>
-    <div id="addForm" hidden></div>
     <div class="card">
       <div class="cal" id="cal">
         <div class="calhead">
@@ -270,7 +270,8 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
         <div class="calgrid" id="calDays"></div>
         <div class="calsel"><div><span class="lbl">Od</span><b id="selFrom"></b></div><div><span class="lbl">Do</span><b id="selTo"></b></div></div>
       </div>
-      <div class="listbar" id="paidBar" hidden><button type="button" class="switch" id="showPaid" role="switch" aria-checked="false"><span class="track"></span><span id="showPaidLbl">Pokaż rozliczone</span></button></div>
+      <div class="listbar"><button type="button" class="switch" id="showPaid" role="switch" aria-checked="false" hidden><span class="track"></span><span id="showPaidLbl">Pokaż rozliczone</span></button><button class="ghost" id="addBtn" type="button">+ Dodaj wpis</button></div>
+      <div id="addForm" hidden></div>
       <div class="days" id="summary"></div>
       <div class="total">
         <div><div class="big" id="sumTotal">0 h 00 min</div><div class="meta" id="sumMeta"></div></div>
@@ -526,7 +527,7 @@ function renderSummary(){
   $("sumTotal").textContent = fmtDur(total);
   $("sumMeta").textContent = days+" "+(days===1?"dzień":"dni")+" · "+dec(total)+" h"+(showPaid ? "" : " do rozliczenia");
   // switch: only when something in the range is settled
-  $("paidBar").hidden = !paidKeys.length;
+  $("showPaid").hidden = !paidKeys.length;
   $("showPaid").setAttribute("aria-checked", String(showPaid));
   $("paidMeta").textContent = showPaid && paidKeys.length && openKeys.length ? "Do rozliczenia: "+fmtDur(total-paidMs)+" · rozliczone: "+fmtDur(paidMs) : "";
   $("paidRow").hidden = !$("paidMeta").textContent;
@@ -659,11 +660,16 @@ $("forgot").onclick = () => openEditor("__open", "summary", getState().since);
 /* tips */
 function showTip(on){
   const t=$("tip"), b=$("tipBtn"); t.hidden = !on; b.setAttribute("aria-expanded", String(on));
-  if (on){ const bx=b.getBoundingClientRect(), tx=t.getBoundingClientRect(); t.style.setProperty("--tipx", (bx.left+bx.width/2-tx.left-6)+"px"); } // arrow points at the "?"
+  if (on){ // float over the content just below the "?", arrow pointing at it
+    const sec=$("sumSec").getBoundingClientRect(), bx=b.getBoundingClientRect();
+    t.style.top = (bx.bottom-sec.top+10)+"px";
+    const tx=t.getBoundingClientRect(); t.style.setProperty("--tipx", (bx.left+bx.width/2-tx.left-6)+"px");
+  }
 }
 $("tipBtn").onclick = () => showTip($("tip").hidden);
 $("tipOk").onclick = () => showTip(false);
-try { const n = +(localStorage.getItem("under.tips")||0); if (n < 3){ localStorage.setItem("under.tips", String(n+1)); showTip(true); } } catch(e){}
+document.addEventListener("click", e => { if (!$("tip").hidden && !$("tip").contains(e.target) && e.target!==$("tipBtn")) showTip(false); });
+try { if (!localStorage.getItem("under.tips")){ localStorage.setItem("under.tips", "1"); showTip(true); } } catch(e){} // only on the very first launch
 
 /* manual add */
 $("addBtn").onclick = () => {
