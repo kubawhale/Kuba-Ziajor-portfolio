@@ -527,7 +527,6 @@ function renderSummary(){
   // switch: only when something in the range is settled
   $("paidBar").hidden = !paidKeys.length;
   $("showPaid").setAttribute("aria-checked", String(showPaid));
-  $("showPaidLbl").textContent = "Pokaż rozliczone ("+paidKeys.length+" "+(paidKeys.length===1?"dzień":"dni")+" · "+fmtDur(paidMs)+")";
   $("paidMeta").textContent = showPaid && paidKeys.length && openKeys.length ? "Do rozliczenia: "+fmtDur(total-paidMs)+" · rozliczone: "+fmtDur(paidMs) : "";
   $("paidRow").hidden = !$("paidMeta").textContent;
   const undoAll = !openKeys.length;
