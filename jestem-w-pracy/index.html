@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Jestem w Under</title>
-<meta name="description" content="Rejestrator godzin pracy w Under: wejścia, przerwy, wyjścia i podsumowanie do PNG/CSV.">
+<meta name="description" content="Rejestrator godzin pracy w Under: wejścia, przerwy, wyjścia i rozliczenie do pobrania jako obrazek.">
 <meta name="theme-color" content="#F3F2EE" id="themeColor">
 <script>
 (function(){ var t="light"; try { t = localStorage.getItem("under.theme") || "light"; } catch(e){}
@@ -248,10 +248,10 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
       <div class="total">
         <div><div class="big" id="sumTotal">0 h 00 min</div><div class="meta" id="sumMeta"></div></div>
       </div>
-      <div class="paidrow"><div class="meta" id="paidMeta"></div><button class="ghost" id="paidAll" type="button">Oznacz zakres jako rozliczony</button></div>
+      <div class="paidrow" id="paidRow"><div class="meta" id="paidMeta"></div></div>
       <div class="dl">
-        <button class="png" type="button" id="pngBtn">Pobierz PNG</button>
-        <button class="csv" type="button" id="csvBtn">Pobierz CSV</button>
+        <button class="csv" type="button" id="paidAll">Rozliczam całość</button>
+        <button class="png" type="button" id="pngBtn">Pobierz rozliczenie</button>
       </div>
       <div class="note">Czas zmiany liczony jest do dnia, w którym zaczęła się zmiana, więc praca po północy wlicza się do poprzedniego dnia. Przerwy się nie liczą.</div>
     </div>
@@ -495,14 +495,15 @@ function renderSummary(){
   $("showPaid").setAttribute("aria-checked", String(showPaid));
   $("showPaidLbl").textContent = "Pokaż rozliczone ("+paidKeys.length+" "+(paidKeys.length===1?"dzień":"dni")+" · "+fmtDur(paidMs)+")";
   $("paidMeta").textContent = showPaid && paidKeys.length && openKeys.length ? "Do rozliczenia: "+fmtDur(total-paidMs)+" · rozliczone: "+fmtDur(paidMs) : "";
+  $("paidRow").hidden = !$("paidMeta").textContent;
   const undoAll = !openKeys.length;
-  $("paidAll").hidden = !allKeys.length;
-  $("paidAll").textContent = undoAll ? "Cofnij rozliczenie zakresu" : "Oznacz zakres jako rozliczony";
+  $("paidAll").disabled = !allKeys.length;
+  $("paidAll").textContent = allKeys.length && undoAll ? "Cofnij rozliczenie" : "Rozliczam całość";
   $("paidAll").onclick = () => {
     const ks = undoAll ? paidKeys : openKeys; setPaid(ks, !undoAll); renderAll(true);
     toast(undoAll ? "Cofnięto rozliczenie" : "Rozliczono "+ks.length+" "+(ks.length===1?"dzień":"dni"), () => { setPaid(ks, undoAll); renderAll(true); });
   };
-  $("pngBtn").disabled = $("csvBtn").disabled = !segs.length;
+  $("pngBtn").disabled = !segs.length;
 }
 $("showPaid").onclick = () => { showPaid = !showPaid; try { localStorage.setItem("under.showPaid", showPaid ? "1" : "0"); } catch(e){} renderAll(true); };
 function renderWho(){ $("who").textContent = store.name || ""; }
@@ -526,16 +527,6 @@ async function saveFile(filename, blob){
   const a = document.createElement("a"); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(url), 4000);
   toast("Zapisano "+filename);
-}
-function csv(){
-  const {segs,total} = summaryData();
-  const rows = [["Data","Dzień","Wejście","Wyjście","Czas (h)","Czas","Rozliczony"]];
-  segs.forEach(s => { const k=dayKey(s.in); rows.push([k.split("-").reverse().join("."), dayLabel(k).split(" ")[0], hm(s.in), s.out?hm(s.out):"w trakcie", dec(segMs(s)), fmtDur(segMs(s)), isPaid(k)?"tak":"nie"]); });
-  const unpaid = segs.filter(s=>!isPaid(dayKey(s.in))).reduce((a,s)=>a+segMs(s),0);
-  rows.push([]); rows.push(["RAZEM","","","",dec(total),fmtDur(total),""]); rows.push(["DO ROZLICZENIA","","","",dec(unpaid),fmtDur(unpaid),""]);
-  if (store.name) rows.unshift([store.name]);
-  const text = "﻿"+rows.map(r=>r.map(c=>/[;"\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c).join(";")).join("\r\n");
-  saveFile(fileBase()+".csv", new Blob([text], {type:"text/csv"}));
 }
 async function png(){
   try { await Promise.all([document.fonts.load('900 64px "Baron Neue"'), document.fonts.load('500 64px "Montserrat"'), document.fonts.ready]); } catch(e){}
@@ -622,7 +613,7 @@ $("installX").onclick = () => { $("install").hidden = true; try { localStorage.s
 /* wiring */
 $("nameInput").value = store.name || "";
 $("nameInput").oninput = e => { store.name = e.target.value.trim(); persist(); renderWho(); };
-$("pngBtn").onclick = png; $("csvBtn").onclick = csv;
+$("pngBtn").onclick = png;
 setInterval(() => { if (getState().status!=="out") renderStatus(); }, 1000);
 setInterval(() => { if (getState().status!=="out") renderAll(); }, 30000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden) renderAll(); });
