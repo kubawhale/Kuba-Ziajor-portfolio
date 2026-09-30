@@ -166,7 +166,18 @@ input:focus{border-color:var(--ink)}
 .calsel .lbl{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .calsel b{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .calsel>div.active{border-color:var(--ink);box-shadow:inset 0 0 0 .5px var(--ink)}
-.calhint{font-size:12px;color:var(--muted);min-height:1.2em}
+.h2wrap{display:flex;align-items:center;gap:8px}
+.infobtn{width:22px;height:22px;border-radius:50%;padding:0;display:grid;place-items:center;background:none;border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:700;line-height:1}
+.infobtn[aria-expanded="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.tip{position:relative;background:var(--ink);color:var(--surface);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.45;display:flex;flex-direction:column;gap:10px;box-shadow:var(--lift-hi)}
+.tip::before{content:"";position:absolute;top:-6px;left:var(--tipx,20px);width:12px;height:12px;background:var(--ink);transform:rotate(45deg);border-radius:2px}
+.tip p{margin:0}
+.tip .legend{display:flex;flex-direction:column;gap:6px}
+.tip .legend div{display:flex;align-items:center;gap:10px}
+.tip .mk{width:14px;height:14px;display:grid;place-items:center;flex:none}
+.tip .mk.dot::after{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.tip .mk.tick::after{content:"";width:7px;height:3.5px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-1px) rotate(-45deg)}
+.tip .ok{align-self:flex-end;background:var(--surface);color:var(--ink);font-weight:600;font-size:13px;padding:6px 14px;border-radius:99px}
 .total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-top:1.5px solid var(--ink);padding-top:12px}
 .total .big{font-weight:700;font-size:28px;line-height:1;letter-spacing:-.02em}
 .total .meta{color:var(--muted);font-size:13px;margin-top:4px}
@@ -223,13 +234,18 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
     <div class="actions" id="actions"></div>
   </div>
 
-  <section>
+  <section id="todaySec">
     <div class="sechead"><h2>Dziś</h2></div>
     <div class="days" id="today"></div>
   </section>
 
   <section>
-    <div class="sechead"><h2>Podsumowanie</h2><button class="ghost" id="addBtn" type="button">+ Dodaj wpis</button></div>
+    <div class="sechead"><div class="h2wrap"><h2>Podsumowanie</h2><button class="infobtn" id="tipBtn" type="button" aria-label="Podpowiedzi" aria-expanded="false" aria-controls="tip">?</button></div><button class="ghost" id="addBtn" type="button">+ Dodaj wpis</button></div>
+    <div class="tip" id="tip" hidden>
+      <p>Stuknij dwa dni w kalendarzu: początek i koniec zakresu. Nazwa miesiąca zaznacza cały miesiąc.</p>
+      <div class="legend"><div><span class="mk tick"></span>rozliczone</div><div><span class="mk dot"></span>nierozliczone</div></div>
+      <button class="ok" type="button" id="tipOk">OK</button>
+    </div>
     <div id="addForm" hidden></div>
     <div class="card">
       <div class="cal" id="cal">
@@ -241,7 +257,6 @@ button:not(.ghost):not(.edit):not(.btn-del):not(.x):active{transform:translateY(
         <div class="calgrid calwd"><span>Pn</span><span>Wt</span><span>Śr</span><span>Cz</span><span>Pt</span><span>So</span><span>Nd</span></div>
         <div class="calgrid" id="calDays"></div>
         <div class="calsel"><div><span class="lbl">Od</span><b id="selFrom"></b></div><div><span class="lbl">Do</span><b id="selTo"></b></div></div>
-        <div class="calhint" id="calHint"></div>
       </div>
       <div class="listbar" id="paidBar" hidden><button type="button" class="switch" id="showPaid" role="switch" aria-checked="false"><span class="track"></span><span id="showPaidLbl">Pokaż rozliczone</span></button></div>
       <div class="days" id="summary"></div>
@@ -471,7 +486,6 @@ function renderCal(){
   }
   $("selFrom").textContent = shortLabel(range.from); $("selTo").textContent = picking ? "wybierz…" : shortLabel(range.to);
   $("selFrom").parentNode.classList.toggle("active", !picking); $("selTo").parentNode.classList.toggle("active", picking);
-  $("calHint").textContent = picking ? "Stuknij dzień końcowy (albo ten sam dzień dla jednego dnia)." : "Stuknij dwa dni: początek i koniec. Nazwa miesiąca zaznacza cały miesiąc. Kropka = dzień z wpisami, ✓ = rozliczony.";
 }
 $("calPrev").onclick = () => { calView = new Date(calView.getFullYear(), calView.getMonth()-1, 1); renderCal(); };
 $("calNext").onclick = () => { calView = new Date(calView.getFullYear(), calView.getMonth()+1, 1); renderCal(); };
@@ -509,7 +523,7 @@ $("showPaid").onclick = () => { showPaid = !showPaid; try { localStorage.setItem
 function renderWho(){ $("who").textContent = store.name || ""; }
 function renderAll(force){
   renderStatus();
-  if (force || !editing){ const t=dayKey(Date.now()); renderDays($("today"), segsForRange(t,t), false); renderSummary(); }
+  if (force || !editing){ const t=dayKey(Date.now()), ts=segsForRange(t,t); $("todaySec").hidden = !ts.length; renderDays($("today"), ts, false); renderSummary(); }
   renderWho();
 }
 
@@ -595,6 +609,15 @@ $("restoreFile").onchange = async e => {
 };
 
 $("forgot").onclick = () => openEditor("__open", "summary", getState().since);
+
+/* tips */
+function showTip(on){
+  const t=$("tip"), b=$("tipBtn"); t.hidden = !on; b.setAttribute("aria-expanded", String(on));
+  if (on){ const bx=b.getBoundingClientRect(), tx=t.getBoundingClientRect(); t.style.setProperty("--tipx", (bx.left+bx.width/2-tx.left-6)+"px"); } // arrow points at the "?"
+}
+$("tipBtn").onclick = () => showTip($("tip").hidden);
+$("tipOk").onclick = () => showTip(false);
+try { const n = +(localStorage.getItem("under.tips")||0); if (n < 3){ localStorage.setItem("under.tips", String(n+1)); showTip(true); } } catch(e){}
 
 /* manual add */
 $("addBtn").onclick = () => {
