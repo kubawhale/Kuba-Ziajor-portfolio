@@ -669,7 +669,7 @@ function showTip(on){
 $("tipBtn").onclick = () => showTip($("tip").hidden);
 $("tipOk").onclick = () => showTip(false);
 document.addEventListener("click", e => { if (!$("tip").hidden && !$("tip").contains(e.target) && e.target!==$("tipBtn")) showTip(false); });
-try { const n = +(localStorage.getItem("under.tips")||0); if (n < 3){ localStorage.setItem("under.tips", String(n+1)); showTip(true); } } catch(e){}
+try { if (!localStorage.getItem("under.tips")){ localStorage.setItem("under.tips", "1"); showTip(true); } } catch(e){} // only on the very first launch
 
 /* manual add */
 $("addBtn").onclick = () => {
