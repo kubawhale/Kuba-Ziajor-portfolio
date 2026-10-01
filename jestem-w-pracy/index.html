@@ -628,7 +628,7 @@ async function png(){
   x.fillStyle=C.muted; x.font='500 28px "Montserrat", sans-serif'; x.textAlign="right";
   x.fillText(dec(total)+" h · "+days+" "+(days===1?"dzień":"dni"), W-P, y+26);
   const unpaidMs = segs.filter(s=>!isPaid(dayKey(s.in))).reduce((a,s)=>a+segMs(s),0);
-  if (unpaidMs !== total) x.fillText("do rozliczenia: "+fmtDur(unpaidMs), W-P, y+66);
+  if (Math.round(unpaidMs/60000) !== Math.round(total/60000)) x.fillText("do rozliczenia: "+fmtDur(unpaidMs), W-P, y+66); // compare in minutes: a running shift ticks between the two sums
   x.textAlign="left";
   x.font='400 20px "Montserrat", sans-serif'; x.fillText("Wygenerowano "+dayLabel(dayKey(Date.now()))+" "+hm(Date.now()), P, H-40);
   c.toBlob(b => b ? showPreview(b, fileBase()+".png") : toast("Nie udało się utworzyć obrazu."), "image/png");
