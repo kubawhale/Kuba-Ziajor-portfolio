@@ -817,7 +817,9 @@ void main(){
     vec3 fillC = pickCol(lFill, linesCol), outC = pickCol(lOut, linesCol);
     float nb = navBlack*navT;                               // opcja „czarne logo” w nawigacji
     fillC = mix(fillC, vec3(0.), nb);
-    mR.y = mix(mR.y, mR.x, nb); mG.y = mix(mG.y, mG.x, nb); mB.y = mix(mB.y, mB.x, nb);
+    // po „Wejdź” obrys znika (także w małym logo w nawigacji)
+    float noOut = max(nb, clr);
+    mR.y = mix(mR.y, mR.x, noOut); mG.y = mix(mG.y, mG.x, noOut); mB.y = mix(mB.y, mB.x, noOut);
     vec3 o = vec3(
       mix(mix(col.r, outC.r, mR.y), fillC.r, mR.x),
       mix(mix(col.g, outC.g, mG.y), fillC.g, mG.x),
