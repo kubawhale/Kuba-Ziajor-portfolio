@@ -637,24 +637,25 @@ float smin(float a, float b, float k){ float h = clamp(.5 + .5*(b-a)/k, 0., 1.);
 // odległość (w pikselach) do liter i kropel, zlana gładkim minimum jak ciecz
 float metaD(vec2 qq, float d, float k){
   float A = res.x/res.y, sc = sqrt(.5/bThr)*res.y;
+  float gone = max(navT, clr);                           // po „Wejdź” krople się kurczą i znikają
   for(int i=0;i<8;i++){                                  // krople krążące wokół napisu
     float fi = float(i);
     if(fi >= bOrb) break;
     vec2 c = vec2(A*.34*sin(t*bSpd*.23*(1.+fi*.17) + fi*2.1), .11*sin(t*bSpd*.37*(1.+fi*.13) + fi*1.3));
     float rr = bSize*(.028 + .012*sin(fi*3.7));
-    d = smin(d, length(qq - c)*res.y - rr*sc*(1. - navT) + navT*3.*k, k);
+    d = smin(d, length(qq - c)*res.y - rr*sc*(1. - gone) + gone*3.*k, k);
   }
   for(int i=0;i<5;i++){                                  // kapanie spod liter
     float fi = float(i);
     if(fi >= bDrip) break;
     float x = A*.3*((fi + .5)/max(bDrip, 1.)*2. - 1.);
     vec2 c = vec2(x, -.07 - bDripL*.13*(.5+.5*sin(t*bSpd*.5 + fi*1.7)));
-    d = smin(d, length(qq - c)*res.y - bSize*.03*sc*(1. - navT) + navT*3.*k, k);
+    d = smin(d, length(qq - c)*res.y - bSize*.03*sc*(1. - gone) + gone*3.*k, k);
   }
   for(int i=0;i<4;i++){                                  // kropla pod palcem: tylko nad napisem
     vec4 T = tch[i];
     float nr = tNear[i];
-    if(T.z < .02 || bFing <= 0. || nr < .01 || navT > .01) continue;
+    if(T.z < .02 || bFing <= 0. || nr < .01 || gone > .01) continue;
     d = smin(d, length(qq - T.xy)*res.y - .055*bFing*T.z*nr*sc, k);
   }
   return d;
@@ -668,7 +669,7 @@ vec2 logoMask(vec2 tuv, vec2 qq){
     vec4 sd = texture2D(tx, tuv);
     float dL = (sd.r + sd.g/255. - .5)*2.*128.*pxPerTex - (bThrUI - .5)*.06*res.y;
     float kk = max(.004*res.y*bBlurUI, 1.);
-    float d = navT > .999 ? dL : metaD(qq, dL, kk);
+    float d = max(navT, clr) > .999 ? dL : metaD(qq, dL, kk);
     d *= lgS;                                               // odległość w pikselach ekranu
     float m = 1. - smoothstep(-.75, .75, d);
     float mo = 0.;
@@ -1992,7 +1993,7 @@ function showCaption(){
   const h = cv.clientHeight;
   let bottomUv = logoBox ? (logoBox.cy - logoBox.bh/2) : .3;
   // poniżej najniżej kapiącej kropli, żeby nie zasłaniała podpisu
-  if(logoBlob() && +document.getElementById('bDrip').value > 0){
+  if(false && logoBlob() && +document.getElementById('bDrip').value > 0){   // krople znikają po „Wejdź”, podpis może być bliżej logo
     const low = .5 - (.07 + .13*(+document.getElementById('bDripL').value) + .035*(+document.getElementById('bSize').value));
     bottomUv = Math.min(bottomUv, low);
   }
