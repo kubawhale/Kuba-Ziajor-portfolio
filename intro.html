@@ -132,7 +132,7 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline
 .lnav{position:relative;border-radius:999px;padding:4px;--w:76px;--x:0px;background:var(--on-ink);box-shadow:0 0 0 1.5px var(--ink);transform:translateY(-8px);transition:transform .6s cubic-bezier(.34,1.56,.64,1)}
 .sitebar.on .lnav{transform:translateY(0)}
 .lnav-goo{position:absolute;inset:4px;filter:url(#goo);pointer-events:none}
-.lnav .nb{position:absolute;top:0;left:0;width:var(--w);height:38px;border-radius:999px;background:var(--ink);transform:translateX(var(--x))}
+.lnav .nb{position:absolute;top:0;left:0;width:var(--w);height:38px;border-radius:999px;background:var(--ink);transform:translate(var(--x),var(--y,0px))}
 .lnav .nb.lead{transition:transform .35s cubic-bezier(.5,0,.2,1)}
 .lnav .nb.trail{transition:transform .7s cubic-bezier(.5,0,.2,1)}
 .lnav-items{position:relative;display:flex}
@@ -165,6 +165,32 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline
 .intro.out .intro-sub,.intro.out .intro-title{opacity:0;filter:blur(8px);transform:translateY(-10px);transition:opacity .6s ease, filter .6s ease, transform .7s cubic-bezier(.7,0,.3,1)}
 .intro.out .intro-title{transition-delay:.08s}
 @media (prefers-reduced-motion: reduce){.intro-sub,.intro-title{transition:opacity .3s ease!important;filter:none!important;transform:none!important}}
+
+/* ---- telefon: hamburger otwiera płynne menu z tymi samymi przyciskami i PL/EN ---- */
+.burger{display:none;position:relative;width:46px;height:46px;border:0;border-radius:999px;background:var(--on-ink);box-shadow:0 0 0 1.5px var(--ink);cursor:pointer;flex:0 0 auto;transition:background .3s, transform .35s cubic-bezier(.34,1.56,.64,1)}
+.burger span{position:absolute;left:14px;right:14px;height:2px;border-radius:2px;background:var(--ink);transition:transform .45s cubic-bezier(.7,0,.2,1), opacity .25s, background .3s}
+.burger span:nth-child(1){top:16px}.burger span:nth-child(2){top:22px}.burger span:nth-child(3){top:28px}
+.burger[aria-expanded="true"]{background:var(--ink)}
+.burger[aria-expanded="true"] span{background:var(--on-ink)}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0;transform:scaleX(.2)}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.burger:active{transform:scale(.92)}
+.burger:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.mmenu{position:absolute;right:12px;top:calc(100% + 4px);width:min(230px, calc(100vw - 24px));box-sizing:border-box;padding:12px;border-radius:26px;background:var(--on-ink);box-shadow:0 0 0 1.5px var(--ink);
+  display:flex;flex-direction:column;align-items:stretch;gap:12px;clip-path:circle(0px at calc(100% - 23px) -27px);transition:clip-path .6s cubic-bezier(.7,0,.2,1);pointer-events:none}
+.mmenu.open{clip-path:circle(160% at calc(100% - 23px) -27px);pointer-events:auto}
+.mmenu .lnav{--w:206px;box-shadow:none;background:transparent;padding:0;transform:none}
+.mmenu .lnav-goo{inset:0}
+.mmenu .lnav-items{flex-direction:column;gap:4px}
+.mmenu .lnav-btn,.mmenu .lnav .nb{height:46px;font-size:15px}
+.mmenu .lnav-btn{width:var(--w);text-align:left;padding:0 20px;opacity:0;transform:translateY(-10px);transition:color .25s, opacity .3s ease, transform .5s cubic-bezier(.34,1.56,.64,1)}
+.mmenu.open .lnav-btn{opacity:1;transform:none;transition-delay:0s, calc(.12s + var(--i)*.06s), calc(.12s + var(--i)*.06s)}
+.mmenu .lang{align-self:flex-start;margin-left:6px;opacity:0;transition:opacity .3s ease}
+.mmenu.open .lang{opacity:1;transition-delay:.4s}
+.mmenu .lang button,.mmenu .lang-knob{width:42px}
+@media (max-width:560px){.burger{display:block}}
+@media (prefers-reduced-motion: reduce){.mmenu,.mmenu .lnav-btn,.burger span{transition-duration:.01ms!important}}
 /* ---- podgląd strony ---- */
 .pv{grid-column:1/-1;border-top:1px solid var(--line);padding-top:28px;display:flex;flex-direction:column;gap:18px;min-width:0}
 .pv-head{display:flex;flex-direction:column;gap:8px}
@@ -305,10 +331,10 @@ body > .wrap > header, .panel, .pv, .tabs, .hud, #hint{display:none!important}
       <div class="lnav" id="lnav">
         <div class="lnav-goo" aria-hidden="true"><span class="nb lead"></span><span class="nb trail"></span></div>
         <div class="lnav-items">
-          <button class="lnav-btn" type="button" aria-current="true" tabindex="-1" data-pl="Prace" data-en="Work">Prace</button>
-          <button class="lnav-btn" type="button" tabindex="-1" data-pl="O mnie" data-en="About">O mnie</button>
-          <button class="lnav-btn" type="button" tabindex="-1" data-pl="Dźwięk" data-en="Sound">Dźwięk</button>
-          <button class="lnav-btn" type="button" tabindex="-1" data-pl="Kontakt" data-en="Contact">Kontakt</button>
+          <button class="lnav-btn" type="button" aria-current="true" tabindex="-1" style="--i:0" data-pl="Prace" data-en="Work">Prace</button>
+          <button class="lnav-btn" type="button" tabindex="-1" style="--i:1" data-pl="O mnie" data-en="About">O mnie</button>
+          <button class="lnav-btn" type="button" tabindex="-1" style="--i:2" data-pl="Dźwięk" data-en="Sound">Dźwięk</button>
+          <button class="lnav-btn" type="button" tabindex="-1" style="--i:3" data-pl="Kontakt" data-en="Contact">Kontakt</button>
         </div>
       </div>
       <div class="lang" id="lang" role="radiogroup" aria-label="Język / Language">
@@ -316,7 +342,9 @@ body > .wrap > header, .panel, .pv, .tabs, .hud, #hint{display:none!important}
         <button type="button" role="radio" data-lang="pl" aria-checked="true" tabindex="-1">PL</button>
         <button type="button" role="radio" data-lang="en" aria-checked="false" tabindex="-1">EN</button>
       </div>
+      <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mmenu" aria-label="Menu" tabindex="-1"><span></span><span></span><span></span></button>
       </div>
+      <div class="mmenu" id="mmenu" inert></div>
     </nav>
     <p class="hint" id="hint" data-pl="Dotknij i przeciągnij · dwa palce = biegun N i S" data-en="Touch and drag · two fingers = N and S poles">Dotknij i przeciągnij · dwa palce = biegun N i S</p>
     <div class="tabs" id="tabs" role="tablist" aria-label="Sekcje ustawień"></div>
@@ -1736,6 +1764,7 @@ function startReveal(){
 function endReveal(){
   if(!revealOn) return; revealOn = false;
   clearTimeout(navTimer); captionTimers.forEach(clearTimeout); captionTimers = [];
+  if(typeof setMenu === 'function') setMenu(false);
   introEl.classList.add('out'); setTimeout(()=>{ if(!revealOn) introEl.hidden = true; }, 700);
   const wait = navNow() > .01 ? NAV_D : 0;
   navGo(0);
@@ -1912,7 +1941,7 @@ document.getElementById('saveMine').addEventListener('click', ()=>{
 
 // ================= PŁYNNA NAWIGACJA (jak w „Płynnych przyciskach”) =================
 const lnav = document.getElementById('lnav'), lbtns = lnav.querySelectorAll('.lnav-btn');
-function placeIndicator(){ const a = lnav.querySelector('[aria-current="true"]'); if(a) lnav.style.setProperty('--x', a.offsetLeft + 'px'); }
+function placeIndicator(){ const a = lnav.querySelector('[aria-current="true"]'); if(a){ lnav.style.setProperty('--x', a.offsetLeft + 'px'); lnav.style.setProperty('--y', a.offsetTop + 'px'); } }
 lbtns.forEach(b=>b.addEventListener('click', ()=>{
   lbtns.forEach(x=>x.removeAttribute('aria-current')); b.setAttribute('aria-current','true'); placeIndicator();
 }));
@@ -1994,15 +2023,37 @@ function playIntro(){
 }
 ['c1','c2'].forEach(k=>document.getElementById(k).addEventListener('input', paintIntro));
 // intro na starcie wyłączone: podpis pokazuje się pod logo po „Wejdź”
+
+// ================= HAMBURGER (telefon) =================
+// na wąskim ekranie przyciski i PL/EN przenoszą się do rozwijanego menu
+const burger = document.getElementById('burger'), mmenu = document.getElementById('mmenu'), sbRight = document.querySelector('.sb-right');
+const narrowMQ = matchMedia('(max-width:560px)');
+function placeMenuParts(){
+  const lng = document.getElementById('lang');
+  if(narrowMQ.matches){ if(lnav.parentNode !== mmenu){ mmenu.appendChild(lnav); mmenu.appendChild(lng); } }
+  else { if(lnav.parentNode !== sbRight){ sbRight.insertBefore(lnav, sbRight.firstChild); sbRight.insertBefore(lng, burger); } setMenu(false); }
+  requestAnimationFrame(()=>{ placeIndicator(); const on = lng.querySelector('[aria-checked="true"]'); if(on) lng.style.setProperty('--lx', (on.offsetLeft - 4) + 'px'); });
+}
+function setMenu(open){
+  mmenu.classList.toggle('open', open);
+  mmenu.inert = !open;
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  const en = document.querySelector('[data-lang="en"][aria-checked="true"]');
+  burger.setAttribute('aria-label', open ? (en ? 'Close menu' : 'Zamknij menu') : 'Menu');
+  if(open) requestAnimationFrame(placeIndicator);
+}
+burger.addEventListener('click', ()=>setMenu(!mmenu.classList.contains('open')));
+document.addEventListener('pointerdown', e=>{ if(mmenu.classList.contains('open') && !mmenu.contains(e.target) && !burger.contains(e.target)) setMenu(false); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && mmenu.classList.contains('open')){ setMenu(false); burger.focus(); } });
+lbtns.forEach(b=>b.addEventListener('click', ()=>{ if(narrowMQ.matches) setTimeout(()=>setMenu(false), 380); }));
+narrowMQ.addEventListener('change', placeMenuParts);
+placeMenuParts();
 </script>
 
 <script>
 // strona live: przyciski nawigacji prowadzą do podstron portfolio
 (function(){
-  const map = {'Prace':'Kuba-Portfolio.dc.html#work','Work':'Kuba-Portfolio.dc.html#work',
-               'O mnie':'Kuba-About.dc.html','About':'Kuba-About.dc.html',
-               'Dźwięk':'Kuba-Portfolio.dc.html','Sound':'Kuba-Portfolio.dc.html',
-               'Kontakt':'Kuba-Kontakt.dc.html','Contact':'Kuba-Kontakt.dc.html'};
+  const map = {'Prace':'Kuba-Portfolio.dc.html#work','O mnie':'Kuba-About.dc.html','Dźwięk':'Kuba-Portfolio.dc.html','Kontakt':'Kuba-Kontakt.dc.html'};
   document.querySelectorAll('.lnav-btn').forEach(b=>b.addEventListener('click', ()=>{
     const href = map[b.dataset.pl] || 'Kuba-Portfolio.dc.html';
     setTimeout(()=>{ location.href = href; }, 480);
