@@ -894,11 +894,11 @@ document.querySelectorAll('.mailbox[data-copy]').forEach(b=>b.addEventListener('
 (function(){
   const f = document.getElementById('introFrame'); if(!f) return;
   if(location.hash && location.hash !== '#'){ f.remove(); return; }   // wejście z linkiem do sekcji pomija intro
-  document.documentElement.style.overflow = 'hidden';
+  // bez blokowania przewijania na <html>: w przeglądarkach w aplikacjach (Instagram, Android WebView) po zdjęciu blokady przewijanie potrafiło zostać zablokowane
   const done = sec=>{
     if(f.classList.contains('gone')) return;
-    if(sec){ location.hash = '#'+sec; } else { scrollTo({top:0}); }
-    f.classList.add('gone'); document.documentElement.style.overflow = '';
+    if(sec){ location.hash = '#'+sec; } else { scrollTo({top:0, behavior:'instant'}); }
+    f.classList.add('gone');
     setTimeout(()=>f.remove(), 1000);
   };
   const sendLogo = ()=>{
