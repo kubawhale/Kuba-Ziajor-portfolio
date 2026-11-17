@@ -569,6 +569,8 @@ body > .wrap > header, .panel, .pv, .tabs, .hud, #hint{display:none!important}
 </div>
 
 <script>
+function toPortfolio(sec){ if(window.parent !== window){ try{ parent.postMessage(sec ? 'intro-go:'+sec : 'intro-done','*'); }catch(_){} } else { location.href = 'index.html#' + (sec || 'prace'); } }
+
 const cv = document.getElementById('c');
 const gl = cv.getContext('webgl', {antialias:false, preserveDrawingBuffer:false});
 
@@ -1762,6 +1764,8 @@ function startReveal(){
   captionTimers.push(setTimeout(()=>{ if(revealOn) showCaption(); }, RV_IN - 300));
   captionTimers.push(setTimeout(()=>{ if(revealOn) introEl.classList.add('out'); }, RV_IN + 2300));
   navTimer = setTimeout(()=>{ if(revealOn){ measureLogo(); navGo(1); } }, RV_IN + 2700);
+  // w podglądzie portfolio: po locie logo do nawigacji intro oddaje stronę portfolio
+  captionTimers.push(setTimeout(()=>{ if(revealOn) toPortfolio(); }, RV_IN + 2700 + NAV_D + 150));
   captionTimers.push(setTimeout(()=>{ introEl.hidden = true; }, RV_IN + 3500));
 }
 function endReveal(){
@@ -2058,8 +2062,8 @@ placeMenuParts();
 (function(){
   const map = {'Prace':'Kuba-Portfolio.dc.html#work','O mnie':'Kuba-About.dc.html','Dźwięk':'Kuba-Portfolio.dc.html','Kontakt':'Kuba-Kontakt.dc.html'};
   document.querySelectorAll('.lnav-btn').forEach(b=>b.addEventListener('click', ()=>{
-    const href = map[b.dataset.pl] || 'Kuba-Portfolio.dc.html';
-    setTimeout(()=>{ location.href = href; }, 480);
+    const sec = {'Prace':'prace','O mnie':'cv','Kontakt':'kontakt'}[b.dataset.pl] || 'prace';
+    setTimeout(()=>toPortfolio(sec), 480);
   }));
 })();
 </script>
