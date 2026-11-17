@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Jakub Ziajor · Portfolio</title>
 <meta name="description" content="Jakub Ziajor — UI/UX, dźwięk, hardware. Portfolio.">
 </head>
@@ -25,8 +25,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--display
 a{color:inherit}
 
 /* nawigacja */
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(255,255,255,.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--paper)}
+/* pasek przyklejony zawsze do samej góry; wcięcie na notch jako padding (z limitem) — przeglądarka w Instagramie podaje ogromne safe-area i pasek lądował na środku */
+header{position:sticky;top:0;padding-top:min(env(safe-area-inset-top,0px),48px);z-index:20;background:rgba(255,255,255,.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+
 .navin{max-width:1240px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;
   padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 @media (min-width:700px){.navin{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
