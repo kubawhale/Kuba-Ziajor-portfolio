@@ -121,7 +121,7 @@ body{--kP:255;--kD:255;--kN:17;--lift:0 1px 2px rgba(0,0,0,.18),0 10px 22px -10p
 
 
 /* ekran startowy (intro z logo, paskami i kroplami) nad stroną; po „Wejdź” i locie logo do menu znika */
-.intro-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#fff;transition:opacity .7s ease}
+.intro-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#fff;transition:opacity .9s cubic-bezier(.4,0,.2,1)}
 .intro-frame.gone{opacity:0;pointer-events:none}
 /* ---- podstrony projektów ---- */
 .case{padding-top:64px;padding-bottom:96px;display:flex;flex-direction:column;gap:24px}
@@ -1031,10 +1031,17 @@ document.querySelectorAll('.mailbox[data-copy]').forEach(b=>b.addEventListener('
     if(f.classList.contains('gone')) return;
     if(sec){ location.hash = '#'+sec; } else { scrollTo({top:0}); }
     f.classList.add('gone'); document.documentElement.style.overflow = '';
-    setTimeout(()=>f.remove(), 800);
+    setTimeout(()=>f.remove(), 1000);
   };
+  const sendLogo = ()=>{
+    const el = document.querySelector('header .logo canvas') || document.querySelector('header .logo'); if(!el || !f.contentWindow) return;
+    const r = el.getBoundingClientRect();
+    f.contentWindow.postMessage({type:'zia-logo', x:r.left, y:r.top, w:r.width, h:r.height}, '*');
+  };
+  f.addEventListener('load', sendLogo); addEventListener('resize', sendLogo);
   addEventListener('message', e=>{
     if(e.source !== f.contentWindow) return;
+    if(e.data === 'intro-ready') sendLogo();
     if(e.data === 'intro-done') done();
     else if(typeof e.data === 'string' && e.data.startsWith('intro-go:')) done(e.data.slice(9));
   });

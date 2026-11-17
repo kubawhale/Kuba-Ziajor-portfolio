@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Jakub Ziajor · Portfolio</title>
 <meta name="description" content="Jakub Ziajor — UI/UX, dźwięk, hardware. Portfolio.">
-<style>[hidden]{display:none!important}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}</style>
+<style>[hidden]{display:none!important}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}
+/* w ramce strony portfolio: własny pasek intro jest niewidoczny (zostaje tylko jako cel lotu logo), logo ląduje tam, gdzie logo portfolio */
+html.embedded .sitebar{background:transparent!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html.embedded .sitebar > :not(.sb-logo),html.embedded #back{visibility:hidden!important}
+</style>
 
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1765,7 +1769,7 @@ function startReveal(){
   captionTimers.push(setTimeout(()=>{ if(revealOn) introEl.classList.add('out'); }, RV_IN + 2300));
   navTimer = setTimeout(()=>{ if(revealOn){ measureLogo(); navGo(1); } }, RV_IN + 2700);
   // w podglądzie portfolio: po locie logo do nawigacji intro oddaje stronę portfolio
-  captionTimers.push(setTimeout(()=>{ if(revealOn) toPortfolio(); }, RV_IN + 2700 + NAV_D + 150));
+  captionTimers.push(setTimeout(()=>{ if(revealOn) toPortfolio(); }, RV_IN + 2700 + (window.parent !== window ? NAV_D*.35 : NAV_D + 150)));   // w ramce: strona wyłania się już w trakcie lotu logo
   captionTimers.push(setTimeout(()=>{ introEl.hidden = true; }, RV_IN + 3500));
 }
 function endReveal(){
@@ -2065,6 +2069,22 @@ placeMenuParts();
     const sec = {'Prace':'prace','O mnie':'cv','Kontakt':'kontakt'}[b.dataset.pl] || 'prace';
     setTimeout(()=>toPortfolio(sec), 480);
   }));
+})();
+
+// ---- osadzenie w portfolio: logo leci w miejsce logo nowej strony ----
+(function(){
+  if(window.parent === window) return;
+  document.documentElement.classList.add('embedded');
+  const nl = document.querySelector('[data-nl="0"]'); if(nl && nl.getAttribute('aria-pressed') !== 'true') nl.click();   // logo zostaje w paskach, jak na stronie
+  addEventListener('message', e=>{
+    const d = e.data; if(!d || d.type !== 'zia-logo') return;
+    const s = document.getElementById('sbLogo'); if(!s) return;
+    Object.assign(s.style, {position:'fixed', left:d.x+'px', top:d.y+'px', width:d.w+'px', height:d.h+'px', margin:'0', flex:'none'});
+    const r = s.getBoundingClientRect();                               // poprawka, gdyby rodzic paska był przesunięty
+    s.style.left = (d.x + (d.x - r.left))+'px'; s.style.top = (d.y + (d.y - r.top))+'px';
+    try{ logoBox = null; }catch(_){}
+  });
+  try{ parent.postMessage('intro-ready','*'); }catch(_){}
 })();
 </script>
 
