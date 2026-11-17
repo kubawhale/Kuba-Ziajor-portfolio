@@ -600,6 +600,8 @@ uniform vec4 btnR;       // przycisk: środek i pół-rozmiar w jednostkach ekra
 uniform float lFill, lOut, lOW, lAb;
 uniform float bThrUI, bBlurUI;
 uniform vec2 lgP; uniform float lgS;   // logo: środek i skala (lot do nawigacji)
+uniform vec4 nbA[4]; uniform float nbN; // krople dołożone palcem: xy = start (układ logo), z = czas narodzin
+uniform float lgUp;  // o ile logo jest podniesione w intro (uv)
 uniform float navT, navBlack, bgFaint;
 uniform float logoA;    // widoczność logo (intro)
 uniform float barH, barA; // półprzezroczysty pasek nawigacji: wysokość (uv) i widoczność // postęp lotu, czarne logo w nawigacji, siła pasków w tle   // surowe wartości suwaków Grubość liter i Płynność  // logo: wypełnienie, kolor obrysu, grubość obrysu, aberracja
@@ -651,6 +653,17 @@ float metaD(vec2 qq, float d, float k){
     float rr = bSize*(.028 + .012*sin(fi*3.7));
     d = smin(d, length(qq - c)*res.y - rr*sc*(1. - gone) + gone*3.*k, k);
   }
+  for(int j=0;j<4;j++){                                  // krople wyciągnięte palcem: dołączają do krążenia i znikają jak inne
+    float fj = float(j);
+    if(fj >= nbN) break;
+    vec4 B = nbA[j];
+    float fi = bOrb + fj;
+    vec2 co = vec2(A*.34*sin(t*bSpd*.23*(1.+fi*.17) + fi*2.1), .11*sin(t*bSpd*.37*(1.+fi*.13) + fi*1.3));
+    float kb = clamp((t - B.z)/1.8, 0., 1.); kb = kb*kb*(3. - 2.*kb);
+    vec2 c = mix(B.xy, co, kb);
+    float rr = bSize*(.028 + .012*sin(fi*3.7))*(.7 + .3*kb);
+    d = smin(d, length(qq - c)*res.y - rr*sc*(1. - gone) + gone*3.*k, k);
+  }
   for(int i=0;i<5;i++){                                  // kapanie spod liter
     float fi = float(i);
     if(fi >= bDrip) break;
@@ -662,7 +675,7 @@ float metaD(vec2 qq, float d, float k){
     vec4 T = tch[i];
     float nr = tNear[i];
     if(T.z < .02 || bFing <= 0. || nr < .01 || gone > .01) continue;
-    d = smin(d, length(qq - T.xy)*res.y - .055*bFing*T.z*nr*sc, k);
+    d = smin(d, length(qq - (T.xy - vec2(0., lgUp)))*res.y - .055*bFing*T.z*nr*sc, k);
   }
   return d;
 }
@@ -821,6 +834,14 @@ void main(){
     vec2 mR = mG, mB = mG;
     if(lAb > 0.){ mR = logoMask(tuv + offT/lgS, qL + off/lgS); mB = logoMask(tuv - offT/lgS, qL - off/lgS); }
     mR *= logoA; mG *= logoA; mB *= logoA;
+    if(blob > .5 && clr > 0.){
+      // lekki cień pod logo po „Wejdź”, jak pod znakami Vibelink i ENHANCE
+      vec4 sdS = texture2D(tx, tuv - vec2(0., .016));   // próbka z góry = cień przesunięty w dół
+      float dS = ((sdS.r + sdS.g/255. - .5)*2.*128.*(res.y/768.) - (bThrUI - .5)*.06*res.y)*lgS;
+      float B = .022*res.y*lgS;
+      float shd = 1. - smoothstep(-B, B*1.4, dS);
+      col = mix(col, col*.55, shd*.42*clr*logoA);
+    }
     vec3 fillC = pickCol(lFill, linesCol), outC = pickCol(lOut, linesCol);
     float nb = navBlack*navT;                               // opcja „czarne logo” w nawigacji
     fillC = mix(fillC, vec3(0.), nb);
@@ -851,8 +872,8 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DR
 const loc = gl.getAttribLocation(pr,'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
 const U = n => gl.getUniformLocation(pr,n);
 const u = {};
-['res','t','freq','width','scale','warp','speed','lwarp','ab','blob','bThr','bOrb','bDrip','bSize','bSpd','bDripL','bWob','bFing','tNear','btnR','btnS','lFill','lOut','lOW','lAb','clr','clrC','bThrUI','bBlurUI','lgP','lgS','navT','navBlack','bgFaint','logoA','barH','barA','hasTxt','oct','c1','c2','c3','tx','mode','force','rad','pole','loopL','dep','camOn','dAmt','dNoise','dPar','dShade','dMir','camSc','depPx'].forEach(n=>u[n]=U(n));
-u.tch = U('tch');
+['res','t','freq','width','scale','warp','speed','lwarp','ab','blob','bThr','bOrb','bDrip','bSize','bSpd','bDripL','bWob','bFing','tNear','btnR','btnS','lFill','lOut','lOW','lAb','clr','clrC','bThrUI','bBlurUI','lgP','lgS','lgUp','nbN','navT','navBlack','bgFaint','logoA','barH','barA','hasTxt','oct','c1','c2','c3','tx','mode','force','rad','pole','loopL','dep','camOn','dAmt','dNoise','dPar','dShade','dMir','camSc','depPx'].forEach(n=>u[n]=U(n));
+u.tch = U('tch'); u.nbA = U('nbA');
 
 // --- dotyk: 4 sloty, biegunowość naprzemiennie N/S ---
 const slots = [0,1,2,3].map(i=>({id:null,tx:0,ty:0,x:0,y:0,s:0,ts:0,pol:i%2?-1:1}));
@@ -868,6 +889,7 @@ const hint = document.getElementById('hint');
 cv.addEventListener('pointerdown', e=>{
   let s = slotFor(e.pointerId) || freeSlot(); if(!s) return;
   const [x,y] = toField(e);
+  s.sx = x; s.sy = y; s.onLogo = onLogoAt(x, y);
   if(s.s < 0.05){ s.x=x; s.y=y; }
   s.id=e.pointerId; s.tx=x; s.ty=y; s.ts=1;
   try{ cv.setPointerCapture(e.pointerId); }catch(_){}
@@ -881,10 +903,28 @@ cv.addEventListener('pointermove', e=>{
   const [x,y] = toField(e); s.tx=x; s.ty=y;
   if(e.pointerType==='mouse' && e.buttons===0) s.ts=.35;
 });
-function release(e){ const s = slotFor(e.pointerId); if(!s) return; s.ts=0; s.id=null; }
+// czy punkt pola leży na logo (maska logo, uwzględnia podniesienie)
+function onLogoAt(x, y){
+  if(!logoData || !cssW || !cssH) return false;
+  const fx = x*cssH/cssW + .5, fy = .5 - (y - LOGO_UP);
+  const px = Math.round(fx*logoData.width), py = Math.round(fy*logoData.height);
+  return px>=0 && py>=0 && px<logoData.width && py<logoData.height && logoData.data[(py*logoData.width+px)*4] > 40;
+}
+// dotknięcie logo i przeciągnięcie w bok: z logo odrywa się nowa kropla i dołącza do krążących
+const newBlobs = [];
+const nbArr = new Float32Array(16);
+function spawnBlob(s){
+  if(typeof revealOn !== 'undefined' && revealOn) return;
+  if(!s.onLogo || Math.abs(s.tx - s.sx) < .07) return;
+  const orb = +document.getElementById('bOrb').value;
+  if(newBlobs.length >= Math.min(4, 8 - orb)) newBlobs.shift();
+  newBlobs.push({x:s.x, y:s.y - LOGO_UP, t:tAcc + 10.});
+  if(navigator.vibrate) try{ navigator.vibrate(12); }catch(_){}
+}
+function release(e){ const s = slotFor(e.pointerId); if(!s) return; spawnBlob(s); s.ts=0; s.id=null; s.onLogo=false; }
 cv.addEventListener('pointerup', e=>{
   const s = slotFor(e.pointerId);
-  if(s && e.pointerType==='mouse'){ s.ts=.35; return; }  // mysz zostaje jako lekki hover
+  if(s && e.pointerType==='mouse'){ spawnBlob(s); s.onLogo=false; s.ts=.35; return; }  // mysz zostaje jako lekki hover
   release(e);
 });
 cv.addEventListener('pointercancel', release);
@@ -908,7 +948,7 @@ function stepTouches(dt){
     // czy palec jest nad napisem: odczyt z maski logo (w trybie blob rozmytej, więc z lekką aureolą)
     let nt = 0;
     if(s.id !== null && s.id !== 'push' && logoData && cssW && cssH){
-      const fx = s.tx*cssH/cssW + .5, fy = .5 - s.ty;
+      const fx = s.tx*cssH/cssW + .5, fy = .5 - (s.ty - LOGO_UP);
       const px = Math.round(fx*logoData.width), py = Math.round(fy*logoData.height);
       if(px>=0 && py>=0 && px<logoData.width && py<logoData.height) nt = logoData.data[(py*logoData.width+px)*4] > 40 ? 1 : 0;
     }
@@ -1088,6 +1128,8 @@ function frame(now){
   stepTouches(Math.min(dt, .1));
   gl.uniform4fv(u.tch, tArr);
   gl.uniform1fv(u.tNear, nearArr);
+  newBlobs.forEach((b,i)=>{ nbArr[i*4]=b.x; nbArr[i*4+1]=b.y; nbArr[i*4+2]=b.t; nbArr[i*4+3]=0; });
+  gl.uniform4fv(u.nbA, nbArr); gl.uniform1f(u.nbN, newBlobs.length);
   gl.uniform1f(u.btnS, 0);   // bez otoczki wokół przycisku
   if(btnS > .01 && !push.hidden){
     const r = cv.getBoundingClientRect(), b = push.getBoundingClientRect();
@@ -1383,7 +1425,7 @@ if(g2){
   const p2 = g2.createProgram(); g2.attachShader(p2, mk(g2.VERTEX_SHADER, vs)); g2.attachShader(p2, mk(g2.FRAGMENT_SHADER, fs)); g2.linkProgram(p2); g2.useProgram(p2);
   const b2 = g2.createBuffer(); g2.bindBuffer(g2.ARRAY_BUFFER, b2); g2.bufferData(g2.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), g2.STATIC_DRAW);
   const l2 = g2.getAttribLocation(p2,'p'); g2.enableVertexAttribArray(l2); g2.vertexAttribPointer(l2,2,g2.FLOAT,false,0,0);
-  g2u = {}; ['res','t','freq','width','scale','warp','speed','lwarp','ab','blob','bThr','bOrb','bDrip','bSize','bSpd','bDripL','bWob','bFing','tNear','btnR','btnS','lFill','lOut','lOW','lAb','clr','clrC','bThrUI','bBlurUI','lgP','lgS','navT','navBlack','bgFaint','logoA','barH','barA','hasTxt','oct','c1','c2','c3','mode','force','rad','pole'].forEach(n=>g2u[n]=g2.getUniformLocation(p2,n));
+  g2u = {}; ['res','t','freq','width','scale','warp','speed','lwarp','ab','blob','bThr','bOrb','bDrip','bSize','bSpd','bDripL','bWob','bFing','tNear','btnR','btnS','lFill','lOut','lOW','lAb','clr','clrC','bThrUI','bBlurUI','lgP','lgS','lgUp','nbN','navT','navBlack','bgFaint','logoA','barH','barA','hasTxt','oct','c1','c2','c3','mode','force','rad','pole'].forEach(n=>g2u[n]=g2.getUniformLocation(p2,n));
   g2u.tch = g2.getUniformLocation(p2,'tch');
 }
 const zeroT = new Float32Array(16);
@@ -1522,7 +1564,7 @@ function exRenderer(){
   const p = g.createProgram(); g.attachShader(p, mk(g.VERTEX_SHADER, vs)); g.attachShader(p, mk(g.FRAGMENT_SHADER, fs)); g.linkProgram(p); g.useProgram(p);
   const b = g.createBuffer(); g.bindBuffer(g.ARRAY_BUFFER, b); g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), g.STATIC_DRAW);
   const l = g.getAttribLocation(p,'p'); g.enableVertexAttribArray(l); g.vertexAttribPointer(l,2,g.FLOAT,false,0,0);
-  const U = {}; ['res','t','freq','width','scale','warp','speed','lwarp','ab','blob','bThr','bOrb','bDrip','bSize','bSpd','bDripL','bWob','bFing','tNear','btnR','btnS','lFill','lOut','lOW','lAb','clr','clrC','bThrUI','bBlurUI','lgP','lgS','navT','navBlack','bgFaint','logoA','barH','barA','hasTxt','oct','c1','c2','c3','tx','mode','force','rad','pole','loopL','tch','dep','camOn','dAmt','dNoise','dPar','dShade','dMir','camSc','depPx'].forEach(n=>U[n]=g.getUniformLocation(p,n));
+  const U = {}; ['res','t','freq','width','scale','warp','speed','lwarp','ab','blob','bThr','bOrb','bDrip','bSize','bSpd','bDripL','bWob','bFing','tNear','btnR','btnS','lFill','lOut','lOW','lAb','clr','clrC','bThrUI','bBlurUI','lgP','lgS','lgUp','nbN','navT','navBlack','bgFaint','logoA','barH','barA','hasTxt','oct','c1','c2','c3','tx','mode','force','rad','pole','loopL','tch','dep','camOn','dAmt','dNoise','dPar','dShade','dMir','camSc','depPx'].forEach(n=>U[n]=g.getUniformLocation(p,n));
   const tex = g.createTexture(); g.bindTexture(g.TEXTURE_2D, tex);
   [[g.TEXTURE_MIN_FILTER,g.LINEAR],[g.TEXTURE_MAG_FILTER,g.LINEAR],[g.TEXTURE_WRAP_S,g.CLAMP_TO_EDGE],[g.TEXTURE_WRAP_T,g.CLAMP_TO_EDGE]].forEach(([k,v])=>g.texParameteri(g.TEXTURE_2D,k,v));
   const dtex = g.createTexture(); g.activeTexture(g.TEXTURE1); g.bindTexture(g.TEXTURE_2D, dtex); texParams(g); g.activeTexture(g.TEXTURE0);
@@ -1791,14 +1833,16 @@ function revealNow(){
 }
 backBtn.addEventListener('click', endReveal);
 cv.addEventListener('dblclick', endReveal);
+const LOGO_UP = .055;   // logo w intro trochę wyżej niż środek ekranu
 function revealUniforms(g, U){
   g.uniform1f(U.clr, revealNow()); g.uniform2f(U.clrC, rvC[0], rvC[1]);
   const n = g === gl ? navNow() : 0;
   const tgt = n > 0 ? navTarget() : null;
   if(tgt){
-    g.uniform2f(U.lgP, .5 + (tgt.P[0]-.5)*n, .5 + (tgt.P[1]-.5)*n);
+    g.uniform2f(U.lgP, .5 + (tgt.P[0]-.5)*n, .5 + LOGO_UP + (tgt.P[1]-.5-LOGO_UP)*n);
     g.uniform1f(U.lgS, 1 + (tgt.S - 1)*n);
-  } else { g.uniform2f(U.lgP, .5, .5); g.uniform1f(U.lgS, 1); }
+  } else { g.uniform2f(U.lgP, .5, .5 + LOGO_UP); g.uniform1f(U.lgS, 1); }
+  g.uniform1f(U.lgUp, LOGO_UP);
   g.uniform1f(U.navT, tgt ? n : 0);
   g.uniform1f(U.navBlack, segVal('data-nl'));
   g.uniform1f(U.bgFaint, +document.getElementById('bgF').value);
@@ -1905,7 +1949,7 @@ function logoUniforms(g, U){
   g.uniform1f(U.lFill, segVal('data-lf'));
   g.uniform1f(U.lOut, segVal('data-lo'));
   g.uniform1f(U.lOW, +document.getElementById('lOW').value);
-  g.uniform1f(U.lAb, +document.getElementById('lAb').value);
+  g.uniform1f(U.lAb, 0);   // bez tęczowego iskrzenia na krawędziach logo
 }
 ['data-lf','data-lo'].forEach(attr=>{
   document.querySelectorAll(`[${attr}]`).forEach(b=>b.addEventListener('click',()=>{
