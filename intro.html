@@ -827,12 +827,13 @@ void main(){
     vec2 qL = (uvL - .5)*vec2(res.x/res.y, 1.);
     vec2 tuv = vec2(uvL.x, 1.-uvL.y) + r*lwarp*(1. - navT);
     if(blob > .5) tuv += (q - .25)*.03*bWob*(1. - navT);  // falujący brzeg (gaśnie w nawigacji)
+    float lAbE = lAb*(1. - clr);                         // tęczowe iskrzenie na krawędziach gaśnie po „Wejdź”
     // aberracja napisu: kanały R i B widzą maskę przesuniętą w przeciwne strony
-    vec2 off = lAb*.018*vec2(1., .35);
+    vec2 off = lAbE*.018*vec2(1., .35);
     vec2 offT = vec2(off.x*res.y/res.x, -off.y);
     vec2 mG = logoMask(tuv, qL);
     vec2 mR = mG, mB = mG;
-    if(lAb > 0.){ mR = logoMask(tuv + offT/lgS, qL + off/lgS); mB = logoMask(tuv - offT/lgS, qL - off/lgS); }
+    if(lAbE > 0.){ mR = logoMask(tuv + offT/lgS, qL + off/lgS); mB = logoMask(tuv - offT/lgS, qL - off/lgS); }
     mR *= logoA; mG *= logoA; mB *= logoA;
     if(blob > .5 && clr > 0.){
       // lekki cień pod logo po „Wejdź”, jak pod znakami Vibelink i ENHANCE
@@ -852,10 +853,10 @@ void main(){
       mix(mix(col.r, outC.r, mR.y), fillC.r, mR.x),
       mix(mix(col.g, outC.g, mG.y), fillC.g, mG.x),
       mix(mix(col.b, outC.b, mB.y), fillC.b, mB.x));
-    if(lAb > 0.){
+    if(lAbE > 0.){
       float e = clamp(abs(mR.x - mB.x) + abs(mR.y - mB.y), 0., 1.);
       vec3 rainbow = .5 + .5*cos(6.2831853*(uv.x*1.3 + uv.y*.7 + t*.08 + vec3(0., .33, .67)));
-      o = mix(o, rainbow, e*min(1., lAb*1.4)*.85);
+      o = mix(o, rainbow, e*min(1., lAbE*1.4)*.85);
     }
     col = o;
   }
@@ -1949,7 +1950,7 @@ function logoUniforms(g, U){
   g.uniform1f(U.lFill, segVal('data-lf'));
   g.uniform1f(U.lOut, segVal('data-lo'));
   g.uniform1f(U.lOW, +document.getElementById('lOW').value);
-  g.uniform1f(U.lAb, 0);   // bez tęczowego iskrzenia na krawędziach logo
+  g.uniform1f(U.lAb, +document.getElementById('lAb').value);
 }
 ['data-lf','data-lo'].forEach(attr=>{
   document.querySelectorAll(`[${attr}]`).forEach(b=>b.addEventListener('click',()=>{
