@@ -66,23 +66,25 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .lang button{position:relative;width:42px;height:40px;border:0;background:transparent;border-radius:999px;font:700 12px var(--display);letter-spacing:.04em;color:var(--ink);cursor:pointer;transition:color .25s}
 .lang button[aria-checked="true"]{color:var(--paper)}
 .navbtn:focus-visible,.lang button:focus-visible,.burger:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-.burger{display:none;position:relative;width:46px;height:46px;border:0;border-radius:999px;background:var(--paper);box-shadow:0 0 0 1.5px var(--ink);cursor:pointer;transition:background .3s}
-.burger span{position:absolute;left:14px;right:14px;height:2px;border-radius:2px;background:var(--ink);transition:transform .45s cubic-bezier(.7,0,.2,1),opacity .25s,background .3s}
-.burger span:nth-child(1){top:16px}.burger span:nth-child(2){top:22px}.burger span:nth-child(3){top:28px}
-.burger[aria-expanded="true"]{background:var(--ink)}
-.burger[aria-expanded="true"] span{background:var(--paper)}
-.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+/* menu na telefonie — jak na poprzedniej stronie portfolio: biały okrągły hamburger, pod paskiem panel na całą szerokość z pozycjami w wierszach */
+.burger{display:none;position:relative;width:40px;height:40px;border:0;border-radius:999px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.06);cursor:pointer}
+.burger span{position:absolute;left:12px;right:12px;height:1.75px;border-radius:2px;background:#1c1c1c;transition:transform .4s cubic-bezier(.7,0,.2,1),opacity .2s}
+.burger span:nth-child(1){top:14px}.burger span:nth-child(2){top:19.5px}.burger span:nth-child(3){top:25px}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
 .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
-.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
-.mmenu{position:absolute;right:max(12px,env(safe-area-inset-right,0px));top:calc(100% + 4px);width:230px;padding:12px;border-radius:26px;background:var(--paper);box-shadow:0 0 0 1.5px var(--ink);
-  display:flex;flex-direction:column;gap:12px;clip-path:circle(0px at calc(100% - 23px) -27px);transition:clip-path .6s cubic-bezier(.7,0,.2,1);pointer-events:none}
-.mmenu.open{clip-path:circle(160% at calc(100% - 23px) -27px);pointer-events:auto}
-.mmenu .lnav{--w:206px;box-shadow:none;background:transparent;padding:0}
-.mmenu .lnav-goo{inset:0;border-radius:20px}
-.mmenu .items{flex-direction:column;gap:4px}
-.mmenu .navbtn,.mmenu .nb{height:46px}
-.mmenu .navbtn{justify-content:flex-start;padding:0 20px;font-size:15px}
-.mmenu .lang{align-self:flex-start;margin-left:6px}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+.mmenu{position:absolute;left:0;right:0;top:100%;padding:8px 18px 18px;background:#ebebeb;border-bottom:1px solid rgba(0,0,0,.08);box-shadow:0 18px 30px -22px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;gap:0;clip-path:inset(0 0 100% 0);transition:clip-path .45s cubic-bezier(.7,0,.2,1);pointer-events:none}
+.mmenu.open{clip-path:inset(0 0 -40px 0);pointer-events:auto}
+#mmenu .lnav{display:block;background:transparent;padding:0;box-shadow:none}
+#mmenu .lnav > .lnav-goo{display:none}
+#mmenu .items{display:flex;flex-direction:column;gap:0}
+#mmenu .navbtn{width:auto;height:auto;justify-content:flex-start;padding:15px 4px;border-radius:0;border-bottom:1px solid rgba(0,0,0,.07);font:600 13px var(--display);letter-spacing:.12em;text-transform:uppercase;color:#1c1c1c!important;transition:color .2s}
+#mmenu .navbtn::before{content:"";width:6px;height:6px;border-radius:50%;background:#1c1c1c;margin-right:12px;transform:scale(0);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+#mmenu .navbtn[aria-current="true"]::before{transform:scale(1)}
+#mmenu .navbtn:not([aria-current="true"]){color:#6b6b6b!important}
+#mmenu .lang{align-self:flex-start;margin-top:16px}
+#mmenu .lang .lblobs{display:none}#mmenu .lang .lpill{opacity:1!important}
 @media (max-width:760px){.burger{display:block}.right > .lnav,.right > .lang{display:none}}
 
 /* treść */
@@ -290,7 +292,7 @@ footer .who{display:flex;align-items:center;gap:14px;font-size:13px;font-weight:
 .hero p.lead{color:var(--on-bg-soft)}
 header{transition:background-color .5s ease,border-color .5s ease}
 .on-dark header{background:rgba(17,17,17,.38);border-bottom-color:rgba(235,232,226,.18)}
-.on-dark .burger{box-shadow:0 0 0 1.5px var(--paper)}
+
 .sec-head{border-bottom-color:var(--on-bg-rule)}
 .sec-head .mono,footer .mono{color:var(--on-bg-soft)}
 footer{color:var(--on-bg);border-top-color:var(--on-bg-rule)}
