@@ -115,85 +115,6 @@ body{--kP:255;--kD:255;--kN:17;--lift:0 1px 2px rgba(0,0,0,.18),0 10px 22px -10p
 .card.wide{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
 .card .shot{width:100%;height:420px;object-fit:cover;object-position:top;display:block;border-right:1px solid var(--hair)}
 .card .logo-area{height:260px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--hair)}
-.reel-card .reel{position:relative;height:420px;background:#0b0b0b;overflow:hidden}
-.reel canvas{display:block;width:100%;height:100%}
-@media (max-width:900px){.reel-card .reel{height:300px}}
-.card.row{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding:40px 44px}
-.card.row .pill-w{background:var(--ink);color:var(--paper)}
-
-
-/* ekran startowy (intro z logo, paskami i kroplami) nad stroną; po „Wejdź” i locie logo do menu znika */
-.intro-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#fff;transition:opacity .9s cubic-bezier(.4,0,.2,1)}
-.intro-frame.gone{opacity:0;pointer-events:none}
-/* ---- podstrony projektów ---- */
-.case{padding-top:64px;padding-bottom:96px;display:flex;flex-direction:column;gap:24px}
-.case-head{display:flex;flex-direction:column;gap:16px;max-width:860px;margin-bottom:20px}
-.case-back{align-self:flex-start;font:700 14px var(--display);color:var(--on-bg-soft);text-decoration:none;padding:6px 0}
-.case-back:hover{color:var(--on-bg)}
-.case .cap{color:var(--on-bg-soft)}
-.case h1{margin:0;font-size:clamp(56px,10vw,128px);line-height:.95;font-weight:800;letter-spacing:-.05em;color:var(--on-bg)}
-.case-lead{margin:0;font-size:clamp(17px,1.6vw,21px);line-height:1.6;font-weight:500;color:var(--on-bg-soft);max-width:760px}
-.card.case-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;padding:32px 36px}
-.case-facts div{display:flex;flex-direction:column;gap:8px;min-width:0}
-.case-facts p{margin:0;font-size:16px;font-weight:700;line-height:1.4}
-.card.csec{padding:36px;gap:24px}
-.csec-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.csec h2{margin:0;font-size:clamp(28px,3.2vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.05}
-.case-sub{font:500 12px var(--mono);color:var(--muted)}
-.case-prose{display:grid;gap:16px;max-width:780px}
-.case-prose p,.case-p{margin:0;font-size:18px;line-height:1.65;font-weight:500;color:var(--body)}
-.g1,.g2,.g3,.g4{display:grid;gap:18px}
-.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
-.cshot{margin:0;display:flex;flex-direction:column;gap:12px;min-width:0}
-.cshot-img{all:unset;box-sizing:border-box;position:relative;display:block;cursor:zoom-in;border-radius:18px;overflow:hidden;background:#f2f2f2;box-shadow:inset 0 0 0 1px var(--hair)}
-.cshot-img:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-.cshot-img img{display:block;width:100%;height:auto}
-.cshot.tall .cshot-img{height:460px}.cshot.tall .cshot-img img{height:100%;object-fit:cover;object-position:50% 0}
-.cshot-open{position:absolute;right:14px;bottom:14px;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;font:700 13px var(--display)}
-.cshot figcaption{display:flex;flex-direction:column;gap:6px;padding:0 4px}
-.cshot figcaption p{margin:0;font-size:15px;line-height:1.55;font-weight:500;color:var(--body)}
-.phones .cshot-img{background:#0f0b1f;display:flex;justify-content:center;padding:28px 0}
-.phones .cshot-img img{width:auto;max-width:78%;max-height:520px;border-radius:22px}
-.card.case-stage{padding:0;overflow:hidden;background:#0f0b1f;display:flex;justify-content:center;align-items:center;min-height:420px}
-.case-stage img{display:block;max-height:620px;width:auto;max-width:100%;padding:36px 0}
-.case-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:24px}
-.case-col{display:grid;gap:24px;min-width:0}
-.case-col .h2,.case-col h2{margin:0;font-size:clamp(26px,2.6vw,34px);font-weight:800;letter-spacing:-.03em}
-.play-box{border-radius:18px;background:#f2f2f2;display:flex;justify-content:center;padding:24px}
-.play-box img{width:200px;height:auto}
-.vb-mark{width:96px;height:auto;filter:drop-shadow(0 8px 10px rgba(0,0,0,.22))}
-.swatches{display:flex;flex-wrap:wrap;gap:16px}
-.swatches span{display:flex;align-items:center;gap:10px;font:500 13px var(--mono)}
-.swatches i{width:28px;height:28px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
-.case-next .ttl{font-size:clamp(28px,3.4vw,44px)}
-@media (max-width:900px){.card.case-facts,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3,.case-split{grid-template-columns:minmax(0,1fr)}.cshot.tall .cshot-img{height:360px}}
-@media (max-width:560px){.card.case-facts,.g2{grid-template-columns:minmax(0,1fr)}.card.csec{padding:24px}.card.case-stage{min-height:0}}
-/* podgląd obrazka na cały ekran */
-.zoom{position:fixed;inset:0;z-index:60;background:rgba(10,10,10,.94);overflow:auto;display:none;-webkit-overflow-scrolling:touch}
-.zoom.on{display:block}
-.zoom-bar{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px clamp(16px,4vw,40px);background:linear-gradient(rgba(10,10,10,.9),rgba(10,10,10,0))}
-.zoom-bar span{font:500 13px var(--mono);color:#bdbdbd}
-.zoom-x{all:unset;cursor:pointer;padding:10px 18px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4);color:#fff;font:700 13px var(--display)}
-.zoom-x:hover{background:#fff;color:#111}
-.zoom img{display:block;margin:0 auto 48px;max-width:min(1200px,calc(100% - 32px));height:auto;border-radius:12px}
-/* kontakt: karta w karcie — czarny box z mailem (klik kopiuje) z cieniem, pod nim telefon i miejsce */
-.card.mailcard{grid-column:1/-1;padding:18px;gap:0}
-.mailbox{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:30px 34px;border-radius:22px;background:#1c1c1c;color:#fff;box-shadow:0 18px 30px -14px rgba(0,0,0,.55),0 4px 10px -4px rgba(0,0,0,.25);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
-.mailbox:active{transform:translateY(1px);box-shadow:0 10px 20px -12px rgba(0,0,0,.5)}
-.mailbox:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
-.mailbox{position:relative;isolation:isolate;overflow:hidden}
-.mb-fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
-.mb-txt,.mb-pill{position:relative;z-index:1;mix-blend-mode:difference}   /* tekst odwraca się na białych paskach, jak w menu */
-.mb-txt{display:flex;flex-direction:column;gap:8px;min-width:0}
-.mailbox .tag{color:#a6a6a6}
-.mb-addr{font:800 clamp(20px,2.6vw,30px)/1.15 var(--display);letter-spacing:-.02em;overflow-wrap:anywhere}
-.mb-pill{flex:none;padding:11px 18px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);font:700 12px var(--display);letter-spacing:.08em;text-transform:uppercase;transition:background .2s,color .2s}
-.mailbox:hover .mb-pill{background:#fff;color:#111}
-.mailbox.done .mb-pill{background:transparent;color:#fff;box-shadow:inset 0 0 0 1px #fff}
-.mb-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;padding:28px 22px 16px}
-.mb-facts div{display:flex;flex-direction:column;gap:8px;min-width:0}
-.mb-facts a,.mb-facts b{font-size:19px;font-weight:700;color:var(--ink);text-decoration:none}
-@media (max-width:520px){.mb-facts{grid-template-columns:minmax(0,1fr)}.mailbox{padding:24px}}
 .card .vis{height:260px;overflow:hidden;border-bottom:1px solid var(--hair);background:#efeee9}
 .card .vis img,.card .vis svg{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0}
 .card .vis.dark-vis{background:#111}
@@ -366,7 +287,7 @@ footer{color:var(--on-bg);border-top-color:var(--on-bg-rule)}
   <main id="top">
     <section class="hero" data-view="home">
       <p class="cap" data-pl="Jakub Ziajor · UI/UX · dźwięk · hardware" data-en="Jakub Ziajor · UI/UX · sound · hardware">Jakub Ziajor · UI/UX · dźwięk · hardware</p>
-      <h1 data-pl="Projektant poza pudełkiem" data-en="Unboxed design">Projektant poza pudełkiem</h1>
+      <h1 data-pl="Design outside the box" data-en="Design outside the box">Design outside the box</h1>
       <p class="lead">Functional and visual design</p>
       <a class="push" href="#prace">Work</a>
     </section>
@@ -417,14 +338,6 @@ footer{color:var(--on-bg);border-top-color:var(--on-bg-rule)}
             <span class="ttl">Raygun</span>
             <span class="desc" data-pl="Projekt syntezatora budowany na podstawie Raspberry Pi Pico. Prototyp stworzony w oparciu o MIDI z TouchOSC. Inspirowany wtyczką VST Blaster." data-en="A synth built on the Raspberry Pi Pico. The prototype was driven by MIDI from TouchOSC. Inspired by the Blaster VST plugin.">Projekt syntezatora budowany na podstawie Raspberry Pi Pico. Prototyp stworzony w oparciu o MIDI z TouchOSC. Inspirowany wtyczką VST Blaster.</span>
             <span class="cs-plain" data-pl="W budowie" data-en="In progress">W budowie</span>
-          </div>
-        </div>
-        <div class="card wide reel-card">
-          <div class="reel"><canvas id="reel" aria-label="Fragmenty wizuali" role="img"></canvas></div>
-          <div class="info">
-            <span class="tag" data-pl="Wizuale · Live" data-en="Visuals · Live">Wizuale · Live</span>
-            <span class="ttl" data-pl="Wizuale" data-en="Visuals">Wizuale</span>
-            <span class="desc" data-pl="Wizualizacje do muzyki i występów na żywo — generatywne pętle, światło i rytm." data-en="Visuals for music and live sets — generative loops, light, and rhythm.">Wizualizacje do muzyki i występów na żywo — generatywne pętle, światło i rytm.</span>
           </div>
         </div>
         <a class="card row" href="https://www.behance.net/" target="_blank" rel="noopener">
@@ -901,54 +814,6 @@ document.getElementById('copyMail').addEventListener('click', e=>{
   try{ navigator.clipboard.writeText('kuba.ziastudio@gmail.com').then(()=>done(true), ()=>done(false)); }catch(_){ done(false); }
 });
 
-// ================= WIZUALE: pasek z filmami, który powoli płynie i co jakiś czas błyska =================
-// Wpisz tu ścieżki do swoich filmów (mp4/webm, bez dźwięku). Dopóki lista jest pusta, lecą generatywne zaślepki.
-const REEL_VIDEOS = [];
-(function(){
-  const cv = document.getElementById('reel'); if(!cv) return;
-  const ctx = cv.getContext('2d');
-  const vids = REEL_VIDEOS.map(src=>{ const v = document.createElement('video'); Object.assign(v,{src,muted:true,loop:true,playsInline:true,autoplay:true}); v.play().catch(()=>{}); return v; });
-  const N = Math.max(5, vids.length);
-  let W=0,H=0,dpr=1, run=true, last=performance.now(), off=0, flashes=[], nextFlash=1200;
-  function size(){ dpr=Math.min(2,devicePixelRatio||1); const b=cv.getBoundingClientRect(); W=b.width; H=b.height; cv.width=W*dpr; cv.height=H*dpr; }
-  size(); addEventListener('resize', size);
-  // zaślepki: pięć prostych czarno-białych pętli
-  function pattern(k,t,w,h){
-    ctx.fillStyle='#0d0d0d'; ctx.fillRect(0,0,w,h); ctx.strokeStyle='#f2f2f2'; ctx.fillStyle='#f2f2f2';
-    const cx=w/2, cy=h/2;
-    if(k===0){ ctx.lineWidth=2; for(let r=(t*24)%22; r<w; r+=22){ ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.stroke(); } }
-    else if(k===1){ for(let x=-40; x<w+40; x+=26){ const xx=x+((t*30)%26); const bw=6+5*Math.sin(t*2+x*.05); ctx.fillRect(xx,0,bw,h); } }
-    else if(k===2){ ctx.lineWidth=1.6; for(let j=0;j<16;j++){ ctx.beginPath(); for(let x=0;x<=w;x+=6){ const y=h*(j+.5)/16 + 14*Math.sin(x*.025 + t*1.2 + j*.5) + 9*Math.sin(x*.011 - t*.7 + j); x?ctx.lineTo(x,y):ctx.moveTo(x,y); } ctx.stroke(); } }
-    else if(k===3){ for(let y=12;y<h;y+=20) for(let x=12;x<w;x+=20){ const d=Math.hypot(x-cx,y-cy); const r=2+3.2*(.5+.5*Math.sin(d*.06 - t*3)); ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill(); } }
-    else { ctx.save(); ctx.translate(cx,cy); ctx.rotate(t*.25); for(let a=0;a<12;a++){ ctx.rotate(Math.PI/6); ctx.fillRect(0,-2,w,4+3*Math.sin(t*3+a)); } ctx.restore(); }
-  }
-  function frame(now){
-    if(!run) return;
-    const dt=Math.min(64, now-last); last=now; const t=now/1000;
-    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle='#0b0b0b'; ctx.fillRect(0,0,W,H);
-    const th=H-56, tw=Math.round(th*0.66), gap=14, step=tw+gap;     // pionowe kafelki jak klatki taśmy, mieszczą się ok. trzy
-    off=(off + dt*0.018) % (step*N);                                 // powolny dryf w lewo
-    for(let n=-1; n<Math.ceil(W/step)+2; n++){
-      const idx=((n + Math.floor(off/step)) % N + N) % N;
-      const x=n*step - (off%step) + gap, y=28;
-      ctx.save(); ctx.beginPath(); ctx.roundRect(x,y,tw,th,16); ctx.clip(); ctx.translate(x,y);
-      const v=vids[idx % Math.max(1,vids.length)];
-      if(v && v.readyState>=2){ const s=Math.max(tw/v.videoWidth, th/v.videoHeight); ctx.drawImage(v,(tw-v.videoWidth*s)/2,(th-v.videoHeight*s)/2,v.videoWidth*s,v.videoHeight*s); }
-      else pattern(idx%5, t + idx*1.7, tw, th);
-      const f=flashes.find(q=>q.idx===idx); if(f){ ctx.fillStyle=`rgba(255,255,255,${f.a})`; ctx.fillRect(0,0,tw,th); }
-      ctx.restore();
-    }
-    // błyski: co 1,5–4 s jeden kafelek rozbłyska i szybko gaśnie, czasem lekko cały pasek
-    nextFlash-=dt;
-    if(nextFlash<=0){ flashes.push({idx:Math.floor(Math.random()*N), a:.75}); if(Math.random()<.25) flashes.push({idx:-1, a:.16}); nextFlash=1500+Math.random()*2500; }
-    flashes.forEach(q=>q.a*=Math.pow(.86, dt/16)); flashes=flashes.filter(q=>q.a>.02);
-    const g=flashes.find(q=>q.idx===-1); if(g){ ctx.fillStyle=`rgba(255,255,255,${g.a})`; ctx.fillRect(0,0,W,H); }
-    requestAnimationFrame(frame);
-  }
-  if(reduce){ run=false; last=0; requestAnimationFrame(t=>{ run=true; frame(t); run=false; }); return; }
-  new IntersectionObserver(es=>es.forEach(e=>{ const was=run; run=e.isIntersecting; if(run && !was){ last=performance.now(); requestAnimationFrame(frame); } })).observe(cv);
-  requestAnimationFrame(frame);
-})();
 
 // po skopiowaniu maila: w czarnym boxie rozlewają się izolinie jak na ekranie startowym, od miejsca kliknięcia
 function mailFx(b, cx, cy){
